@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.databinding.FragmentSettingsBinding
 import be.christiano.portfolio.app.ui.base.ToolbarDelegate
 import be.christiano.portfolio.app.ui.base.ToolbarDelegateImpl
 import be.christiano.portfolio.app.ui.base.dataBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 // TODO: add things like "dark/light" mode support here!
 // TODO: maybe also some general settings like Measurements (Celsius, Fahrenheit,...)
@@ -18,7 +19,7 @@ import be.christiano.portfolio.app.ui.base.dataBinding
 // TODO: option to show information as a dialog, snackbar or toast
 class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
 
-    private val mViewModel by viewModels<SettingsViewModel>()
+    private val mViewModel by viewModel<SettingsViewModel>()
     private val binding by dataBinding<FragmentSettingsBinding>(R.layout.fragment_settings) {
         registerToolbar(this@SettingsFragment, mtbMain)
         viewModel = mViewModel
@@ -29,5 +30,32 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initViews()
+    }
+
+    private fun initViews() {
+        initCheckedDisplayMode()
+
+        binding.btgDisplayMode.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked) return@addOnButtonCheckedListener
+
+            val displayMode = when (checkedId) {
+                R.id.btnDark -> AppCompatDelegate.MODE_NIGHT_YES
+                R.id.btnLight -> AppCompatDelegate.MODE_NIGHT_NO
+                else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            }
+
+            mViewModel.onEvent(SettingsEvent.ChangeDisplayMode(displayMode))
+        }
+    }
+
+    private fun initCheckedDisplayMode() {
+        val id = when (AppCompatDelegate.getDefaultNightMode()) {
+            AppCompatDelegate.MODE_NIGHT_YES -> R.id.btnDark
+            AppCompatDelegate.MODE_NIGHT_NO -> R.id.btnLight
+            else -> R.id.btnSystem
+        }
+
+        binding.btgDisplayMode.check(id)
     }
 }
