@@ -3,4 +3,12 @@
     <string name="introduction">Introduction</string>
     <string name="components">Components</string>
     <string name="settings">Settings</string>
+    <string name="title_activity_landing">LandingActivity</string>
+    <string name="common_continue">Continue</string>
+    <string name="landing_body">Do you want to see the app where the UI is created with Jetpack Compose or XML layout?</string>
+    <string name="landing_subtitle">This can be changed at any moment in the settings.</string>
+    <string name="jetpack_compose">Jetpack Compose</string>
+    <string name="xml_layout">XML layout</string>
+    <string name="jetpack_compose_description">Jetpack Compose is a modern Android UI toolkit by Google, designed to simplify and accelerate the development of native user interfaces with a declarative and component-based approach.</string>
+    <string name="xml_layout_description">XML layout in Android is a markup language used to define the structure and appearance of user interfaces for Android apps, specifying the arrangement and properties of UI elements like buttons and text views within a parent layout. It allows developers to design and organize the visual aspects of their app\'s user interface.</string>
 </resources>

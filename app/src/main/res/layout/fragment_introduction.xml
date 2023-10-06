@@ -7,13 +7,13 @@
 
         <variable
             name="viewModel"
-            type="be.christiano.portfolio.app.ui.introduction.IntroductionViewModel" />
+            type="be.christiano.portfolio.app.ui.main.introduction.IntroductionViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.introduction.IntroductionFragment">
+        tools:context=".ui.main.introduction.IntroductionFragment">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/mtbMain"
