@@ -1,17 +1,23 @@
 package be.christiano.portfolio.app.ui.main.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.databinding.FragmentSettingsBinding
+import be.christiano.portfolio.app.ui.landing.LayoutSystem
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegate
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegateImpl
 import be.christiano.portfolio.app.ui.main.base.dataBinding
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 // TODO: maybe also some general settings like Measurements (Celsius, Fahrenheit,...)
 // TODO: accept local notifications (no OneSignal or Firebase support... or maybe yes?)
@@ -31,10 +37,29 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
+        initObservers()
+    }
+
+    private fun initObservers() {
+        lifecycleScope.launch {
+            mViewModel.eventFlow.collectLatest {
+                when (it) {
+                    SettingsUiEvent.RestartApplication -> {
+                        val i = requireActivity().packageManager.getLaunchIntentForPackage(requireActivity().packageName)
+                        startActivity(Intent.makeRestartActivityTask(i?.component))
+                        Runtime.getRuntime().exit(0)
+                    }
+                }
+            }
+        }
     }
 
     private fun initViews() {
         initCheckedDisplayMode()
+
+        binding.btnChangeLayoutSystem.setOnClickListener {
+            mViewModel.onEvent(SettingsEvent.ChangeSelectedLayoutSystem(LayoutSystem.Compose))
+        }
 
         binding.btgDisplayMode.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (!isChecked) return@addOnButtonCheckedListener

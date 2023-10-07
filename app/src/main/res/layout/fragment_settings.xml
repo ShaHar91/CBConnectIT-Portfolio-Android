@@ -89,6 +89,7 @@
         </LinearLayout>
 
         <be.christiano.portfolio.dataRow.DataRow
+            android:id="@+id/drVersion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -100,5 +101,13 @@
             app:layout_constraintTop_toBottomOf="@id/llDisplayMode"
             app:valueText="@{viewModel.state.appVersion}"
             tools:valueText="v1.0" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnChangeLayoutSystem"
+            app:layout_constraintTop_toBottomOf="@id/drVersion"
+            android:layout_marginTop="16dp"
+            android:text="Change Layout System"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
