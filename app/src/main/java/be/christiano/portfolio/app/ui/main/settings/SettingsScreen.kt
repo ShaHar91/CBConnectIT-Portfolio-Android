@@ -1,6 +1,7 @@
 package be.christiano.portfolio.app.ui.main.settings
 
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,11 +15,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import be.christiano.portfolio.app.extensions.findActivity
 import be.christiano.portfolio.app.ui.components.DefaultAppBar
 import be.christiano.portfolio.app.ui.landing.LayoutSystem
+import be.christiano.portfolio.app.ui.main.introduction.IntroductionScreenContent
+import be.christiano.portfolio.app.ui.main.introduction.IntroductionState
+import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -72,5 +78,14 @@ fun SettingsScreenContent(
                 Text(text = "Change layout system")
             }
         }
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun SettingsScreenPreview() {
+    PortfolioTheme {
+        SettingsScreenContent(state = SettingsState(), navController = rememberNavController(), onEvent = {})
     }
 }

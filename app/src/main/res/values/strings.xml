@@ -11,4 +11,11 @@
     <string name="xml_layout">XML layout</string>
     <string name="jetpack_compose_description">Jetpack Compose is a modern Android UI toolkit by Google, designed to simplify and accelerate the development of native user interfaces with a declarative and component-based approach.</string>
     <string name="xml_layout_description">XML layout in Android is a markup language used to define the structure and appearance of user interfaces for Android apps, specifying the arrangement and properties of UI elements like buttons and text views within a parent layout. It allows developers to design and organize the visual aspects of their app\'s user interface.</string>
+    <string name="introduction_hello">Hello, I am</string>
+    <string name="introduction_name">Christiano Bolla</string>
+    <string name="introduction_function">Mobile developer</string>
+    <string name="introduction_body">I have been working since 2017 as an Android Developer. Proficient in turning an idea into a fully functioning and UI/UX stunning application.</string>
+    <string name="about_me">About me</string>
+    <string name="why_hire_me">Why Hire Me?</string>
+    <string name="about_me_body">Skilled Android Developer with over 5 years of experience in developing applications using Java and Kotlin. Someone who has a passion for staying up-to-date with all new technologies, constantly seeking to explore and take advantage of the latest advancements in the Android Framework. Committed to delivering robust, user-friendly, and scalable applications. A fast learner with an ability to adapt quickly to new technologies and a strong focus for code quality and best practices.</string>
 </resources>
