@@ -1,8 +1,8 @@
 package be.christiano.portfolio.app.ui.main.introduction
 
 import androidx.lifecycle.viewModelScope
+import be.christiano.portfolio.app.data.models.Social
 import be.christiano.portfolio.app.ui.base.BaseComposeViewModel
-import be.christiano.portfolio.app.ui.main.introduction.sections.components.Social
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

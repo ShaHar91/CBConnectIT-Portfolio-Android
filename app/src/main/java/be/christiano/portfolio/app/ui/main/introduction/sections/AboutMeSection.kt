@@ -66,18 +66,18 @@ fun AboutMeSection(
                 title = stringResource(R.string.completed),
                 subtitle = stringResource(R.string.completed_projects)
             ) {
-                Icon(painter = painterResource(id = R.drawable.ic_fact_check), contentDescription = "")
-            }
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            AboutMeCard(
-                modifier = Modifier.width(100.dp),
-                title = "Something",
-                subtitle = "Dunno"
-            ) {
                 Icon(painter = painterResource(id = R.drawable.ic_assignment_turned_in), contentDescription = "")
             }
+
+//            Spacer(modifier = Modifier.width(16.dp))
+//
+//            AboutMeCard(
+//                modifier = Modifier.width(100.dp),
+//                title = "Something",
+//                subtitle = "Dunno"
+//            ) {
+//                Icon(painter = painterResource(id = R.drawable.ic_fact_check), contentDescription = "")
+//            }
         }
     }
 }

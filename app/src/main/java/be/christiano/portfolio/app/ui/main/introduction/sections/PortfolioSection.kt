@@ -15,8 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import be.christiano.portfolio.app.R
+import be.christiano.portfolio.app.data.models.Portfolio
 import be.christiano.portfolio.app.ui.main.introduction.sections.components.ImageCard
-import be.christiano.portfolio.app.ui.main.introduction.sections.components.Portfolio
 import be.christiano.portfolio.app.ui.main.introduction.sections.components.SectionTitle
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 
