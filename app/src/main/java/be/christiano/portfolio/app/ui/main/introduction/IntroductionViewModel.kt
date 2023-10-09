@@ -1,6 +1,7 @@
 package be.christiano.portfolio.app.ui.main.introduction
 
 import androidx.lifecycle.viewModelScope
+import be.christiano.portfolio.app.data.models.Experience
 import be.christiano.portfolio.app.data.models.Portfolio
 import be.christiano.portfolio.app.data.models.Service
 import be.christiano.portfolio.app.data.models.Social
@@ -51,6 +52,7 @@ class IntroductionViewModel : BaseComposeViewModel() {
             is IntroductionEvent.OpenServiceList -> showSnackbar("In Development!")
             is IntroductionEvent.OpenPortfolioList -> showSnackbar("In Development!")
             is IntroductionEvent.OpenTestimonialsList -> showSnackbar("In Development!")
+            is IntroductionEvent.OpenExperiencesList -> showSnackbar("In Development!")
         }
     }
 }
@@ -61,6 +63,7 @@ sealed class IntroductionEvent {
     data object OpenServiceList : IntroductionEvent()
     data object OpenPortfolioList : IntroductionEvent()
     data object OpenTestimonialsList : IntroductionEvent()
+    data object OpenExperiencesList : IntroductionEvent()
 }
 
 data class IntroductionState(
@@ -69,7 +72,7 @@ data class IntroductionState(
     val services: List<Service> = Service.values().toList(),
     val projects: List<Portfolio> = Portfolio.values().toList(),
     val testimonials: List<Testimonial> = Testimonial.values().toList(),
-    val experiences: List<String> = listOf("Appwise", "Zappware")
+    val experiences: List<Experience> = Experience.values().toList()
 )
 
 sealed class IntroductionUiEvent {

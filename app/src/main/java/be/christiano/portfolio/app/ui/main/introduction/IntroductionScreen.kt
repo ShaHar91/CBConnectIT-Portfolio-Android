@@ -32,6 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.extensions.startWeb
 import be.christiano.portfolio.app.ui.main.introduction.sections.AboutMeSection
+import be.christiano.portfolio.app.ui.main.introduction.sections.ExperienceSection
 import be.christiano.portfolio.app.ui.main.introduction.sections.MainSection
 import be.christiano.portfolio.app.ui.main.introduction.sections.PortfolioSection
 import be.christiano.portfolio.app.ui.main.introduction.sections.ServiceSection
@@ -126,6 +127,12 @@ fun IntroductionScreenContent(
 
             TestimonialsSection(state.testimonials) {
                 onEvent(IntroductionEvent.OpenTestimonialsList)
+            }
+
+            Spacer(modifier = Modifier.height(62.dp))
+
+            ExperienceSection(state.experiences) {
+                onEvent(IntroductionEvent.OpenExperiencesList)
             }
 
             Spacer(modifier = Modifier.height(85.dp))
