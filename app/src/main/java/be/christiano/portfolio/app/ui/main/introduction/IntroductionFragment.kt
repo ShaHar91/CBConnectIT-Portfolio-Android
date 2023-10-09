@@ -12,8 +12,6 @@ import be.christiano.portfolio.app.ui.main.base.ToolbarDelegate
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegateImpl
 import be.christiano.portfolio.app.ui.main.base.dataBinding
 
-// TODO: Maybe use the same colors as the portfolio site?
-// TODO:
 class IntroductionFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
 
     private val mViewModel by viewModels<IntroductionViewModel>()

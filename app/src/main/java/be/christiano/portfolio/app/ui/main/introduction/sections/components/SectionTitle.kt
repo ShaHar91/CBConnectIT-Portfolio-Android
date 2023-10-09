@@ -76,7 +76,7 @@ fun SectionTitle(
             TextButton(
                 modifier = Modifier.height(30.dp),
                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
-                onClick = {}
+                onClick = { actionClicked?.invoke() }
             ) {
                 Text(style = MaterialTheme.typography.labelLarge, text = actionText)
 

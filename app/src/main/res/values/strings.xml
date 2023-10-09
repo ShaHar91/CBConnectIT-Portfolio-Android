@@ -18,4 +18,14 @@
     <string name="about_me">About me</string>
     <string name="why_hire_me">Why Hire Me?</string>
     <string name="about_me_body">Skilled Android Developer with over 5 years of experience in developing applications using Java and Kotlin. Someone who has a passion for staying up-to-date with all new technologies, constantly seeking to explore and take advantage of the latest advancements in the Android Framework. Committed to delivering robust, user-friendly, and scalable applications. A fast learner with an ability to adapt quickly to new technologies and a strong focus for code quality and best practices.</string>
+    <string name="let_s_chat">Let\'s chat!</string>
+    <string name="experience">Experience</string>
+    <string name="completed">Completed</string>
+    <string name="completed_projects">15+ projects</string>
+    <string name="experience_in_years">%1$s+ years</string>
+    <string name="service">Service</string>
+    <string name="service_subtitle">I\'m Good At</string>
+    <string name="see_more">See more</string>
+    <string name="portfolio">Portfolio</string>
+    <string name="portfolio_subtitle">My Work</string>
 </resources>

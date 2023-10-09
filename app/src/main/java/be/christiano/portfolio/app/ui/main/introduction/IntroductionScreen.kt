@@ -24,13 +24,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.extensions.startWeb
 import be.christiano.portfolio.app.ui.main.introduction.sections.AboutMeSection
 import be.christiano.portfolio.app.ui.main.introduction.sections.MainSection
+import be.christiano.portfolio.app.ui.main.introduction.sections.PortfolioSection
+import be.christiano.portfolio.app.ui.main.introduction.sections.ServiceSection
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -51,19 +55,19 @@ fun IntroductionScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is IntroductionUiEvent.DummyUiEvent -> {}
                 is IntroductionUiEvent.OpenSocialLink -> {
                     localContext.startWeb(event.social.link, toolbarColor = colorScheme.surfaceColorAtElevation(3.dp).toArgb())
                 }
 
                 is IntroductionUiEvent.OpenMailClient -> {
+                    viewModel.showSnackbar("In development!")
                     //TODO: Open mail client with subject and mail filled in!
                 }
             }
         }
     }
 
-    IntroductionScreenContent(state = state, navController = navController, onEvent = viewModel::onEvent)
+    IntroductionScreenContent(state = state, navController = navController, { viewModel.CreateSnackBarHost() }, onEvent = viewModel::onEvent)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,15 +75,17 @@ fun IntroductionScreen(
 fun IntroductionScreenContent(
     state: IntroductionState,
     navController: NavController,
+    createSnackbarHost: @Composable () -> Unit = {},
     onEvent: (IntroductionEvent) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        snackbarHost = { createSnackbarHost() },
         floatingActionButton = {
             ExtendedFloatingActionButton(text = {
-                Text(text = "Let's chat!")
+                Text(text = stringResource(R.string.let_s_chat))
             }, icon = {
                 Icon(Icons.Default.MailOutline, "")
             }, onClick = {
@@ -102,6 +108,18 @@ fun IntroductionScreenContent(
             Spacer(modifier = Modifier.height(40.dp))
 
             AboutMeSection(state.experienceInYears)
+
+            Spacer(modifier = Modifier.height(62.dp))
+
+            ServiceSection {
+                onEvent(IntroductionEvent.OpenServiceList)
+            }
+
+            Spacer(modifier = Modifier.height(62.dp))
+
+            PortfolioSection {
+                onEvent(IntroductionEvent.OpenPortfolioList)
+            }
 
             Spacer(modifier = Modifier.height(85.dp))
         }

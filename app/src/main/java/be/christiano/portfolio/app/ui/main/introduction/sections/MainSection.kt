@@ -53,7 +53,9 @@ fun MainSection(
             style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary),
             text = stringResource(R.string.introduction_name)
         )
+
         Spacer(modifier = Modifier.height(8.dp))
+
         Text(
             modifier = Modifier
                 .fillMaxWidth()
@@ -61,7 +63,9 @@ fun MainSection(
             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
             text = stringResource(R.string.introduction_function)
         )
+
         Spacer(modifier = Modifier.height(8.dp))
+
         Text(
             modifier = Modifier
                 .fillMaxWidth()

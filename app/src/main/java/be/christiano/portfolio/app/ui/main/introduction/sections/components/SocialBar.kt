@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import be.christiano.portfolio.app.R
+import be.christiano.portfolio.app.data.models.Social
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,9 +57,4 @@ fun SocialBarPreview() {
             SocialBar {}
         }
     }
-}
-
-enum class Social(val link: String, @DrawableRes val icon: Int) {
-    Github("https://github.com/ShaHar91", R.drawable.ic_github),
-    LinkedIn("https://www.linkedin.com/in/christiano-bolla/", R.drawable.ic_linkedin)
 }
