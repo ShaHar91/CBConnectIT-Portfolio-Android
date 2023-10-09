@@ -28,4 +28,6 @@
     <string name="see_more">See more</string>
     <string name="portfolio">Portfolio</string>
     <string name="portfolio_subtitle">My Work</string>
+    <string name="testimonials">Testimonials</string>
+    <string name="what_they_say">What They Say</string>
 </resources>

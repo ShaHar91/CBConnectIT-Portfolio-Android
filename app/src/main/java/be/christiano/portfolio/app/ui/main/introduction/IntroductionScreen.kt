@@ -35,6 +35,7 @@ import be.christiano.portfolio.app.ui.main.introduction.sections.AboutMeSection
 import be.christiano.portfolio.app.ui.main.introduction.sections.MainSection
 import be.christiano.portfolio.app.ui.main.introduction.sections.PortfolioSection
 import be.christiano.portfolio.app.ui.main.introduction.sections.ServiceSection
+import be.christiano.portfolio.app.ui.main.introduction.sections.TestimonialsSection
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -111,14 +112,20 @@ fun IntroductionScreenContent(
 
             Spacer(modifier = Modifier.height(62.dp))
 
-            ServiceSection {
+            ServiceSection(state.services) {
                 onEvent(IntroductionEvent.OpenServiceList)
             }
 
             Spacer(modifier = Modifier.height(62.dp))
 
-            PortfolioSection {
+            PortfolioSection(state.projects) {
                 onEvent(IntroductionEvent.OpenPortfolioList)
+            }
+
+            Spacer(modifier = Modifier.height(62.dp))
+
+            TestimonialsSection(state.testimonials) {
+                onEvent(IntroductionEvent.OpenTestimonialsList)
             }
 
             Spacer(modifier = Modifier.height(85.dp))

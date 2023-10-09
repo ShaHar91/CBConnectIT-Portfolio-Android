@@ -1,7 +1,10 @@
 package be.christiano.portfolio.app.ui.main.introduction
 
 import androidx.lifecycle.viewModelScope
+import be.christiano.portfolio.app.data.models.Portfolio
+import be.christiano.portfolio.app.data.models.Service
 import be.christiano.portfolio.app.data.models.Social
+import be.christiano.portfolio.app.data.models.Testimonial
 import be.christiano.portfolio.app.ui.base.BaseComposeViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,6 +50,7 @@ class IntroductionViewModel : BaseComposeViewModel() {
             is IntroductionEvent.OpenMailClient -> _eventFlow.send(IntroductionUiEvent.OpenMailClient)
             is IntroductionEvent.OpenServiceList -> showSnackbar("In Development!")
             is IntroductionEvent.OpenPortfolioList -> showSnackbar("In Development!")
+            is IntroductionEvent.OpenTestimonialsList -> showSnackbar("In Development!")
         }
     }
 }
@@ -56,11 +60,16 @@ sealed class IntroductionEvent {
     data object OpenMailClient : IntroductionEvent()
     data object OpenServiceList : IntroductionEvent()
     data object OpenPortfolioList : IntroductionEvent()
+    data object OpenTestimonialsList : IntroductionEvent()
 }
 
 data class IntroductionState(
     val isLoading: Boolean = false,
     val experienceInYears: Int = 0,
+    val services: List<Service> = Service.values().toList(),
+    val projects: List<Portfolio> = Portfolio.values().toList(),
+    val testimonials: List<Testimonial> = Testimonial.values().toList(),
+    val experiences: List<String> = listOf("Appwise", "Zappware")
 )
 
 sealed class IntroductionUiEvent {

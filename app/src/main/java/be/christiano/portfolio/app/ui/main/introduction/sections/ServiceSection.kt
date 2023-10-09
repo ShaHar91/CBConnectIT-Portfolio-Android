@@ -23,6 +23,7 @@ import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 
 @Composable
 fun ServiceSection(
+    services: List<Service>,
     actionClicked: () -> Unit
 ) {
     Column {
@@ -39,7 +40,7 @@ fun ServiceSection(
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
-            items(Service.values()) {
+            items(services) {
                 ImageCard(
                     Modifier
                         .fillParentMaxWidth()
@@ -61,7 +62,7 @@ fun ServiceSection(
 fun ServiceSectionPreview() {
     PortfolioTheme {
         Surface {
-            ServiceSection { }
+            ServiceSection(Service.values().toList()) { }
         }
     }
 }

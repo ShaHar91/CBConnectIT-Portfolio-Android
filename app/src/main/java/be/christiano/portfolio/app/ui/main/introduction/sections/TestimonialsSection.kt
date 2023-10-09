@@ -15,21 +15,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import be.christiano.portfolio.app.R
-import be.christiano.portfolio.app.data.models.Portfolio
-import be.christiano.portfolio.app.ui.main.introduction.sections.components.ImageCard
+import be.christiano.portfolio.app.data.models.Testimonial
 import be.christiano.portfolio.app.ui.main.introduction.sections.components.SectionTitle
+import be.christiano.portfolio.app.ui.main.introduction.sections.components.TestimonialCard
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 
 @Composable
-fun PortfolioSection(
-    projects: List<Portfolio>,
+fun TestimonialsSection(
+    testimonials: List<Testimonial>,
     actionClicked: () -> Unit
 ) {
     Column {
         SectionTitle(
             modifier = Modifier.padding(start = 24.dp, end = 12.dp),
-            title = stringResource(R.string.portfolio),
-            subtitle = stringResource(R.string.portfolio_subtitle),
+            title = stringResource(R.string.testimonials),
+            subtitle = stringResource(R.string.what_they_say),
             actionText = stringResource(R.string.see_more),
             actionClicked = actionClicked
         )
@@ -39,16 +39,15 @@ fun PortfolioSection(
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
-            items(projects) {
-                ImageCard(
-                    Modifier
+            items(testimonials) {
+                TestimonialCard(
+                    modifier = Modifier
                         .fillParentMaxWidth()
                         .padding(horizontal = 8.dp),
-                    it.image,
-                    it.imageDesc,
-                    it.title,
-                    it.description,
-                    tags = it.tags
+                    image = it.img,
+                    name= it.fullName,
+                    function = it.function,
+                    review = it.review
                 )
             }
         }
@@ -58,10 +57,10 @@ fun PortfolioSection(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun PortfolioSectionPreview() {
+fun TestimonialsSectionPreview() {
     PortfolioTheme {
         Surface {
-            PortfolioSection(Portfolio.values().toList()) { }
+            TestimonialsSection(Testimonial.values().toList()) { }
         }
     }
 }
