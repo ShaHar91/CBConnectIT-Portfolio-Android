@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import be.christiano.portfolio.app.R
+import be.christiano.portfolio.app.extensions.startIntentMail
 import be.christiano.portfolio.app.extensions.startWeb
 import be.christiano.portfolio.app.ui.main.introduction.sections.AboutMeSection
 import be.christiano.portfolio.app.ui.main.introduction.sections.ExperienceSection
@@ -58,18 +59,27 @@ fun IntroductionScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is IntroductionUiEvent.OpenSocialLink -> {
-                    localContext.startWeb(event.social.link, toolbarColor = colorScheme.surfaceColorAtElevation(3.dp).toArgb())
+                    localContext.startWeb(
+                        event.social.link,
+                        toolbarColor = colorScheme.surfaceColorAtElevation(3.dp).toArgb()
+                    )
                 }
 
                 is IntroductionUiEvent.OpenMailClient -> {
-                    viewModel.showSnackbar("In development!")
-                    //TODO: Open mail client with subject and mail filled in!
+                    localContext.startIntentMail("bollachristiano@gmail.com", "Select an app") {
+                        viewModel.showSnackbar("Something went wrong, please try again later")
+                    }
                 }
             }
         }
     }
 
-    IntroductionScreenContent(state = state, navController = navController, { viewModel.CreateSnackBarHost() }, onEvent = viewModel::onEvent)
+    IntroductionScreenContent(
+        state = state,
+        navController = navController,
+        { viewModel.CreateSnackBarHost() },
+        onEvent = viewModel::onEvent
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -145,6 +155,9 @@ fun IntroductionScreenContent(
 @Composable
 fun IntroductionScreenPreview() {
     PortfolioTheme {
-        IntroductionScreenContent(state = IntroductionState(), navController = rememberNavController(), onEvent = {})
+        IntroductionScreenContent(
+            state = IntroductionState(),
+            navController = rememberNavController(),
+            onEvent = {})
     }
 }

@@ -13,7 +13,7 @@ enum class Service(
         icon = R.drawable.android_img,
         imageDesc = "Android Icon",
         title = "Android Development",
-        description = "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        description = "Lorum ipsum dolor sit amet."
     ),
     Tutoring(
         icon = R.drawable.tutoring_img,

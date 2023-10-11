@@ -1,6 +1,8 @@
 package be.christiano.portfolio.app.extensions
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabColorSchemeParams
@@ -24,4 +26,24 @@ fun Context.startWeb(url: String, @ColorInt toolbarColor: Int = Color.Black.toAr
         launchUrl = "http://$url"
     }
     customTabsIntent.launchUrl(this, Uri.parse(launchUrl))
+}
+
+/**
+ * This function will open a chooser to send an email
+ *
+ * @param email An email address to send a mail to
+ * @param chooserTitle The title for the chooser
+ * @param error A callback function when an error occurs. Mostly because of no available application that can send a mail
+ */
+fun Context.startIntentMail(email: String, chooserTitle: String, error: () -> Unit) {
+    try {
+        val emails = arrayOf(email)
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.data = Uri.parse("mailto:")
+        intent.putExtra(Intent.EXTRA_EMAIL, emails)
+        startActivity(Intent.createChooser(intent, chooserTitle))
+    } catch (ex: Exception) {
+        ex.printStackTrace()
+        error()
+    }
 }
