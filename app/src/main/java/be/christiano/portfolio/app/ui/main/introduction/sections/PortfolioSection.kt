@@ -10,12 +10,16 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.data.models.Portfolio
+import be.christiano.portfolio.app.extensions.MinimumHeightState
+import be.christiano.portfolio.app.extensions.minimumHeightModifier
 import be.christiano.portfolio.app.ui.main.introduction.sections.components.ImageCard
 import be.christiano.portfolio.app.ui.main.introduction.sections.components.SectionTitle
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
@@ -36,12 +40,20 @@ fun PortfolioSection(
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        val density = LocalDensity.current
+
+        val minimumHeightState = remember { MinimumHeightState() }
+        val minimumHeightStateModifier = Modifier.minimumHeightModifier(
+            minimumHeightState,
+            density
+        )
+
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
             items(projects) {
                 ImageCard(
-                    Modifier
+                    minimumHeightStateModifier
                         .fillParentMaxWidth()
                         .padding(horizontal = 8.dp),
                     it.image,

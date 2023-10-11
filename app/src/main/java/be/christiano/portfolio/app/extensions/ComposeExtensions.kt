@@ -3,8 +3,16 @@ package be.christiano.portfolio.app.extensions
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 
 internal fun Context.findActivity(): Activity {
     var context = this
@@ -47,4 +55,25 @@ inline fun Modifier.thenIf(condition: Boolean, lazyProduce: () -> Modifier): Mod
  */
 inline fun Modifier.thenUnless(condition: Boolean, lazyProduce: () -> Modifier): Modifier {
     return this.thenIf(!condition, lazyProduce)
+}
+
+
+/**
+ *
+ * https://stackoverflow.com/questions/71080209/jetpack-compose-row-with-all-items-same-height/73112412#73112412
+ */
+fun Modifier.minimumHeightModifier(state: MinimumHeightState, density: Density) =
+    onSizeChanged { size ->
+        val itemHeight = with(density) {
+            val height = size.height
+            height.toDp()
+        }
+
+        if (itemHeight > (state.minHeight ?: 0.dp)) {
+            state.minHeight = itemHeight
+        }
+    }.defaultMinSize(minHeight = state.minHeight ?: Dp.Unspecified)
+
+class MinimumHeightState(minHeight: Dp? = null) {
+    var minHeight by mutableStateOf(minHeight)
 }
