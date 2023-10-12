@@ -1,10 +1,7 @@
 package be.christiano.portfolio.app.data.models
 
-import androidx.annotation.DrawableRes
-import be.christiano.portfolio.app.R
-
 enum class Portfolio(
-    @DrawableRes val image: Int,
+    val image: String,
     val title: String,
     val imageDesc: String,
     val description: String,
@@ -12,7 +9,7 @@ enum class Portfolio(
     val tags: List<String>
 ) {
     One(
-        image = R.drawable.portfolio1,
+        image = "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/portfolio1.png",
         title = "Android Core",
         imageDesc = "Android Library",
         description = "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -20,7 +17,7 @@ enum class Portfolio(
         tags = listOf("Library", "Coroutines", "Kotlin", "XML", "MVVM")
     ),
     Two(
-        image = R.drawable.portfolio2,
+        image = "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/portfolio2.png",
         title = "Measurements",
         imageDesc = "Android Library",
         description = "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -28,7 +25,7 @@ enum class Portfolio(
         tags = listOf("Library", "Kotlin")
     ),
     Three(
-        image = R.drawable.portfolio3,
+        image = "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/portfolio3.png",
         title = "Pokédex",
         imageDesc = "Android",
         description = "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -36,7 +33,7 @@ enum class Portfolio(
         tags = listOf("Coroutines", "Kotlin", "Jetpack Compose", "Koin", "MVVM")
     ),
     Four(
-        image = R.drawable.portfolio4,
+        image = "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/portfolio4.jpg",
         title = "FoodWatcher",
         imageDesc = "Android",
         description = "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -44,7 +41,7 @@ enum class Portfolio(
         tags = listOf("Coroutines", "Kotlin", "XML", "MVVM")
     ),
     Five(
-        image = R.drawable.portfolio5,
+        image = "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/portfolio5.png",
         title = "PoemCollection Backend",
         imageDesc = "Kotlin",
         description = "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",

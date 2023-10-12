@@ -33,12 +33,13 @@ import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.data.models.Portfolio
 import be.christiano.portfolio.app.data.models.Service
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
+import coil.compose.AsyncImage
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ImageCard(
     modifier: Modifier = Modifier,
-    @DrawableRes image: Int,
+    image: String,
     imgDescription: String,
     text: String,
     body: String,
@@ -51,14 +52,14 @@ fun ImageCard(
         Column(
             modifier = Modifier.padding(20.dp)
         ) {
-            Image(
+            AsyncImage(
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(190.dp)
                     .clip(imgShape)
                     .border(2.dp, MaterialTheme.colorScheme.primary, imgShape),
-                painter = painterResource(id = image),
+                model = image,
                 contentDescription = imgDescription
             )
 
@@ -67,7 +68,10 @@ fun ImageCard(
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary),
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                ),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 text = text
@@ -95,7 +99,10 @@ fun ImageCard(
                     tags.forEach {
                         Text(
                             modifier = Modifier
-                                .background(color = MaterialTheme.colorScheme.secondaryContainer, shape = RoundedCornerShape(6.dp))
+                                .background(
+                                    color = MaterialTheme.colorScheme.secondaryContainer,
+                                    shape = RoundedCornerShape(6.dp)
+                                )
                                 .padding(horizontal = 6.dp, vertical = 4.dp),
                             text = it,
                             style = MaterialTheme.typography.labelSmall
@@ -115,10 +122,21 @@ fun PortfolioCardPreview() {
         Surface {
             Column {
                 val service = Service.values().first()
-                ImageCard(image = service.icon, text = service.title, body = service.description, imgDescription = service.imageDesc)
+                ImageCard(
+                    image = service.icon,
+                    text = service.title,
+                    body = service.description,
+                    imgDescription = service.imageDesc
+                )
                 Spacer(modifier = Modifier.height(20.dp))
                 val portfolio = Portfolio.values().first()
-                ImageCard(image = portfolio.image, text = portfolio.title, body = portfolio.description, imgDescription = portfolio.imageDesc, tags = portfolio.tags)
+                ImageCard(
+                    image = portfolio.image,
+                    text = portfolio.title,
+                    body = portfolio.description,
+                    imgDescription = portfolio.imageDesc,
+                    tags = portfolio.tags
+                )
             }
         }
     }
