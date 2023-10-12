@@ -2,25 +2,48 @@ package be.christiano.portfolio.app.ui.main.settings
 
 import android.content.Intent
 import android.content.res.Configuration
+import android.provider.Settings
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import be.christiano.portfolio.app.extensions.findActivity
+import be.christiano.portfolio.app.ui.components.DataRow
 import be.christiano.portfolio.app.ui.components.DefaultAppBar
+import be.christiano.portfolio.app.ui.components.ToggleableDataRow
+import be.christiano.portfolio.app.ui.components.ValueDataRow
 import be.christiano.portfolio.app.ui.landing.LayoutSystem
 import be.christiano.portfolio.app.ui.main.introduction.IntroductionScreenContent
 import be.christiano.portfolio.app.ui.main.introduction.IntroductionState
@@ -67,16 +90,98 @@ fun SettingsScreenContent(
     Scaffold(
         Modifier.fillMaxSize(),
         topBar = { DefaultAppBar(navController = navController, appBarTitle = "Settings") }
-    ) {
+    ) { paddingValues ->
+        Spacer(modifier = Modifier.height(24.dp))
+
         Column(
-            modifier = Modifier.padding(it)
+            modifier = Modifier.padding(paddingValues)
         ) {
 
-            Button(onClick = {
-                onEvent(SettingsEvent.ChangeSelectedLayoutSystem(LayoutSystem.Xml))
-            }) {
-                Text(text = "Change layout system")
-            }
+            DataRow(
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                labelText = "Mode",
+                endSlot = {
+
+//                    onEvent(SettingsEvent.ChangeDisplayMode(AppCompatDelegate.MODE_NIGHT_YES))
+                }
+            )
+
+            Divider(modifier = Modifier.padding(start = 16.dp))
+
+            DataRow(
+                modifier = Modifier.padding(start = 16.dp, end = 8.dp),
+                labelText = "Layout system",
+                endSlot = {
+                    Box {
+
+                        TextButton(
+                            colors = ButtonDefaults.textButtonColors(
+                                contentColor = MaterialTheme.colorScheme.onBackground
+                            ),
+                            onClick = {
+                            onEvent(SettingsEvent.UpdateSelectedLayoutSystemExpanded(!state.selectedLayoutSystemExpanded))
+                        }) {
+                            Text(
+                             text =    state.currentLayoutSystem?.systemName?.let { stringResource(id = it) } ?: ""
+                            )
+
+                            val icon = if (state.selectedLayoutSystemExpanded) {
+                                Icons.Default.KeyboardArrowUp
+                            } else {
+                                Icons.Default.KeyboardArrowDown
+                            }
+                            Icon(icon, contentDescription = "")
+                        }
+
+                        DropdownMenu(
+                            expanded = state.selectedLayoutSystemExpanded,
+                            onDismissRequest = {
+                                onEvent(SettingsEvent.UpdateSelectedLayoutSystemExpanded(false))
+                            }) {
+                            LayoutSystem.values().forEach {
+
+                                DropdownMenuItem(
+                                    trailingIcon = {
+                                        if (state.selectedLayoutSystem == it) {
+                                                Icon(
+                                                    Icons.Default.Check,
+                                                    contentDescription = ""
+                                                )
+                                        }
+                                    },
+                                    text = {
+                                        Text(
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            text = stringResource(id = it.systemName))
+                                    },
+                                    onClick = {
+                                        onEvent(SettingsEvent.ChangeSelectedLayoutSystem(it))
+                                    })
+                            }
+                        }
+                    }
+                }
+            )
+
+            Divider(modifier = Modifier.padding(start = 16.dp))
+
+            ToggleableDataRow(
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                labelText = "Dynamic (Material You)",
+                checked = state.dynamicModeEnabled,
+                onCheckedChange = {
+                    onEvent(SettingsEvent.ChangeDynamicMode(it))
+                })
+
+            Divider(modifier = Modifier.padding(start = 16.dp))
+
+            ValueDataRow(
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                labelText = "App version",
+                valueText = state.appVersion,
+                endIcon = null
+            )
+
         }
     }
 }
@@ -86,6 +191,9 @@ fun SettingsScreenContent(
 @Composable
 fun SettingsScreenPreview() {
     PortfolioTheme {
-        SettingsScreenContent(state = SettingsState(), navController = rememberNavController(), onEvent = {})
+        SettingsScreenContent(
+            state = SettingsState(currentLayoutSystem = LayoutSystem.Compose),
+            navController = rememberNavController(),
+            onEvent = {})
     }
 }

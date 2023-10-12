@@ -32,7 +32,7 @@ class SettingsViewModel(
     init {
         viewModelScope.launch {
             val layoutSystem = dataStore.layoutSystem.firstOrNull()
-            _state.update { it.copy(currentLayoutSystem = layoutSystem) }
+            _state.update { it.copy(currentLayoutSystem = layoutSystem, selectedLayoutSystem = layoutSystem) }
         }
     }
 
@@ -51,6 +51,14 @@ class SettingsViewModel(
                 dataStore.changeLayoutSystem(event.layoutSystem)
                 _eventFlow.send(SettingsUiEvent.RestartApplication)
             }
+
+            is SettingsEvent.ChangeDynamicMode -> {
+                _state.update { it.copy(dynamicModeEnabled = event.dynamicModeEnabled) }
+            }
+
+            is SettingsEvent.UpdateSelectedLayoutSystemExpanded -> {
+                _state.update { it.copy(selectedLayoutSystemExpanded = event.expanded) }
+            }
         }
     }
 }
@@ -58,12 +66,16 @@ class SettingsViewModel(
 sealed class SettingsEvent {
     data class ChangeDisplayMode(val displayMode: Int) : SettingsEvent()
     data class ChangeSelectedLayoutSystem(val layoutSystem: LayoutSystem) : SettingsEvent()
+    data class ChangeDynamicMode(val dynamicModeEnabled: Boolean) : SettingsEvent()
+    data class UpdateSelectedLayoutSystemExpanded(val expanded: Boolean) : SettingsEvent()
 }
 
 data class SettingsState(
     val isLoading: Boolean = false,
     val currentLayoutSystem: LayoutSystem? = null,
     val selectedLayoutSystem: LayoutSystem? = null,
+    val selectedLayoutSystemExpanded: Boolean = false,
+    val dynamicModeEnabled: Boolean = false,
     val language: String = "-",
     val appVersion: String = "-"
 )
