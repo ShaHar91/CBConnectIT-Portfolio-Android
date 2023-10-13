@@ -25,7 +25,7 @@ class MyApp : Application() {
         KoinInitializer.init(instance)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val mode = get<UserPreferences>().displayMode.first()
+            val mode = get<UserPreferences>().userPrefs.first().displayMode
             AppCompatDelegate.setDefaultNightMode(mode)
         }
     }

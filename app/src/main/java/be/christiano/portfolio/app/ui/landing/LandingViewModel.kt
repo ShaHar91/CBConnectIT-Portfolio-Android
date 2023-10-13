@@ -8,6 +8,7 @@ import be.christiano.portfolio.app.data.preferences.UserPreferences
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
@@ -28,7 +29,7 @@ class LandingViewModel(
 
     init {
         viewModelScope.launch {
-            val layoutSystem = dataStore.layoutSystem.firstOrNull()
+            val layoutSystem = dataStore.userPrefs.first().layoutSystem
             _state.update { it.copy(currentLayoutSystem = layoutSystem) }
             _isGettingData.value = false
         }

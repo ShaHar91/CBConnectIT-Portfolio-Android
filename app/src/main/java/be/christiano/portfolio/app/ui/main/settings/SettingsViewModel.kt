@@ -1,15 +1,16 @@
 package be.christiano.portfolio.app.ui.main.settings
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.christiano.portfolio.app.BuildConfig
+import be.christiano.portfolio.app.data.models.LayoutSystem
 import be.christiano.portfolio.app.data.preferences.UserPreferences
-import be.christiano.portfolio.app.ui.landing.LayoutSystem
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -30,8 +31,15 @@ class SettingsViewModel(
 
     init {
         viewModelScope.launch {
-            val layoutSystem = dataStore.layoutSystem.firstOrNull()
-            _state.update { it.copy(currentLayoutSystem = layoutSystem, selectedLayoutSystem = layoutSystem) }
+            val userPrefs = dataStore.userPrefs.first()
+            _state.update {
+                it.copy(
+                    dynamicModeEnabled = userPrefs.dynamicEnabled,
+                    selectedDisplayMode = AppCompatDelegate.getDefaultNightMode(),
+                    currentLayoutSystem = userPrefs.layoutSystem,
+                    selectedLayoutSystem = userPrefs.layoutSystem
+                )
+            }
         }
     }
 
@@ -40,6 +48,7 @@ class SettingsViewModel(
             is SettingsEvent.ChangeDisplayMode -> {
                 AppCompatDelegate.setDefaultNightMode(event.displayMode)
                 dataStore.changeDisplayMode(event.displayMode)
+                _state.update { it.copy(selectedDisplayMode = event.displayMode) }
             }
 
             is SettingsEvent.ChangeSelectedLayoutSystem -> {
@@ -63,6 +72,7 @@ class SettingsViewModel(
             }
 
             is SettingsEvent.ChangeDynamicMode -> {
+                dataStore.changeDynamicEnabled(event.dynamicModeEnabled)
                 _state.update { it.copy(dynamicModeEnabled = event.dynamicModeEnabled) }
             }
 
@@ -84,14 +94,19 @@ sealed class SettingsEvent {
 
 data class SettingsState(
     val isLoading: Boolean = false,
+    val selectedDisplayMode: Int = AppCompatDelegate.MODE_NIGHT_UNSPECIFIED,
     val currentLayoutSystem: LayoutSystem? = null,
     val selectedLayoutSystem: LayoutSystem? = null,
     val selectedLayoutSystemExpanded: Boolean = false,
-    val dynamicModeEnabled: Boolean = false,
+    val dynamicModeEnabled: Boolean = true,
     val language: String = "-",
     val appVersion: String = "-",
     val showConfirmationDialog: Boolean = false
-)
+) {
+    val hasDarkModeSupport = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+
+    val hasDynamicSupport = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+}
 
 sealed class SettingsUiEvent {
     data object RestartApplication : SettingsUiEvent()

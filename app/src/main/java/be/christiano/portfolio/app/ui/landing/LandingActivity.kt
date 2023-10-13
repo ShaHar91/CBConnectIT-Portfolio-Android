@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -35,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import be.christiano.portfolio.app.R
+import be.christiano.portfolio.app.data.models.LayoutSystem
 import be.christiano.portfolio.app.ui.components.ChoiceCard
 import be.christiano.portfolio.app.ui.main.MainActivity
 import be.christiano.portfolio.app.ui.main.MainComposeActivity
@@ -85,7 +85,6 @@ private fun navigateToNext(layoutSystem: LayoutSystem?, context: Context) {
     context.startActivity(intent)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LandingScreenContent(
     state: LandingState,

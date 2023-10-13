@@ -52,7 +52,7 @@ fun AboutMeSection(
             horizontalArrangement = Arrangement.Center
         ) {
             AboutMeCard(
-                modifier = Modifier.width(100.dp),
+                modifier = Modifier.width(110.dp),
                 title = stringResource(R.string.experience),
                 subtitle = stringResource(R.string.experience_in_years, yearsOfExperience)
             ) {
@@ -62,7 +62,7 @@ fun AboutMeSection(
             Spacer(modifier = Modifier.width(16.dp))
 
             AboutMeCard(
-                modifier = Modifier.width(100.dp),
+                modifier = Modifier.width(110.dp),
                 title = stringResource(R.string.completed),
                 subtitle = stringResource(R.string.completed_projects)
             ) {
@@ -72,7 +72,7 @@ fun AboutMeSection(
 //            Spacer(modifier = Modifier.width(16.dp))
 //
 //            AboutMeCard(
-//                modifier = Modifier.width(100.dp),
+//                modifier = Modifier.width(110.dp),
 //                title = "Something",
 //                subtitle = "Dunno"
 //            ) {

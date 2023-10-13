@@ -2,25 +2,30 @@ package be.christiano.portfolio.app.ui.main.settings
 
 import android.content.Intent
 import android.content.res.Configuration
+import android.os.Build
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -29,19 +34,20 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import be.christiano.portfolio.app.R
+import be.christiano.portfolio.app.data.models.DisplayMode
+import be.christiano.portfolio.app.data.models.LayoutSystem
 import be.christiano.portfolio.app.extensions.findActivity
 import be.christiano.portfolio.app.ui.components.DataRow
 import be.christiano.portfolio.app.ui.components.DefaultAppBar
 import be.christiano.portfolio.app.ui.components.ToggleableDataRow
 import be.christiano.portfolio.app.ui.components.ValueDataRow
-import be.christiano.portfolio.app.ui.landing.LayoutSystem
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.flow.collectLatest
@@ -85,7 +91,7 @@ fun SettingsScreenContent(
     if (state.showConfirmationDialog) {
         AlertDialog(
             title = {
-                Text(text ="Are your sure?")
+                Text(text = "Are your sure?")
             },
             text = {
                 Text(text = "Changing the layout system will result in a full reboot of the app. Are you sure you want to continue?")
@@ -110,22 +116,40 @@ fun SettingsScreenContent(
         Modifier.fillMaxSize(),
         topBar = { DefaultAppBar(navController = navController, appBarTitle = "Settings") }
     ) { paddingValues ->
-        Spacer(modifier = Modifier.height(24.dp))
 
         Column(
             modifier = Modifier.padding(paddingValues)
         ) {
 
-            DataRow(
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                labelText = "Mode",
-                endSlot = {
+            Spacer(modifier = Modifier.height(24.dp))
 
-//                    onEvent(SettingsEvent.ChangeDisplayMode(AppCompatDelegate.MODE_NIGHT_YES))
-                }
-            )
+            if (state.hasDarkModeSupport) {
+                DataRow(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                    labelText = "Mode",
+                    endSlot = {
+                        SingleChoiceSegmentedButtonRow() {
+                            val displayModes = DisplayMode.values()
 
-            Divider(modifier = Modifier.padding(start = 16.dp))
+                            displayModes.forEachIndexed { index, displayMode ->
+                                SegmentedButton(
+                                    modifier = Modifier.size(width = 50.dp, height = 32.dp),
+                                    selected = displayMode.options.contains(state.selectedDisplayMode),
+                                    onClick = {
+                                        onEvent(SettingsEvent.ChangeDisplayMode(displayMode.options.first()))
+                                    },
+                                    shape = SegmentedButtonDefaults.itemShape(index = index, count = displayModes.count()),
+                                    icon = {}
+                                ) {
+                                    Icon(modifier = Modifier.size(24.dp), painter = painterResource(id = displayMode.icon), contentDescription = "")
+                                }
+                            }
+                        }
+                    }
+                )
+
+                HorizontalDivider(modifier = Modifier.padding(start = 16.dp))
+            }
 
             DataRow(
                 modifier = Modifier.padding(start = 16.dp, end = 8.dp),
@@ -183,17 +207,19 @@ fun SettingsScreenContent(
                 }
             )
 
-            Divider(modifier = Modifier.padding(start = 16.dp))
+            HorizontalDivider(modifier = Modifier.padding(start = 16.dp))
 
-            ToggleableDataRow(
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                labelText = "Dynamic (Material You)",
-                checked = state.dynamicModeEnabled,
-                onCheckedChange = {
-                    onEvent(SettingsEvent.ChangeDynamicMode(it))
-                })
+            if (state.hasDynamicSupport) {
+                ToggleableDataRow(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                    labelText = "Dynamic (Material You)",
+                    checked = state.dynamicModeEnabled,
+                    onCheckedChange = {
+                        onEvent(SettingsEvent.ChangeDynamicMode(it))
+                    })
 
-            Divider(modifier = Modifier.padding(start = 16.dp))
+                HorizontalDivider(modifier = Modifier.padding(start = 16.dp))
+            }
 
             ValueDataRow(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp),
