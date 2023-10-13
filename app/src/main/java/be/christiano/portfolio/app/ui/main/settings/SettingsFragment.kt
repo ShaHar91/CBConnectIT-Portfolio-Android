@@ -14,6 +14,7 @@ import be.christiano.portfolio.app.ui.landing.LayoutSystem
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegate
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegateImpl
 import be.christiano.portfolio.app.ui.main.base.dataBinding
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -22,7 +23,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 // TODO: maybe also some general settings like Measurements (Celsius, Fahrenheit,...)
 // TODO: accept local notifications (no OneSignal or Firebase support... or maybe yes?)
 // TODO: option to show information as a dialog, snackbar or toast
-// TODO: make a selection between compose or XML as a standard. When switched, recreate full app/activity
 class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
 
     private val mViewModel by viewModel<SettingsViewModel>()
@@ -58,7 +58,12 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
         initCheckedDisplayMode()
 
         binding.btnChangeLayoutSystem.setOnClickListener {
-            mViewModel.onEvent(SettingsEvent.ChangeSelectedLayoutSystem(LayoutSystem.Compose))
+            lifecycleScope.launch {
+                mViewModel.onEvent(SettingsEvent.ChangeSelectedLayoutSystem(LayoutSystem.Compose))
+                delay(500)
+                mViewModel.onEvent(SettingsEvent.PersistSelectedLayoutSystem)
+            }
+
         }
 
         binding.btgDisplayMode.addOnButtonCheckedListener { _, checkedId, isChecked ->

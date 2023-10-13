@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.christiano.portfolio.app.BuildConfig
 import be.christiano.portfolio.app.data.preferences.UserPreferences
-import be.christiano.portfolio.app.ui.landing.LandingUiEvent
 import be.christiano.portfolio.app.ui.landing.LayoutSystem
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,14 +41,25 @@ class SettingsViewModel(
                 AppCompatDelegate.setDefaultNightMode(event.displayMode)
                 dataStore.changeDisplayMode(event.displayMode)
             }
-            is SettingsEvent.ChangeSelectedLayoutSystem -> {
-                _state.update { it.copy(selectedLayoutSystem = event.layoutSystem) }
-                //TODO: show dialog to ask for confirmation from the user!!
-                //TODO: when user presses continue, save the selected system to the datastore and recreate the application
-                //TODO: when user presses cancel, reset the state to the current Layout system
 
-                dataStore.changeLayoutSystem(event.layoutSystem)
+            is SettingsEvent.ChangeSelectedLayoutSystem -> {
+                // Don't do anything when the same item is being selected
+                if (event.layoutSystem == _state.value.selectedLayoutSystem) {
+                    _state.update { it.copy(selectedLayoutSystemExpanded = false) }
+                    return@launch
+                }
+
+                _state.update { it.copy(selectedLayoutSystem = event.layoutSystem, showConfirmationDialog = true) }
+            }
+
+            is SettingsEvent.PersistSelectedLayoutSystem -> {
+                _state.update { it.copy(selectedLayoutSystemExpanded = false, showConfirmationDialog = false) }
+                _state.value.selectedLayoutSystem?.let { dataStore.changeLayoutSystem(it) }
                 _eventFlow.send(SettingsUiEvent.RestartApplication)
+            }
+
+            is SettingsEvent.ResetSelectedLayoutSystem -> {
+                _state.update { it.copy(selectedLayoutSystem = it.currentLayoutSystem, selectedLayoutSystemExpanded = false, showConfirmationDialog = false) }
             }
 
             is SettingsEvent.ChangeDynamicMode -> {
@@ -66,6 +76,8 @@ class SettingsViewModel(
 sealed class SettingsEvent {
     data class ChangeDisplayMode(val displayMode: Int) : SettingsEvent()
     data class ChangeSelectedLayoutSystem(val layoutSystem: LayoutSystem) : SettingsEvent()
+    data object PersistSelectedLayoutSystem : SettingsEvent()
+    data object ResetSelectedLayoutSystem : SettingsEvent()
     data class ChangeDynamicMode(val dynamicModeEnabled: Boolean) : SettingsEvent()
     data class UpdateSelectedLayoutSystemExpanded(val expanded: Boolean) : SettingsEvent()
 }
@@ -77,7 +89,8 @@ data class SettingsState(
     val selectedLayoutSystemExpanded: Boolean = false,
     val dynamicModeEnabled: Boolean = false,
     val language: String = "-",
-    val appVersion: String = "-"
+    val appVersion: String = "-",
+    val showConfirmationDialog: Boolean = false
 )
 
 sealed class SettingsUiEvent {

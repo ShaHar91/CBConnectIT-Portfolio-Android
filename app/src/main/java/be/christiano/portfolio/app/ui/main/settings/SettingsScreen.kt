@@ -2,8 +2,6 @@ package be.christiano.portfolio.app.ui.main.settings
 
 import android.content.Intent
 import android.content.res.Configuration
-import android.provider.Settings
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,11 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.Button
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
@@ -32,21 +29,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.extensions.findActivity
 import be.christiano.portfolio.app.ui.components.DataRow
 import be.christiano.portfolio.app.ui.components.DefaultAppBar
 import be.christiano.portfolio.app.ui.components.ToggleableDataRow
 import be.christiano.portfolio.app.ui.components.ValueDataRow
 import be.christiano.portfolio.app.ui.landing.LayoutSystem
-import be.christiano.portfolio.app.ui.main.introduction.IntroductionScreenContent
-import be.christiano.portfolio.app.ui.main.introduction.IntroductionState
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.flow.collectLatest
@@ -87,6 +82,30 @@ fun SettingsScreenContent(
     navController: NavController,
     onEvent: (SettingsEvent) -> Unit
 ) {
+    if (state.showConfirmationDialog) {
+        AlertDialog(
+            title = {
+                Text(text ="Are your sure?")
+            },
+            text = {
+                Text(text = "Changing the layout system will result in a full reboot of the app. Are you sure you want to continue?")
+            },
+            onDismissRequest = {
+                onEvent(SettingsEvent.ResetSelectedLayoutSystem)
+            },
+            confirmButton = {
+                TextButton(onClick = { onEvent(SettingsEvent.PersistSelectedLayoutSystem) }) {
+                    Text("Continue")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { onEvent(SettingsEvent.ResetSelectedLayoutSystem) }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+
     Scaffold(
         Modifier.fillMaxSize(),
         topBar = { DefaultAppBar(navController = navController, appBarTitle = "Settings") }
@@ -119,10 +138,10 @@ fun SettingsScreenContent(
                                 contentColor = MaterialTheme.colorScheme.onBackground
                             ),
                             onClick = {
-                            onEvent(SettingsEvent.UpdateSelectedLayoutSystemExpanded(!state.selectedLayoutSystemExpanded))
-                        }) {
+                                onEvent(SettingsEvent.UpdateSelectedLayoutSystemExpanded(!state.selectedLayoutSystemExpanded))
+                            }) {
                             Text(
-                             text =    state.currentLayoutSystem?.systemName?.let { stringResource(id = it) } ?: ""
+                                text = state.currentLayoutSystem?.systemName?.let { stringResource(id = it) } ?: ""
                             )
 
                             val icon = if (state.selectedLayoutSystemExpanded) {
@@ -143,16 +162,17 @@ fun SettingsScreenContent(
                                 DropdownMenuItem(
                                     trailingIcon = {
                                         if (state.selectedLayoutSystem == it) {
-                                                Icon(
-                                                    Icons.Default.Check,
-                                                    contentDescription = ""
-                                                )
+                                            Icon(
+                                                Icons.Default.Check,
+                                                contentDescription = ""
+                                            )
                                         }
                                     },
                                     text = {
                                         Text(
                                             style = MaterialTheme.typography.bodyLarge,
-                                            text = stringResource(id = it.systemName))
+                                            text = stringResource(id = it.systemName)
+                                        )
                                     },
                                     onClick = {
                                         onEvent(SettingsEvent.ChangeSelectedLayoutSystem(it))
