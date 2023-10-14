@@ -79,6 +79,10 @@ class SettingsViewModel(
             is SettingsEvent.UpdateSelectedLayoutSystemExpanded -> {
                 _state.update { it.copy(selectedLayoutSystemExpanded = event.expanded) }
             }
+
+            is SettingsEvent.ShowUnsupportedDynamicFeatureDialog -> {
+                _state.update { it.copy(ShowUnsupportedDynamicFeatureDialog = event.shown) }
+            }
         }
     }
 }
@@ -90,6 +94,7 @@ sealed class SettingsEvent {
     data object ResetSelectedLayoutSystem : SettingsEvent()
     data class ChangeDynamicMode(val dynamicModeEnabled: Boolean) : SettingsEvent()
     data class UpdateSelectedLayoutSystemExpanded(val expanded: Boolean) : SettingsEvent()
+    data class ShowUnsupportedDynamicFeatureDialog(val shown: Boolean) : SettingsEvent()
 }
 
 data class SettingsState(
@@ -101,10 +106,9 @@ data class SettingsState(
     val dynamicModeEnabled: Boolean = true,
     val language: String = "-",
     val appVersion: String = "-",
-    val showConfirmationDialog: Boolean = false
+    val showConfirmationDialog: Boolean = false,
+    val ShowUnsupportedDynamicFeatureDialog: Boolean = false
 ) {
-    val hasDarkModeSupport = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-
     val hasDynamicSupport = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 }
 

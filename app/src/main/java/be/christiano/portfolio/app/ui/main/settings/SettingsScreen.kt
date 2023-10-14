@@ -2,9 +2,9 @@ package be.christiano.portfolio.app.ui.main.settings
 
 import android.content.Intent
 import android.content.res.Configuration
-import android.os.Build
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -12,15 +12,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
@@ -41,11 +42,14 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.data.models.DisplayMode
 import be.christiano.portfolio.app.data.models.LayoutSystem
 import be.christiano.portfolio.app.extensions.findActivity
+import be.christiano.portfolio.app.ui.components.ConfirmationDialog
 import be.christiano.portfolio.app.ui.components.DataRow
 import be.christiano.portfolio.app.ui.components.DefaultAppBar
+import be.christiano.portfolio.app.ui.components.InformativeDialog
 import be.christiano.portfolio.app.ui.components.ToggleableDataRow
 import be.christiano.portfolio.app.ui.components.ValueDataRow
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
@@ -89,32 +93,28 @@ fun SettingsScreenContent(
     onEvent: (SettingsEvent) -> Unit
 ) {
     if (state.showConfirmationDialog) {
-        AlertDialog(
-            title = {
-                Text(text = "Are your sure?")
-            },
-            text = {
-                Text(text = "Changing the layout system will result in a full reboot of the app. Are you sure you want to continue?")
-            },
-            onDismissRequest = {
-                onEvent(SettingsEvent.ResetSelectedLayoutSystem)
-            },
-            confirmButton = {
-                TextButton(onClick = { onEvent(SettingsEvent.PersistSelectedLayoutSystem) }) {
-                    Text("Continue")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { onEvent(SettingsEvent.ResetSelectedLayoutSystem) }) {
-                    Text("Cancel")
-                }
-            }
+        ConfirmationDialog(
+            title = stringResource(R.string.change_layout_mode_title),
+            text = stringResource(R.string.change_layout_mode_body),
+            confirmButtonText = stringResource(R.string.common_continue),
+            dismissButtonText = stringResource(R.string.cancel),
+            onDismissRequest = { onEvent(SettingsEvent.ResetSelectedLayoutSystem) },
+            onConfirmButtonClicked = { onEvent(SettingsEvent.PersistSelectedLayoutSystem) }
+        )
+    }
+
+    if (state.ShowUnsupportedDynamicFeatureDialog) {
+        InformativeDialog(
+            title = stringResource(R.string.unsupported_feature),
+            text = stringResource(R.string.unsupported_feature_dynamic_colors_dialog_body),
+            confirmButtonText = stringResource(R.string.ok),
+            onDismissRequest = { onEvent(SettingsEvent.ShowUnsupportedDynamicFeatureDialog(false)) }
         )
     }
 
     Scaffold(
         Modifier.fillMaxSize(),
-        topBar = { DefaultAppBar(navController = navController, appBarTitle = "Settings") }
+        topBar = { DefaultAppBar(navController = navController, appBarTitle = stringResource(id = R.string.settings)) }
     ) { paddingValues ->
 
         Column(
@@ -123,37 +123,42 @@ fun SettingsScreenContent(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            if (state.hasDarkModeSupport) {
-                DataRow(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                    labelText = "Mode",
-                    endSlot = {
-                        SingleChoiceSegmentedButtonRow() {
-                            val displayModes = DisplayMode.values()
+            DataRow(
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                labelText = stringResource(R.string.display_mode),
+                endSlot = {
+                    SingleChoiceSegmentedButtonRow {
+                        val displayModes = DisplayMode.values()
 
-                            displayModes.forEachIndexed { index, displayMode ->
-                                SegmentedButton(
-                                    modifier = Modifier.size(width = 50.dp, height = 32.dp),
-                                    selected = displayMode.options.contains(state.selectedDisplayMode),
-                                    onClick = {
-                                        onEvent(SettingsEvent.ChangeDisplayMode(displayMode.options.first()))
-                                    },
-                                    shape = SegmentedButtonDefaults.itemShape(index = index, count = displayModes.count()),
-                                    icon = {}
-                                ) {
-                                    Icon(modifier = Modifier.size(24.dp), painter = painterResource(id = displayMode.icon), contentDescription = "")
-                                }
+                        displayModes.forEachIndexed { index, displayMode ->
+                            SegmentedButton(
+                                modifier = Modifier.size(width = 50.dp, height = 32.dp),
+                                selected = displayMode.options.contains(state.selectedDisplayMode),
+                                onClick = {
+                                    onEvent(SettingsEvent.ChangeDisplayMode(displayMode.options.first()))
+                                },
+                                shape = SegmentedButtonDefaults.itemShape(
+                                    index = index,
+                                    count = displayModes.count()
+                                ),
+                                icon = {}
+                            ) {
+                                Icon(
+                                    modifier = Modifier.size(24.dp),
+                                    painter = painterResource(id = displayMode.icon),
+                                    contentDescription = ""
+                                )
                             }
                         }
                     }
-                )
+                }
+            )
 
-                HorizontalDivider(modifier = Modifier.padding(start = 16.dp))
-            }
+            HorizontalDivider(modifier = Modifier.padding(start = 16.dp))
 
             DataRow(
                 modifier = Modifier.padding(start = 16.dp, end = 8.dp),
-                labelText = "Layout system",
+                labelText = stringResource(R.string.layout_system),
                 endSlot = {
                     Box {
 
@@ -165,7 +170,11 @@ fun SettingsScreenContent(
                                 onEvent(SettingsEvent.UpdateSelectedLayoutSystemExpanded(!state.selectedLayoutSystemExpanded))
                             }) {
                             Text(
-                                text = state.currentLayoutSystem?.systemName?.let { stringResource(id = it) } ?: ""
+                                text = state.currentLayoutSystem?.systemName?.let {
+                                    stringResource(
+                                        id = it
+                                    )
+                                } ?: ""
                             )
 
                             val icon = if (state.selectedLayoutSystemExpanded) {
@@ -209,21 +218,30 @@ fun SettingsScreenContent(
 
             HorizontalDivider(modifier = Modifier.padding(start = 16.dp))
 
-            if (state.hasDynamicSupport) {
+            Row {
+                if (!state.hasDynamicSupport) {
+                    IconButton(onClick = {
+                        onEvent(SettingsEvent.ShowUnsupportedDynamicFeatureDialog(true))
+                    }) {
+                        Icon(Icons.Default.Info, null)
+                    }
+                }
+
                 ToggleableDataRow(
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                    labelText = "Dynamic (Material You)",
+                    labelText = stringResource(R.string.dynamic_material_you),
                     checked = state.dynamicModeEnabled,
+                    enabled = state.hasDynamicSupport,
                     onCheckedChange = {
                         onEvent(SettingsEvent.ChangeDynamicMode(it))
                     })
-
-                HorizontalDivider(modifier = Modifier.padding(start = 16.dp))
             }
+
+            HorizontalDivider(modifier = Modifier.padding(start = 16.dp))
 
             ValueDataRow(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                labelText = "App version",
+                labelText = stringResource(R.string.app_version),
                 valueText = state.appVersion,
                 endIcon = null
             )

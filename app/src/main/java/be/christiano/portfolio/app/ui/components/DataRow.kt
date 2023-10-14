@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -42,10 +44,11 @@ fun DataRow(
     modifier: Modifier = Modifier,
     labelText: String,
     labelTextStyle: TextStyle = MaterialTheme.typography.titleSmall,
-    labelTextColor: Color? = null,
+    labelTextColor: Color = MaterialTheme.colorScheme.onBackground,
     startIcon: ImageVector? = null,
     endSlot: @Composable RowScope.() -> Unit,
     spaceBetween: Dp = 10.dp,
+    enabled: Boolean = true,
     onClick: (() -> Unit)? = null
 ) {
     Row(
@@ -73,8 +76,7 @@ fun DataRow(
                     text = labelText,
                     overflow = TextOverflow.Ellipsis,
                     style = labelTextStyle,
-
-                    color = labelTextColor ?: Color.Unspecified,
+                    color = labelTextColor.copy(if (enabled) 1f else 0.38f),
                     maxLines = 1
                 )
             }, endSlot = {
@@ -94,9 +96,9 @@ fun ValueDataRow(
     modifier: Modifier = Modifier,
     labelText: String,
     labelTextStyle: TextStyle = MaterialTheme.typography.titleSmall,
-    labelTextColor: Color? = null,
+    labelTextColor: Color = MaterialTheme.colorScheme.onBackground,
     startIcon: ImageVector? = null,
-    endIcon: ImageVector? = Icons.Default.KeyboardArrowRight,
+    endIcon: ImageVector? = Icons.AutoMirrored.Default.KeyboardArrowRight,
     valueText: String? = null,
     valueTextStyle: TextStyle = MaterialTheme.typography.titleSmall,
     onClick: (() -> Unit)? = null
@@ -132,9 +134,10 @@ fun ToggleableDataRow(
     modifier: Modifier = Modifier,
     labelText: String,
     labelTextStyle: TextStyle = MaterialTheme.typography.titleSmall,
-    labelTextColor: Color? = null,
+    labelTextColor: Color = MaterialTheme.colorScheme.onBackground,
     startIcon: ImageVector? = null,
     checked: Boolean,
+    enabled: Boolean = true,
     onCheckedChange: ((Boolean) -> Unit)?
 ) {
     DataRow(
@@ -144,8 +147,9 @@ fun ToggleableDataRow(
         labelTextColor = labelTextColor,
         startIcon = startIcon,
         spaceBetween = 20.dp,
+        enabled = enabled,
         endSlot = {
-            Switch(checked = checked, onCheckedChange = onCheckedChange)
+            Switch(enabled = enabled, checked = checked, onCheckedChange = onCheckedChange)
         }
     )
 }
@@ -242,32 +246,32 @@ fun DataRowPreview() {
             Column {
                 ValueDataRow(labelText = "This is a longer text than usual.")
 
-                Divider(Modifier.padding(start = 16.dp), thickness = 0.5.dp)
+                HorizontalDivider(Modifier.padding(start = 16.dp), thickness = 0.5.dp)
 
                 ValueDataRow(labelText = "This is a text", valueText = "Some value")
 
-                Divider(Modifier.padding(start = 16.dp), thickness = 0.5.dp)
+                HorizontalDivider(Modifier.padding(start = 16.dp), thickness = 0.5.dp)
 
                 ValueDataRow(
                     labelText = "This is a longer text to see what the data does",
                     valueText = "Some value"
                 )
 
-                Divider(Modifier.padding(start = 16.dp), thickness = 0.5.dp)
+                HorizontalDivider(Modifier.padding(start = 16.dp), thickness = 0.5.dp)
 
                 ValueDataRow(
                     labelText = "This is a text",
                     valueText = "Some value with a longer text"
                 )
 
-                Divider(Modifier.padding(start = 16.dp), thickness = 0.5.dp)
+                HorizontalDivider(Modifier.padding(start = 16.dp), thickness = 0.5.dp)
 
                 ValueDataRow(
                     labelText = "This is a longer text to see what the data does",
                     valueText = "Some value with a longer text"
                 )
 
-                Divider(Modifier.padding(start = 16.dp), thickness = 0.5.dp)
+                HorizontalDivider(Modifier.padding(start = 16.dp), thickness = 0.5.dp)
 
                 ValueDataRow(
                     labelText = "This is a longer text to see what the data does",
@@ -277,7 +281,7 @@ fun DataRowPreview() {
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                Divider(Modifier.padding(start = 16.dp), thickness = 0.5.dp)
+                HorizontalDivider(Modifier.padding(start = 16.dp), thickness = 0.5.dp)
 
                 ToggleableDataRow(
                     labelText = "This is a longer text to see what the data does, but a longer text is needed",

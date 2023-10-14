@@ -31,4 +31,14 @@
     <string name="testimonials">Testimonials</string>
     <string name="what_they_say">What They Say</string>
     <string name="work_experience">Work Experience</string>
+    <string name="dynamic_material_you">Dynamic (Material You)</string>
+    <string name="app_version">App version</string>
+    <string name="layout_system">Layout system</string>
+    <string name="display_mode">Display mode</string>
+    <string name="change_layout_mode_title">Are you sure?</string>
+    <string name="change_layout_mode_body">Changing the layout system will result in a full reboot of the app. Are you sure you want to continue?</string>
+    <string name="cancel">Cancel</string>
+    <string name="unsupported_feature">Unsupported feature</string>
+    <string name="ok">OK</string>
+    <string name="unsupported_feature_dynamic_colors_dialog_body">Dynamic colors (a.k.a. Material You) is only available for Android phones with version 12 or higher. If possible, please update to use this setting.</string>
 </resources>
