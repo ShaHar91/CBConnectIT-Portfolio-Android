@@ -11,7 +11,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.Month
@@ -22,27 +21,21 @@ import kotlin.time.toDuration
 class IntroductionViewModel : BaseComposeViewModel() {
 
     private val _state = MutableStateFlow(
-        IntroductionState()
+        IntroductionState(experienceInYears = getUpdateExperienceInYears())
     )
     val state = _state.asStateFlow()
 
     private val _eventFlow = Channel<IntroductionUiEvent>()
     val eventFlow = _eventFlow.receiveAsFlow()
 
-    init {
-        updateExperienceInYears()
-    }
-
-    private fun updateExperienceInYears() {
+    private fun getUpdateExperienceInYears(): Int {
         //TODO: maybe try to simplify this?
         val started = LocalDateTime.of(2017, Month.NOVEMBER, 1, 0, 0).toInstant(ZoneOffset.UTC)
         val current = LocalDateTime.now().toInstant(ZoneOffset.UTC)
 
         val difference = current.minusMillis(started.toEpochMilli()).toEpochMilli()
 
-        val yearsExperience = difference.toDuration(DurationUnit.MILLISECONDS).inWholeDays / 365
-
-        _state.update { it.copy(experienceInYears = yearsExperience.toInt()) }
+        return (difference.toDuration(DurationUnit.MILLISECONDS).inWholeDays / 365).toInt()
     }
 
     fun onEvent(event: IntroductionEvent) = viewModelScope.launch {

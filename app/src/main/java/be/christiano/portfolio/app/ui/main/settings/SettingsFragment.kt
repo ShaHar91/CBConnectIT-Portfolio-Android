@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 // TODO: maybe also some general settings like Measurements (Celsius, Fahrenheit,...)
 // TODO: accept local notifications (no OneSignal or Firebase support... or maybe yes?)
 // TODO: option to show information as a dialog, snackbar or toast

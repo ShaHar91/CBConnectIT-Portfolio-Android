@@ -103,7 +103,7 @@ fun SettingsScreenContent(
         )
     }
 
-    if (state.ShowUnsupportedDynamicFeatureDialog) {
+    if (state.showUnsupportedDynamicFeatureDialog) {
         InformativeDialog(
             title = stringResource(R.string.unsupported_feature),
             text = stringResource(R.string.unsupported_feature_dynamic_colors_dialog_body),

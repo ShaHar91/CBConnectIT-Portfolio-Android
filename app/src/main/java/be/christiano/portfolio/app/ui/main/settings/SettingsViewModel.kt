@@ -81,7 +81,7 @@ class SettingsViewModel(
             }
 
             is SettingsEvent.ShowUnsupportedDynamicFeatureDialog -> {
-                _state.update { it.copy(ShowUnsupportedDynamicFeatureDialog = event.shown) }
+                _state.update { it.copy(showUnsupportedDynamicFeatureDialog = event.shown) }
             }
         }
     }
@@ -107,7 +107,7 @@ data class SettingsState(
     val language: String = "-",
     val appVersion: String = "-",
     val showConfirmationDialog: Boolean = false,
-    val ShowUnsupportedDynamicFeatureDialog: Boolean = false
+    val showUnsupportedDynamicFeatureDialog: Boolean = false
 ) {
     val hasDynamicSupport = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 }

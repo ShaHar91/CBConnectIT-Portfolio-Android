@@ -6,25 +6,23 @@ import androidx.lifecycle.viewModelScope
 import be.christiano.portfolio.app.data.preferences.UserPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val dataStore: UserPreferences
+    dataStore: UserPreferences
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MainState())
     val state = _state.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            dataStore.userPrefs.collectLatest {
-                _state.update { state ->
-                    state.copy(displayMode = it.displayMode, dynamicModeEnabled = it.dynamicEnabled)
-                }
+        dataStore.userPrefs.onEach {
+            _state.update { state ->
+                state.copy(displayMode = it.displayMode, dynamicModeEnabled = it.dynamicEnabled)
             }
-        }
+        }.launchIn(viewModelScope)
     }
 }
 
