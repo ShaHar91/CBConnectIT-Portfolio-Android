@@ -1,4 +1,4 @@
-package be.christiano.portfolio.app.data.models
+package be.christiano.portfolio.app.domain.enums
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

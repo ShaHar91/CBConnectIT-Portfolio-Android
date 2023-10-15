@@ -43,8 +43,8 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import be.christiano.portfolio.app.R
-import be.christiano.portfolio.app.data.models.DisplayMode
-import be.christiano.portfolio.app.data.models.LayoutSystem
+import be.christiano.portfolio.app.domain.enums.DisplayMode
+import be.christiano.portfolio.app.domain.enums.LayoutSystem
 import be.christiano.portfolio.app.extensions.findActivity
 import be.christiano.portfolio.app.ui.components.ConfirmationDialog
 import be.christiano.portfolio.app.ui.components.DataRow

@@ -1,7 +1,6 @@
 package be.christiano.portfolio.app.ui.main.introduction.sections.components
 
 import android.content.res.Configuration
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,8 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import be.christiano.portfolio.app.R
-import be.christiano.portfolio.app.data.models.Social
+import be.christiano.portfolio.app.domain.enums.Social
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

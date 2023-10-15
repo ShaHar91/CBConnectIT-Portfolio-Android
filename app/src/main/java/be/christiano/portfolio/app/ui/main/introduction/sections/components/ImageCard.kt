@@ -1,8 +1,6 @@
 package be.christiano.portfolio.app.ui.main.introduction.sections.components
 
 import android.content.res.Configuration
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -24,14 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import be.christiano.portfolio.app.R
-import be.christiano.portfolio.app.data.models.Portfolio
-import be.christiano.portfolio.app.data.models.Service
+import be.christiano.portfolio.app.domain.model.Service
+import be.christiano.portfolio.app.domain.model.Work
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 import coil.compose.AsyncImage
 
@@ -121,21 +117,21 @@ fun PortfolioCardPreview() {
     PortfolioTheme {
         Surface {
             Column {
-                val service = Service.values().first()
+                val service = Service("", "", "", "")
                 ImageCard(
-                    image = service.icon,
+                    image = service.image,
                     text = service.title,
                     body = service.description,
-                    imgDescription = service.imageDesc
+                    imgDescription = service.title
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                val portfolio = Portfolio.values().first()
+                val portfolio = Work("", "", "", "", emptyList())
                 ImageCard(
                     image = portfolio.image,
                     text = portfolio.title,
                     body = portfolio.description,
-                    imgDescription = portfolio.imageDesc,
-                    tags = portfolio.tags
+                    imgDescription = portfolio.title,
+                    tags = portfolio.tags.map { it.name }
                 )
             }
         }

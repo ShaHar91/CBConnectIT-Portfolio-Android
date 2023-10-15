@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import be.christiano.portfolio.app.R
-import be.christiano.portfolio.app.data.models.Service
+import be.christiano.portfolio.app.domain.model.Service
 import be.christiano.portfolio.app.extensions.MinimumHeightState
 import be.christiano.portfolio.app.extensions.minimumHeightModifier
 import be.christiano.portfolio.app.ui.main.introduction.sections.components.ImageCard
@@ -57,8 +57,8 @@ fun ServiceSection(
                     minimumHeightStateModifier
                         .fillParentMaxWidth()
                         .padding(horizontal = 8.dp),
-                    it.icon,
-                    it.imageDesc,
+                    it.image,
+                    it.title,
                     it.title,
                     it.description,
                     RoundedCornerShape(20.dp, 20.dp, 0.dp, 20.dp)
@@ -74,7 +74,7 @@ fun ServiceSection(
 fun ServiceSectionPreview() {
     PortfolioTheme {
         Surface {
-            ServiceSection(Service.values().toList()) { }
+            ServiceSection(listOf(Service("", "", "", ""))) { }
         }
     }
 }

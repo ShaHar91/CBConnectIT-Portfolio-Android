@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.christiano.portfolio.app.BuildConfig
-import be.christiano.portfolio.app.data.models.LayoutSystem
+import be.christiano.portfolio.app.domain.enums.LayoutSystem
 import be.christiano.portfolio.app.data.preferences.UserPreferences
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

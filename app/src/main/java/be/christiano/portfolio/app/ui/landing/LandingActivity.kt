@@ -34,7 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import be.christiano.portfolio.app.R
-import be.christiano.portfolio.app.data.models.LayoutSystem
+import be.christiano.portfolio.app.domain.enums.LayoutSystem
 import be.christiano.portfolio.app.ui.components.ChoiceCard
 import be.christiano.portfolio.app.ui.main.MainActivity
 import be.christiano.portfolio.app.ui.main.MainComposeActivity

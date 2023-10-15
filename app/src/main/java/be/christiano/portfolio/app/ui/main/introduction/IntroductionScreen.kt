@@ -148,6 +148,9 @@ fun IntroductionScreenContent(
             Spacer(modifier = Modifier.height(85.dp))
         }
     }
+
+    //TODO: show loading bar when data is being loaded!!
+    //TODO: maybe add a SwipeToRefresh to the layout?
 }
 
 @Preview

@@ -3,6 +3,9 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("com.google.devtools.ksp") version "1.9.0-1.0.13" // Depends on your kotlin version
+    id("org.jetbrains.kotlin.plugin.serialization")
+    id("kotlin-parcelize")
+
 }
 
 android {
@@ -92,8 +95,21 @@ dependencies {
     implementation("io.insert-koin:koin-androidx-navigation:3.4.0")
     implementation("io.insert-koin:koin-androidx-compose:3.4.3")
     testImplementation("io.insert-koin:koin-test-junit4:3.4.0")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    implementation("io.ktor:ktor-client-core:2.3.5")
+    // Ktor network)
+//    implementation("io.ktor:ktor-client-cio:2.3.5")
+    implementation("io.ktor:ktor-client-android:2.3.5")
+//    implementation("io.ktor:ktor-client-websockets:2.3.5")
+    implementation("io.ktor:ktor-client-logging:2.3.5")
+    // Ktor serialization)
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.5")
+    implementation("io.ktor:ktor-client-serialization:2.3.5")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.5")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+
 }

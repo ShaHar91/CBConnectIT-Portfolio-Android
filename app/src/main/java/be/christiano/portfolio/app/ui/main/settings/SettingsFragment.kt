@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import be.christiano.portfolio.app.R
-import be.christiano.portfolio.app.data.models.LayoutSystem
+import be.christiano.portfolio.app.domain.enums.LayoutSystem
 import be.christiano.portfolio.app.databinding.FragmentSettingsBinding
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegate
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegateImpl

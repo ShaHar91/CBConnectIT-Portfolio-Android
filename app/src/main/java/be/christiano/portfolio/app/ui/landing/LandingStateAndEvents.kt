@@ -1,6 +1,6 @@
 package be.christiano.portfolio.app.ui.landing
 
-import be.christiano.portfolio.app.data.models.LayoutSystem
+import be.christiano.portfolio.app.domain.enums.LayoutSystem
 
 data class LandingState(
     val currentLayoutSystem: LayoutSystem? = null,
