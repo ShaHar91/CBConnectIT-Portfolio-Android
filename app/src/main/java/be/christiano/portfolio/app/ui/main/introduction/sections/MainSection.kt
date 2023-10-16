@@ -81,31 +81,31 @@ fun MainSection(
             onClick = onClick
         )
 
-        @Composable
-        fun MainImage(modifier: Modifier = Modifier, visible: Boolean = true) {
-            Image(
-                modifier = modifier
-                    .alpha(if (visible) 1f else 0f)
-                    .fillMaxWidth(),
-                painter = painterResource(id = R.drawable.main_image),
-                contentDescription = "Main image"
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .widthIn(max = 400.dp)
-                .padding(horizontal = 16.dp)
-                .offset(y = (-20).dp),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            ElevatedCard {
-                // internal image is needed otherwise the height would not be drawn...
-                MainImage(Modifier.padding(horizontal = 30.dp), visible = false)
-            }
-
-            MainImage()
-        }
+//        @Composable
+//        fun MainImage(modifier: Modifier = Modifier, visible: Boolean = true) {
+//            Image(
+//                modifier = modifier
+//                    .alpha(if (visible) 1f else 0f)
+//                    .fillMaxWidth(),
+//                painter = painterResource(id = R.drawable.main_image),
+//                contentDescription = "Main image"
+//            )
+//        }
+//
+//        Box(
+//            modifier = Modifier
+//                .widthIn(max = 400.dp)
+//                .padding(horizontal = 16.dp)
+//                .offset(y = (-20).dp),
+//            contentAlignment = Alignment.BottomCenter
+//        ) {
+//            ElevatedCard {
+//                // internal image is needed otherwise the height would not be drawn...
+//                MainImage(Modifier.padding(horizontal = 30.dp), visible = false)
+//            }
+//
+//            MainImage()
+//        }
     }
 }
 

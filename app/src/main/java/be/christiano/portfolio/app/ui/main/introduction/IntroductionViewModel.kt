@@ -1,9 +1,9 @@
 package be.christiano.portfolio.app.ui.main.introduction
 
 import androidx.lifecycle.viewModelScope
+import be.christiano.portfolio.app.domain.enums.Social
 import be.christiano.portfolio.app.domain.model.Experience
 import be.christiano.portfolio.app.domain.model.Service
-import be.christiano.portfolio.app.domain.enums.Social
 import be.christiano.portfolio.app.domain.model.Testimonial
 import be.christiano.portfolio.app.domain.model.Work
 import be.christiano.portfolio.app.domain.repository.ExperienceRepository
@@ -11,17 +11,16 @@ import be.christiano.portfolio.app.domain.repository.ServiceRepository
 import be.christiano.portfolio.app.domain.repository.TestimonialRepository
 import be.christiano.portfolio.app.domain.repository.WorkRepository
 import be.christiano.portfolio.app.ui.base.BaseComposeViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
+import java.time.Duration
+import java.time.LocalDate
 import java.time.Month
-import java.time.ZoneOffset
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 class IntroductionViewModel(
     private val serviceRepo: ServiceRepository,
@@ -39,58 +38,50 @@ class IntroductionViewModel(
     val eventFlow = _eventFlow.receiveAsFlow()
 
     init {
+        fetchAllData()
     }
 
-    private fun fetchAllServices() {
-        viewModelScope.launch {
-            val services = serviceRepo.fetchAllServices()
-            _state.update { it.copy(services = services.data ?: emptyList()) }
+    private fun fetchAllData() = viewModelScope.launch {
+        _state.update { it.copy(isLoading = true) }
+
+        val servicesAsync = async { serviceRepo.fetchAllServices() }
+        val experiencesAsync = async { experienceRepo.fetchAllExperiences() }
+        val worksAsync = async { workRepository.fetchAllWorks() }
+        val testimonialsAsync = async { testimonialRepository.fetchAllTestimonials() }
+
+        val services = servicesAsync.await()
+        val experiences = experiencesAsync.await()
+        val works = worksAsync.await()
+        val testimonials = testimonialsAsync.await()
+
+        val calls = listOf(services, experiences, works, testimonials)
+        if (calls.any { it.isFailure }) {
+            calls.first { it.isFailure }.exceptionOrNull()?.let { showSnackbar(it.message) }
         }
-    }
 
-    private fun fetchAllExperiences() {
-        viewModelScope.launch {
-            val experiences = experienceRepo.fetchAllExperiences()
-            _state.update { it.copy(experiences = experiences.data ?: emptyList()) }
-        }
-    }
-
-    private fun fetchAllWorks() {
-        viewModelScope.launch {
-            val works = workRepository.fetchAllWorks()
-            _state.update { it.copy(projects = works.data ?: emptyList()) }
-        }
-    }
-
-    private fun fetchAllTestimonials() {
-        viewModelScope.launch {
-            val testimonials = testimonialRepository.fetchAllTestimonials()
-            _state.update { it.copy(testimonials = testimonials.data ?: emptyList()) }
+        _state.update {
+            it.copy(
+                isLoading = false,
+                services = services.getOrNull() ?: emptyList(),
+                experiences = experiences.getOrNull() ?: emptyList(),
+                projects = works.getOrNull() ?: emptyList(),
+                testimonials = testimonials.getOrNull() ?: emptyList()
+            )
         }
     }
 
     private fun getUpdateExperienceInYears(): Int {
-        //TODO: maybe try to simplify this?
-        val started = LocalDateTime.of(2017, Month.NOVEMBER, 1, 0, 0).toInstant(ZoneOffset.UTC)
-        val current = LocalDateTime.now().toInstant(ZoneOffset.UTC)
+        val startDate = LocalDate.of(2017, Month.NOVEMBER, 1)
+        val currentDate = LocalDate.now()
+        val yearsBetween = Duration.between(startDate.atStartOfDay(), currentDate.atStartOfDay()).toDays() / 365
 
-        val difference = current.minusMillis(started.toEpochMilli()).toEpochMilli()
-
-        return (difference.toDuration(DurationUnit.MILLISECONDS).inWholeDays / 365).toInt()
+        return yearsBetween.toInt()
     }
 
     fun onEvent(event: IntroductionEvent) = viewModelScope.launch {
         when (event) {
             is IntroductionEvent.OpenSocialLink -> _eventFlow.send(IntroductionUiEvent.OpenSocialLink(event.social))
-            is IntroductionEvent.OpenMailClient -> {
-                //TODO: remove all data fetches from this place!
-                //_eventFlow.send(IntroductionUiEvent.OpenMailClient)
-                fetchAllServices()
-                fetchAllExperiences()
-                fetchAllWorks()
-                fetchAllTestimonials()
-            }
-
+            is IntroductionEvent.OpenMailClient -> _eventFlow.send(IntroductionUiEvent.OpenMailClient)
             is IntroductionEvent.OpenServiceList -> showSnackbar("In Development!")
             is IntroductionEvent.OpenPortfolioList -> showSnackbar("In Development!")
             is IntroductionEvent.OpenTestimonialsList -> showSnackbar("In Development!")
