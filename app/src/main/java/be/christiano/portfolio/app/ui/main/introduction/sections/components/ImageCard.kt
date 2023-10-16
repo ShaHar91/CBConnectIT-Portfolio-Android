@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import be.christiano.portfolio.app.domain.model.Service
 import be.christiano.portfolio.app.domain.model.Work
+import be.christiano.portfolio.app.domain.model.previewData
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 import coil.compose.AsyncImage
 
@@ -117,7 +118,7 @@ fun PortfolioCardPreview() {
     PortfolioTheme {
         Surface {
             Column {
-                val service = Service("", "", "", "")
+                val service = Service.previewData()
                 ImageCard(
                     image = service.image,
                     text = service.title,
@@ -125,7 +126,7 @@ fun PortfolioCardPreview() {
                     imgDescription = service.title
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                val portfolio = Work("", "", "", "", emptyList())
+                val portfolio = Work.previewData()
                 ImageCard(
                     image = portfolio.image,
                     text = portfolio.title,

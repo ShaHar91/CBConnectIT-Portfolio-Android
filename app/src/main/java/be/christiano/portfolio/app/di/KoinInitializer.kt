@@ -13,7 +13,7 @@ object KoinInitializer {
             androidLogger(if (BuildConfig.DEBUG) Level.DEBUG else Level.NONE)
             androidContext(context)
 
-            modules(appModule, viewModelModule)
+            modules(appModule, viewModelModule, apiModule, daoModule, repositoryModule)
         }
     }
 }

@@ -15,6 +15,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -39,6 +41,22 @@ class IntroductionViewModel(
 
     init {
         fetchAllData()
+
+        serviceRepo.findAllServices().onEach { services ->
+            _state.update { it.copy(services = services) }
+        }.launchIn(viewModelScope)
+
+        experienceRepo.findAllExperiences().onEach { experiences ->
+            _state.update { it.copy(experiences = experiences) }
+        }.launchIn(viewModelScope)
+
+        workRepository.findAllWorks().onEach { works ->
+            _state.update { it.copy(projects = works) }
+        }.launchIn(viewModelScope)
+
+        testimonialRepository.findAllTestimonials().onEach { testimonials ->
+            _state.update { it.copy(testimonials = testimonials) }
+        }.launchIn(viewModelScope)
     }
 
     private fun fetchAllData() = viewModelScope.launch {
@@ -59,15 +77,7 @@ class IntroductionViewModel(
             calls.first { it.isFailure }.exceptionOrNull()?.let { showSnackbar(it.message) }
         }
 
-        _state.update {
-            it.copy(
-                isLoading = false,
-                services = services.getOrNull() ?: emptyList(),
-                experiences = experiences.getOrNull() ?: emptyList(),
-                projects = works.getOrNull() ?: emptyList(),
-                testimonials = testimonials.getOrNull() ?: emptyList()
-            )
-        }
+        _state.update { it.copy(isLoading = false) }
     }
 
     private fun getUpdateExperienceInYears(): Int {

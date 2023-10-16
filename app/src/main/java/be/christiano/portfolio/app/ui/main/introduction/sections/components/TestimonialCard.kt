@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import be.christiano.portfolio.app.domain.model.Testimonial
+import be.christiano.portfolio.app.domain.model.previewData
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 import coil.compose.AsyncImage
 
@@ -86,7 +87,7 @@ fun TestimonialCard(
 fun TestimonialCardPreview() {
     PortfolioTheme {
         Surface {
-            val testimonial = Testimonial("", "", "", "")
+            val testimonial = Testimonial.previewData()
             TestimonialCard(image = testimonial.image, name = testimonial.fullName, function = testimonial.function, review = testimonial.review)
         }
     }

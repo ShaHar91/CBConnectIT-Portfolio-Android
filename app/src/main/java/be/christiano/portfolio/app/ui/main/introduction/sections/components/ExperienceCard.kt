@@ -125,7 +125,7 @@ fun ExperienceCardPreview() {
     PortfolioTheme {
         Surface {
             ExperienceCard(
-                experience = Experience("", "", "", "", "")
+                experience = Experience("", "", "", "", "", "")
             )
         }
     }

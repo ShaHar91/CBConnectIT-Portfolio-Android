@@ -66,7 +66,7 @@ fun ExperienceSection(
 fun ExperienceSectionPreview() {
     PortfolioTheme {
         Surface {
-            ExperienceSection(listOf(Experience("", "", "", "", ""))) {}
+            ExperienceSection(listOf(Experience("", "", "", "", "", ""))) {}
         }
     }
 }
