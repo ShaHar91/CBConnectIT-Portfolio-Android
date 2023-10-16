@@ -2,15 +2,16 @@ package be.christiano.portfolio.app.data.mapper
 
 import be.christiano.portfolio.app.data.local.entities.WorkEntity
 import be.christiano.portfolio.app.data.remote.dto.WorkDto
+import be.christiano.portfolio.app.domain.model.Tag
 import be.christiano.portfolio.app.domain.model.Work
 
-fun WorkEntity.toWork() = Work(
+fun WorkEntity.toWork(tags: List<Tag> = emptyList()) = Work(
     id,
     image,
     title,
     description,
     link,
-    emptyList()// TODO:   tags.map { it.toTag() }
+    tags
 )
 
 fun List<WorkEntity>.toWorks() = this.map { it.toWork() }

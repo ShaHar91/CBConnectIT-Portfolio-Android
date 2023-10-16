@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import be.christiano.portfolio.app.data.local.entities.WorkTagCrossRefEntity
 import be.christiano.portfolio.app.data.local.entities.WorkWithTags
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WorkTagCrossRefDao {
@@ -15,5 +16,5 @@ interface WorkTagCrossRefDao {
 
     @Transaction
     @Query("SELECT * FROM work")
-    suspend fun findAllWorksWithTags(): List<WorkWithTags>
+    fun findAllWorksWithTags(): Flow<List<WorkWithTags>>
 }

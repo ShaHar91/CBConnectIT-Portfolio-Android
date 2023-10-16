@@ -4,8 +4,8 @@ import androidx.room.Entity
 
 @Entity(primaryKeys = [WorkTagCrossRefEntity.COLUMN_ID_TAG, WorkTagCrossRefEntity.COLUMN_ID_WORK], tableName = WorkTagCrossRefEntity.ENTITY_NAME)
 data class WorkTagCrossRefEntity(
-    val tagId: String,
-    val workId: String
+    val workId: String,
+    val tagId: String
 ) {
     companion object {
         const val COLUMN_ID_TAG = "tagId"
