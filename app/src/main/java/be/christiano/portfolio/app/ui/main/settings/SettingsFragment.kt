@@ -5,8 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.ListPopupWindow
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.databinding.FragmentSettingsBinding
@@ -14,7 +18,7 @@ import be.christiano.portfolio.app.domain.enums.LayoutSystem
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegate
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegateImpl
 import be.christiano.portfolio.app.ui.main.base.dataBinding
-import com.google.android.material.elevation.SurfaceColors
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -31,6 +35,45 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
         viewModel = mViewModel
     }
 
+    private val listPopUpWindow by lazy {
+        val popUp = ListPopupWindow(requireContext(), null, com.google.android.material.R.attr.listPopupWindowStyle)
+        popUp.anchorView = binding.btnLayoutSystem
+        popUp.width = 800
+
+        //TODO: update the items when a selection gets updated, also show the checkmark at the end!
+        val items = LayoutSystem.values().map { getString(it.systemName) }
+        val adapter = ArrayAdapter(requireContext(), R.layout.list_popup_window_item, items)
+        popUp.setAdapter(adapter)
+
+        popUp.setOnDismissListener {
+            mViewModel.onEvent(SettingsEvent.UpdateSelectedLayoutSystemExpanded(false))
+        }
+
+        popUp.setOnItemClickListener { parent, view, position, id ->
+            mViewModel.onEvent(SettingsEvent.ChangeSelectedLayoutSystem(LayoutSystem.values()[position]))
+        }
+
+        popUp
+    }
+
+    private fun showConfirmationDialog() = MaterialAlertDialogBuilder(requireContext())
+        .setTitle(R.string.change_layout_mode_title)
+        .setMessage(R.string.change_layout_mode_body)
+        .setNegativeButton(R.string.cancel) { dialog, which ->
+            mViewModel.onEvent(SettingsEvent.ResetSelectedLayoutSystem)
+        }
+        .setPositiveButton(R.string.common_continue) { dialog, which ->
+            mViewModel.onEvent(SettingsEvent.PersistSelectedLayoutSystem)
+        }
+        .setOnDismissListener {
+            mViewModel.onEvent(SettingsEvent.ResetSelectedLayoutSystem)
+        }.show()
+
+    //TODO: when the dynamic is unsupported, show this dialog!
+    private fun showInformativeDialog() = MaterialAlertDialogBuilder(requireContext())
+        .setTitle(R.string.app_name)
+        .show()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = binding.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,7 +84,7 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
     }
 
     private fun initObservers() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             mViewModel.eventFlow.collectLatest {
                 when (it) {
                     SettingsUiEvent.RestartApplication -> {
@@ -52,21 +95,38 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
                 }
             }
         }
+
+        var confirmationDialog: AlertDialog? = null
+        var informativeDialog: AlertDialog? = null
+
+        mViewModel.state.asLiveData().observe(viewLifecycleOwner) {
+            if (it.selectedLayoutSystemExpanded) {
+                listPopUpWindow.show()
+            } else {
+                listPopUpWindow.dismiss()
+            }
+
+            confirmationDialog = if (it.showConfirmationDialog) {
+                showConfirmationDialog()
+            } else {
+                confirmationDialog?.dismiss()
+                null
+            }
+
+            informativeDialog = if (it.showUnsupportedDynamicFeatureDialog) {
+                showInformativeDialog()
+            } else {
+                informativeDialog?.dismiss()
+                null
+            }
+        }
     }
 
     private fun initViews() {
         initCheckedDisplayMode()
 
-        val color = SurfaceColors.SURFACE_2.getColor(requireContext())
-        binding.mtbMain.setBackgroundColor(color)
-
-        binding.btnChangeLayoutSystem.setOnClickListener {
-            lifecycleScope.launch {
-                mViewModel.onEvent(SettingsEvent.ChangeSelectedLayoutSystem(LayoutSystem.Compose))
-                delay(500)
-                mViewModel.onEvent(SettingsEvent.PersistSelectedLayoutSystem)
-            }
-
+        binding.btnLayoutSystem.setOnClickListener {
+            mViewModel.onEvent(SettingsEvent.UpdateSelectedLayoutSystemExpanded(true))
         }
 
         binding.btgDisplayMode.addOnButtonCheckedListener { _, checkedId, isChecked ->
@@ -81,7 +141,7 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
             mViewModel.onEvent(SettingsEvent.ChangeDisplayMode(displayMode))
         }
 
-        binding.swDynamicMode.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.tdrDynamicMode.valueSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (buttonView.isPressed || buttonView.isFocused) {
                 lifecycleScope.launch {
                     mViewModel.onEvent(SettingsEvent.ChangeDynamicMode(isChecked))

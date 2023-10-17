@@ -10,16 +10,17 @@
             type="be.christiano.portfolio.app.ui.main.settings.SettingsViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         tools:context=".ui.main.settings.SettingsFragment">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/mtbMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorSurface"
+            android:background="?colorSurfaceContainer"
             app:layout_constraintTop_toTopOf="parent"
             tools:navigationIcon="@drawable/ic_back"
             tools:title="Settings" />
@@ -28,8 +29,7 @@
             android:id="@+id/llDisplayMode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="?colorSurfaceContainer"
+            android:layout_marginTop="24dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="16dp"
@@ -39,9 +39,10 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:text="Mode"
-                android:textAppearance="?attr/textAppearanceSubtitle1" />
+                android:text="@string/display_mode"
+                android:textAppearance="?attr/textAppearanceTitleSmall" />
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/btgDisplayMode"
@@ -89,35 +90,73 @@
             </com.google.android.material.button.MaterialButtonToggleGroup>
         </LinearLayout>
 
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp" />
+
+        <LinearLayout
+            android:id="@+id/llLayoutSystem"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp"
+            app:layout_constraintTop_toBottomOf="@id/mtbMain">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="@string/layout_system"
+                android:textAppearance="?attr/textAppearanceTitleSmall" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLayoutSystem"
+                style="@style/Widget.Material3.Button.TextButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="6dp"
+                android:text="@{viewModel.state.currentLayoutSystem.systemName}"
+                android:textColor="?attr/colorOnBackground"
+                app:icon="@drawable/ic_drop_down"
+                app:iconGravity="end"
+                app:iconTint="?attr/colorOnBackground"
+                tools:text="@string/xml_layout" />
+        </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp" />
+
+        <be.christiano.portfolio.dataRow.ToggleDataRow
+            android:id="@+id/tdrDynamicMode"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:checked="@{viewModel.state.dynamicModeEnabled}"
+            app:labelText="@string/dynamic_material_you"
+            app:labelTextAppearance="?attr/textAppearanceTitleSmall"
+            app:paddingContentVertical="0dp" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp" />
+
         <be.christiano.portfolio.dataRow.DataRow
             android:id="@+id/drVersion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:boxBackgroundColor="?colorSurfaceContainer"
             app:boxCornerRadius="0dp"
             app:boxElevation="0dp"
             app:labelText="App version"
-            app:labelTextAppearance="?attr/textAppearanceSubtitle1"
+            app:labelTextAppearance="?attr/textAppearanceTitleSmall"
             app:layout_constraintTop_toBottomOf="@id/llDisplayMode"
             app:valueText="@{viewModel.state.appVersion}"
+            app:valueTextAppearance="?attr/textAppearanceTitleSmall"
             tools:valueText="v1.0" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnChangeLayoutSystem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Change Layout System"
-            app:layout_constraintTop_toBottomOf="@id/drVersion" />
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/swDynamicMode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="@{viewModel.state.dynamicModeEnabled}"
-            android:layout_marginHorizontal="16dp"
-            android:text="Dynamic mode"
-            app:layout_constraintTop_toBottomOf="@id/btnChangeLayoutSystem" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>

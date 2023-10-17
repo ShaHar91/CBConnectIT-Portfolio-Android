@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -63,7 +64,9 @@ class MainActivity : AppCompatActivity() {
                 }.build()
         )
 
-        val color = SurfaceColors.SURFACE_2.getColor(this)
+        val typedValue = TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorSurfaceContainer, typedValue, true)
+        val color =ContextCompat.getColor(this, typedValue.resourceId) // SurfaceColors.SURFACE_2.getColor(this)
         window.statusBarColor = color
         window.navigationBarColor = color
     }

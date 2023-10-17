@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -178,9 +176,9 @@ fun SettingsScreenContent(
                             )
 
                             val icon = if (state.selectedLayoutSystemExpanded) {
-                                Icons.Default.KeyboardArrowUp
+                                painterResource(id = R.drawable.ic_drop_up)
                             } else {
-                                Icons.Default.KeyboardArrowDown
+                                painterResource(id = R.drawable.ic_drop_down)
                             }
                             Icon(icon, contentDescription = "")
                         }
@@ -189,12 +187,16 @@ fun SettingsScreenContent(
                             expanded = state.selectedLayoutSystemExpanded,
                             onDismissRequest = {
                                 onEvent(SettingsEvent.UpdateSelectedLayoutSystemExpanded(false))
-                            }) {
-                            LayoutSystem.values().forEach {
+                            }
+                        ) {
+                            LayoutSystem.values().forEachIndexed { index, layoutSystem ->
+                                if (index != 0) {
+                                    HorizontalDivider()
+                                }
 
                                 DropdownMenuItem(
                                     trailingIcon = {
-                                        if (state.selectedLayoutSystem == it) {
+                                        if (state.selectedLayoutSystem == layoutSystem) {
                                             Icon(
                                                 Icons.Default.Check,
                                                 contentDescription = ""
@@ -204,12 +206,13 @@ fun SettingsScreenContent(
                                     text = {
                                         Text(
                                             style = MaterialTheme.typography.bodyLarge,
-                                            text = stringResource(id = it.systemName)
+                                            text = stringResource(id = layoutSystem.systemName)
                                         )
                                     },
                                     onClick = {
-                                        onEvent(SettingsEvent.ChangeSelectedLayoutSystem(it))
-                                    })
+                                        onEvent(SettingsEvent.ChangeSelectedLayoutSystem(layoutSystem))
+                                    }
+                                )
                             }
                         }
                     }
