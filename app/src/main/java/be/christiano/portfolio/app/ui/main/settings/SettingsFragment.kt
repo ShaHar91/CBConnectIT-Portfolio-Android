@@ -60,20 +60,25 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
     private fun showConfirmationDialog() = MaterialAlertDialogBuilder(requireContext())
         .setTitle(R.string.change_layout_mode_title)
         .setMessage(R.string.change_layout_mode_body)
-        .setNegativeButton(R.string.cancel) { dialog, which ->
+        .setNegativeButton(R.string.cancel) { _, _ ->
             mViewModel.onEvent(SettingsEvent.ResetSelectedLayoutSystem)
         }
-        .setPositiveButton(R.string.common_continue) { dialog, which ->
+        .setPositiveButton(R.string.common_continue) { _, _ ->
             mViewModel.onEvent(SettingsEvent.PersistSelectedLayoutSystem)
         }
         .setOnDismissListener {
             mViewModel.onEvent(SettingsEvent.ResetSelectedLayoutSystem)
         }.show()
 
-    //TODO: when the dynamic is unsupported, show this dialog!
     private fun showInformativeDialog() = MaterialAlertDialogBuilder(requireContext())
-        .setTitle(R.string.app_name)
-        .show()
+        .setTitle(R.string.unsupported_feature)
+        .setMessage(R.string.unsupported_feature_dynamic_colors_dialog_body)
+        .setPositiveButton(R.string.ok) { _, _ ->
+            mViewModel.onEvent(SettingsEvent.ShowUnsupportedDynamicFeatureDialog(false))
+        }
+        .setOnDismissListener {
+            mViewModel.onEvent(SettingsEvent.ShowUnsupportedDynamicFeatureDialog(false))
+        }.show()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = binding.root
 
@@ -132,6 +137,10 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
 
         binding.btnLayoutSystem.setOnClickListener {
             mViewModel.onEvent(SettingsEvent.UpdateSelectedLayoutSystemExpanded(true))
+        }
+
+        binding.ibtnInfoDynamicLayout.setOnClickListener {
+            mViewModel.onEvent(SettingsEvent.ShowUnsupportedDynamicFeatureDialog(true))
         }
 
         binding.btgDisplayMode.addOnButtonCheckedListener { _, checkedId, isChecked ->

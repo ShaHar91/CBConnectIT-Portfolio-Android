@@ -226,7 +226,7 @@ fun SettingsScreenContent(
                     IconButton(onClick = {
                         onEvent(SettingsEvent.ShowUnsupportedDynamicFeatureDialog(true))
                     }) {
-                        Icon(Icons.Default.Info, null)
+                        Icon(painterResource(id = R.drawable.ic_info), null)
                     }
                 }
 
