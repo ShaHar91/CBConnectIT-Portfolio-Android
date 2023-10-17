@@ -216,6 +216,8 @@ open class BaseDataRow @JvmOverloads constructor(
 
             showBoxError = a.getBoolean(R.styleable.BaseDataRow_showBoxError, false)
 
+            isEnabled = a.getBoolean(R.styleable.BaseDataRow_enabled, true)
+
             a.recycle()
         }
     }

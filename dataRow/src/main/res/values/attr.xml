@@ -63,6 +63,8 @@
 
         <attr name="showBoxError" format="boolean" />
 
+        <attr name="enabled" format="boolean"/>
+
     </declare-styleable>
 
     <!-- All these attributes are possible to override -->

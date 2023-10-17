@@ -9,7 +9,7 @@
             name="viewModel"
             type="be.christiano.portfolio.app.ui.main.settings.SettingsViewModel" />
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
     </data>
 
     <LinearLayout
@@ -134,31 +134,34 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp" />
 
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:orientation="horizontal"
-           android:gravity="center_vertical"
-           android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-           <com.google.android.material.button.MaterialButton
-               android:id="@+id/ibtnInfoDynamicLayout"
-               style="@style/Widget.Material3.Button.IconButton"
-               android:layout_width="wrap_content"
-               app:icon="@drawable/ic_info"
-               android:visibility="@{viewModel.state.hasDynamicSupport ? View.GONE : View.VISIBLE}"
-               app:iconTint="?colorControlNormal"
-               android:layout_height="wrap_content"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/ibtnInfoDynamicLayout"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.state.hasDynamicSupport ? View.GONE : View.VISIBLE}"
+                app:icon="@drawable/ic_info"
+                app:iconTint="?colorControlNormal"
+                tools:visibility="gone" />
 
-           <be.christiano.portfolio.dataRow.ToggleDataRow
-               android:id="@+id/tdrDynamicMode"
-               android:layout_width="0dp"
-               android:layout_weight="1"
-               android:layout_height="48dp"
-               android:checked="@{viewModel.state.dynamicModeEnabled}"
-               app:labelText="@string/dynamic_material_you"
-               app:labelTextAppearance="?attr/textAppearanceTitleSmall"
-               app:paddingContentVertical="0dp" />
-       </LinearLayout>
+            <be.christiano.portfolio.dataRow.ToggleDataRow
+                android:id="@+id/tdrDynamicMode"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:checked="@{viewModel.state.dynamicModeEnabled}"
+                app:enabled="@{viewModel.state.hasDynamicSupport}"
+                app:labelText="@string/dynamic_material_you"
+                app:labelTextAppearance="?attr/textAppearanceTitleSmall"
+                app:labelTextColor="@color/app_primary_text_color"
+                app:paddingContentVertical="0dp" />
+        </LinearLayout>
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"

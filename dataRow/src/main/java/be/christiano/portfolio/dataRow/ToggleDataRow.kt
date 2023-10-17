@@ -19,18 +19,18 @@ class ToggleDataRow @JvmOverloads constructor(
     }
 
     // <editor-fold desc="Views">
-    private var swValue: SwitchCompat
+    private var swValue: SwitchCompat?
 
-    val valueSwitch get() = swValue
+    val valueSwitch get() = swValue!!
     // </editor-fold>
 
 
     var checked: Boolean = false
         set(value) {
             field = value
-            val bool = swValue.isChecked
+            val bool = swValue?.isChecked
             if (bool != value) {
-                swValue.isChecked = value
+                swValue?.isChecked = value
             }
         }
 
@@ -69,6 +69,16 @@ class ToggleDataRow @JvmOverloads constructor(
         clipChildren = false
         clipToPadding = false
     }
+
+    override fun setEnabled(enabled: Boolean) {
+        super.setEnabled(enabled)
+
+        swValue?.isEnabled = enabled
+        tvLabel?.isEnabled = enabled
+        tvSubtitle?.isEnabled = enabled
+        clData?.isEnabled = enabled
+        tvError?.isEnabled = enabled
+    }
 }
 
 // The 2-way data binding is creating an infinite loop
@@ -89,7 +99,7 @@ fun getToggleValue(view: ToggleDataRow): Boolean {
 
 @BindingAdapter("android:checkedAttrChanged")
 fun checkedChanged(view: ToggleDataRow, listener: InverseBindingListener) {
-    view.valueSwitch.setOnCheckedChangeListener { compoundButton, b ->
+    view.valueSwitch.setOnCheckedChangeListener { _, b ->
         val oldVal = view.checked
         if (oldVal == b) return@setOnCheckedChangeListener
 
