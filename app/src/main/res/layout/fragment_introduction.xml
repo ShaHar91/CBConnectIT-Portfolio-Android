@@ -15,12 +15,6 @@
         android:layout_height="match_parent"
         tools:context=".ui.main.introduction.IntroductionFragment">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/mtbMain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/text_dashboard"
             android:layout_width="match_parent"

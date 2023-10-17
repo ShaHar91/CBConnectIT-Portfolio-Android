@@ -12,6 +12,7 @@ import be.christiano.portfolio.app.databinding.FragmentComponentsBinding
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegate
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegateImpl
 import be.christiano.portfolio.app.ui.main.base.dataBinding
+import com.google.android.material.elevation.SurfaceColors
 import com.google.android.material.snackbar.Snackbar
 
 // TODO: a list with all components (left item is a little snapshot or thumbnail of the actual view!)
@@ -38,6 +39,9 @@ class ComponentsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() 
     }
 
     private fun initViews() {
+        val color = SurfaceColors.SURFACE_2.getColor(requireContext())
+        binding.mtbMain.setBackgroundColor(color)
+
         val options = listOf("Android", "iOS", "Web", "Flutter", "KMP")
         val adapter = ArrayAdapter(requireContext(), com.google.android.material.R.layout.support_simple_spinner_dropdown_item, options)
         binding.atvOptions.setAdapter(adapter)

@@ -14,6 +14,7 @@ import be.christiano.portfolio.app.domain.enums.LayoutSystem
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegate
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegateImpl
 import be.christiano.portfolio.app.ui.main.base.dataBinding
+import com.google.android.material.elevation.SurfaceColors
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -55,6 +56,9 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
 
     private fun initViews() {
         initCheckedDisplayMode()
+
+        val color = SurfaceColors.SURFACE_2.getColor(requireContext())
+        binding.mtbMain.setBackgroundColor(color)
 
         binding.btnChangeLayoutSystem.setOnClickListener {
             lifecycleScope.launch {

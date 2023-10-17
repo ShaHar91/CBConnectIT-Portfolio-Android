@@ -14,10 +14,4 @@
 <!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
     </style>
 
-    <style name="Theme.Splash" parent="Theme.SplashScreen" >
-        <item name="windowSplashScreenBackground">#1F1F1F</item>
-        <item name="windowSplashScreenAnimationDuration">600</item>
-        <item name="postSplashScreenTheme">@style/Theme.Portfolio</item>
-    </style>
-
 </resources>

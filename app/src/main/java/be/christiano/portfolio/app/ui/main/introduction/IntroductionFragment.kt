@@ -17,7 +17,6 @@ class IntroductionFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl(
 
     private val mViewModel by viewModel<IntroductionViewModel>()
     private val binding by dataBinding<FragmentIntroductionBinding>(R.layout.fragment_introduction) {
-        registerToolbar(this@IntroductionFragment, mtbMain)
         viewModel = mViewModel
     }
 

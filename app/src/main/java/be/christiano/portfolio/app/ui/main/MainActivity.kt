@@ -2,9 +2,15 @@ package be.christiano.portfolio.app.ui.main
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.graphics.toArgb
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
@@ -15,6 +21,7 @@ import be.christiano.portfolio.app.ui.main.base.viewBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.DynamicColorsOptions
+import com.google.android.material.elevation.SurfaceColors
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -33,15 +40,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        checkAndApplyDynamicColors()
 
-        DynamicColors.applyToActivityIfAvailable(
-            this,
-            DynamicColorsOptions.Builder()
-                .setPrecondition { _, _ ->
-                    runBlocking { viewModel.state.firstOrNull()?.dynamicModeEnabled == true }
-                }.build()
-        )
+        super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
 
@@ -50,13 +51,20 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navView.setupWithNavController(navController)
 
-        ViewCompat.setOnApplyWindowInsetsListener(window.decorView.rootView) { _, insets ->
+        // TODO: Hide bottomBar when keyboard opens?
+    }
 
-            //This lambda block will be called, every time keyboard is opened or closed
-            val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
-            binding.navView.isVisible = !imeVisible
+    private fun checkAndApplyDynamicColors() {
+        DynamicColors.applyToActivityIfAvailable(
+            this,
+            DynamicColorsOptions.Builder()
+                .setPrecondition { _, _ ->
+                    runBlocking { viewModel.state.firstOrNull()?.dynamicModeEnabled == true }
+                }.build()
+        )
 
-            insets
-        }
+        val color = SurfaceColors.SURFACE_2.getColor(this)
+        window.statusBarColor = color
+        window.navigationBarColor = color
     }
 }
