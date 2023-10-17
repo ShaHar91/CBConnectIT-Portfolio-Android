@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.ListPopupWindow
@@ -18,6 +17,7 @@ import be.christiano.portfolio.app.domain.enums.LayoutSystem
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegate
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegateImpl
 import be.christiano.portfolio.app.ui.main.base.dataBinding
+import be.christiano.portfolio.app.ui.main.settings.adapter.LayoutSystemAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -40,10 +40,7 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
         popUp.anchorView = binding.btnLayoutSystem
         popUp.width = 800
 
-        //TODO: update the items when a selection gets updated, also show the checkmark at the end!
-        val items = LayoutSystem.values().map { getString(it.systemName) }
-        val adapter = ArrayAdapter(requireContext(), R.layout.list_popup_window_item, items)
-        popUp.setAdapter(adapter)
+        popUp.setAdapter(layoutSystemsAdapter)
 
         popUp.setOnDismissListener {
             mViewModel.onEvent(SettingsEvent.UpdateSelectedLayoutSystemExpanded(false))
@@ -54,6 +51,10 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
         }
 
         popUp
+    }
+
+    private val layoutSystemsAdapter by lazy {
+        LayoutSystemAdapter(requireContext(), LayoutSystem.values().toList())
     }
 
     private fun showConfirmationDialog() = MaterialAlertDialogBuilder(requireContext())
@@ -81,20 +82,10 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
 
         initViews()
         initObservers()
+        initObserveStateChanges()
     }
 
-    private fun initObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            mViewModel.eventFlow.collectLatest {
-                when (it) {
-                    SettingsUiEvent.RestartApplication -> {
-                        val i = requireActivity().packageManager.getLaunchIntentForPackage(requireActivity().packageName)
-                        startActivity(Intent.makeRestartActivityTask(i?.component))
-                        Runtime.getRuntime().exit(0)
-                    }
-                }
-            }
-        }
+    private fun initObserveStateChanges() {
 
         var confirmationDialog: AlertDialog? = null
         var informativeDialog: AlertDialog? = null
@@ -118,6 +109,20 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
             } else {
                 informativeDialog?.dismiss()
                 null
+            }
+
+            layoutSystemsAdapter.updateSelectedLayoutSystem(it.selectedLayoutSystem)
+        }
+    }
+
+    private fun initObservers() = viewLifecycleOwner.lifecycleScope.launch {
+        mViewModel.eventFlow.collectLatest {
+            when (it) {
+                SettingsUiEvent.RestartApplication -> {
+                    val i = requireActivity().packageManager.getLaunchIntentForPackage(requireActivity().packageName)
+                    startActivity(Intent.makeRestartActivityTask(i?.component))
+                    Runtime.getRuntime().exit(0)
+                }
             }
         }
     }

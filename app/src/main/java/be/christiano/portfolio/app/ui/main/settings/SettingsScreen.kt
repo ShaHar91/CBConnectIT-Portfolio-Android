@@ -198,7 +198,7 @@ fun SettingsScreenContent(
                                     trailingIcon = {
                                         if (state.selectedLayoutSystem == layoutSystem) {
                                             Icon(
-                                                Icons.Default.Check,
+                                                painterResource(id = R.drawable.ic_check),
                                                 contentDescription = ""
                                             )
                                         }
