@@ -31,7 +31,7 @@ fun DefaultAppBar(
     navController: NavController,
     appBarTitle: String,
     overrideBackArrow: (() -> Unit)? = null,
-    colors: TopAppBarColors = TopAppBarDefaults.smallTopAppBarColors(containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)),
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)),
     title: @Composable () -> Unit = { DefaultAppBarText(appBarTitle = appBarTitle) },
     actions: @Composable RowScope.() -> Unit = {}
 ) {

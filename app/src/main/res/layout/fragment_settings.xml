@@ -19,6 +19,7 @@
             android:id="@+id/mtbMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?attr/colorSurface"
             app:layout_constraintTop_toTopOf="parent"
             tools:navigationIcon="@drawable/ic_back"
             tools:title="Settings" />
@@ -104,10 +105,19 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnChangeLayoutSystem"
-            app:layout_constraintTop_toBottomOf="@id/drVersion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Change Layout System"
+            app:layout_constraintTop_toBottomOf="@id/drVersion" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/swDynamicMode"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:checked="@{viewModel.state.dynamicModeEnabled}"
+            android:layout_marginHorizontal="16dp"
+            android:text="Dynamic mode"
+            app:layout_constraintTop_toBottomOf="@id/btnChangeLayoutSystem" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

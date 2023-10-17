@@ -13,10 +13,16 @@ import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.databinding.ActivityMainBinding
 import be.christiano.portfolio.app.ui.main.base.viewBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.color.DynamicColors
+import com.google.android.material.color.DynamicColorsOptions
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.runBlocking
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
     private val binding by viewBinding(ActivityMainBinding::inflate)
+    private val viewModel by viewModel<MainViewModel>()
 
     companion object {
         fun newIntent(context: Context): Intent {
@@ -28,6 +34,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        DynamicColors.applyToActivityIfAvailable(
+            this,
+            DynamicColorsOptions.Builder()
+                .setPrecondition { _, _ ->
+                    runBlocking { viewModel.state.firstOrNull()?.dynamicModeEnabled == true }
+                }.build()
+        )
 
         setContentView(binding.root)
 

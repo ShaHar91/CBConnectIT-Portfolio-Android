@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import be.christiano.portfolio.app.R
-import be.christiano.portfolio.app.domain.enums.LayoutSystem
 import be.christiano.portfolio.app.databinding.FragmentSettingsBinding
+import be.christiano.portfolio.app.domain.enums.LayoutSystem
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegate
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegateImpl
 import be.christiano.portfolio.app.ui.main.base.dataBinding
@@ -75,6 +75,16 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
             }
 
             mViewModel.onEvent(SettingsEvent.ChangeDisplayMode(displayMode))
+        }
+
+        binding.swDynamicMode.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (buttonView.isPressed || buttonView.isFocused) {
+                lifecycleScope.launch {
+                    mViewModel.onEvent(SettingsEvent.ChangeDynamicMode(isChecked))
+                    delay(250)
+                    requireActivity().recreate()
+                }
+            }
         }
     }
 
