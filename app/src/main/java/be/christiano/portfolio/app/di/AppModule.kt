@@ -34,10 +34,13 @@ val appModule = module {
     single { TransactionProvider(get()) }
 
     single {
-        Room.databaseBuilder(
-            androidContext(),
-            PortfolioDatabase::class.java,
-            "portfolio.db"
-        ).build()
+        Room
+            .databaseBuilder(
+                androidContext(),
+                PortfolioDatabase::class.java,
+                "portfolio.db"
+            )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 }

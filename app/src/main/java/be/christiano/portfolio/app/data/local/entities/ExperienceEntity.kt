@@ -2,6 +2,7 @@ package be.christiano.portfolio.app.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import be.christiano.portfolio.app.domain.enums.TechStack
 
 @Entity(ExperienceEntity.ENTITY_NAME)
 data class ExperienceEntity(
@@ -11,7 +12,8 @@ data class ExperienceEntity(
     val description: String,
     val company: String,
     val from: String,
-    val to: String
+    val to: String,
+    val techStacks: List<TechStack>
 ) {
     companion object {
         const val ENTITY_NAME = "experience"

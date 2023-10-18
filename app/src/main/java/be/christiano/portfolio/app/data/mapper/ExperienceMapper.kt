@@ -10,7 +10,8 @@ fun ExperienceEntity.toExperience() = Experience(
     description,
     company,
     from,
-    to
+    to,
+    techStacks
 )
 
 fun List<ExperienceEntity>.toExperiences() = this.map { it.toExperience() }
@@ -21,7 +22,8 @@ fun ExperienceDto.toExperience() = Experience(
     description,
     company,
     from,
-    to
+    to,
+    techStacks
 )
 
 fun ExperienceDto.toExperienceEntity() = ExperienceEntity(
@@ -30,7 +32,8 @@ fun ExperienceDto.toExperienceEntity() = ExperienceEntity(
     description,
     company,
     from,
-    to
+    to,
+    techStacks
 )
 
 fun List<ExperienceDto>.toEntities() = this.map { it.toExperienceEntity() }

@@ -74,7 +74,10 @@ class IntroductionViewModel(
 
         val calls = listOf(services, experiences, works, testimonials)
         if (calls.any { it.isFailure }) {
-            calls.first { it.isFailure }.exceptionOrNull()?.let { showSnackbar(it.message) }
+            calls.first { it.isFailure }.exceptionOrNull()?.let {
+                it.printStackTrace()
+                showSnackbar(it.message)
+            }
         }
 
         _state.update { it.copy(isLoading = false) }

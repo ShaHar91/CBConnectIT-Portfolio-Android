@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.domain.model.Experience
+import be.christiano.portfolio.app.domain.model.previewData
 import be.christiano.portfolio.app.extensions.MinimumHeightState
 import be.christiano.portfolio.app.extensions.minimumHeightModifier
 import be.christiano.portfolio.app.ui.main.introduction.sections.components.ExperienceCard
@@ -66,7 +67,7 @@ fun ExperienceSection(
 fun ExperienceSectionPreview() {
     PortfolioTheme {
         Surface {
-            ExperienceSection(listOf(Experience("", "", "", "", "", ""))) {}
+            ExperienceSection(listOf(Experience.previewData())) {}
         }
     }
 }

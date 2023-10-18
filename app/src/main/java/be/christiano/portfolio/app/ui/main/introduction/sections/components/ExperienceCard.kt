@@ -10,21 +10,26 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.domain.model.Experience
+import be.christiano.portfolio.app.domain.model.previewData
 import be.christiano.portfolio.app.extensions.thenIf
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 
@@ -55,6 +60,7 @@ fun ExperienceCard(
             style = typography.labelLarge,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
+            //TODO: get the "from" and "to" in the correct format!!
             text = "${experience.from} - ${experience.to}"
         )
 
@@ -82,15 +88,22 @@ fun ExperienceCard(
                     .background(colorScheme.primary)
             )
 
-            Text(
-                modifier = Modifier
-                    .thenIf(!active) { Modifier.border(2.dp, colorScheme.primary, CircleShape) }
-                    .thenIf(active) { Modifier.background(colorScheme.primary, CircleShape) }
-                    .padding(8.dp),
-                textAlign = TextAlign.Center,
-                style = typography.labelMedium.copy(if (active) colorScheme.onPrimary else colorScheme.primary),
-                text = "01"
-            )
+            Row(modifier = Modifier
+                .thenIf(!active) { Modifier.border(2.dp, colorScheme.primary, CircleShape) }
+                .thenIf(active) { Modifier.background(colorScheme.primary, CircleShape) }
+                .padding(horizontal = 10.dp, vertical = 4.dp)) {
+
+                experience.techStacks.forEachIndexed { index, techStack ->
+                    if (index != 0) {
+                        Spacer(modifier = Modifier.width(10.dp))
+                    }
+                    Icon(
+                        tint = if (active) colorScheme.onPrimary else colorScheme.primary,
+                        painter = painterResource(id = techStack.iconRes),
+                        contentDescription = ""
+                    )
+                }
+            }
 
             Box(
                 modifier = Modifier
@@ -124,9 +137,7 @@ fun ExperienceCard(
 fun ExperienceCardPreview() {
     PortfolioTheme {
         Surface {
-            ExperienceCard(
-                experience = Experience("", "", "", "", "", "")
-            )
+            ExperienceCard(experience = Experience.previewData())
         }
     }
 }
