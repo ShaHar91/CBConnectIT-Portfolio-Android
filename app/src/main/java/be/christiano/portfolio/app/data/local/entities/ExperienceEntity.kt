@@ -9,6 +9,7 @@ data class ExperienceEntity(
     @PrimaryKey
     val id: String,
     val jobPosition: String,
+    val shortDescription: String,
     val description: String,
     val company: String,
     val from: String,

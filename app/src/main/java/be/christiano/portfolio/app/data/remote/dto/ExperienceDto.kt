@@ -12,6 +12,8 @@ data class ExperienceDto(
     val id: String,
     @SerialName("job_position")
     val jobPosition: String,
+    @SerialName("short_description")
+    val shortDescription: String,
     val description: String,
     val company: String,
     val from: String,

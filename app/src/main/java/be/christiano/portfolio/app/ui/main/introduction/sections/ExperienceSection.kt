@@ -20,7 +20,7 @@ import be.christiano.portfolio.app.domain.model.Experience
 import be.christiano.portfolio.app.domain.model.previewData
 import be.christiano.portfolio.app.extensions.MinimumHeightState
 import be.christiano.portfolio.app.extensions.minimumHeightModifier
-import be.christiano.portfolio.app.ui.main.introduction.sections.components.ExperienceCard
+import be.christiano.portfolio.app.ui.main.introduction.sections.components.ExperienceItem
 import be.christiano.portfolio.app.ui.main.introduction.sections.components.SectionTitle
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 
@@ -52,10 +52,11 @@ fun ExperienceSection(
             contentPadding = PaddingValues(horizontal = 24.dp)
         ) {
             itemsIndexed(experiences) { index, item ->
-                ExperienceCard(
+                ExperienceItem(
                     modifier = minimumHeightStateModifier.fillParentMaxWidth(),
                     experience = item,
-                    index == 0
+                    index == 0,
+                    maxLines = 10
                 )
             }
         }

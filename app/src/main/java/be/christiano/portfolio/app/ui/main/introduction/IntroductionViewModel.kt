@@ -98,7 +98,7 @@ class IntroductionViewModel(
             is IntroductionEvent.OpenServiceList -> showSnackbar("In Development!")
             is IntroductionEvent.OpenPortfolioList -> showSnackbar("In Development!")
             is IntroductionEvent.OpenTestimonialsList -> showSnackbar("In Development!")
-            is IntroductionEvent.OpenExperiencesList -> showSnackbar("In Development!")
+            is IntroductionEvent.OpenExperiencesList -> _eventFlow.send(IntroductionUiEvent.OpenExperienceList)
         }
     }
 }
@@ -124,4 +124,5 @@ data class IntroductionState(
 sealed class IntroductionUiEvent {
     data class OpenSocialLink(val social: Social) : IntroductionUiEvent()
     data object OpenMailClient : IntroductionUiEvent()
+    data object OpenExperienceList : IntroductionUiEvent()
 }

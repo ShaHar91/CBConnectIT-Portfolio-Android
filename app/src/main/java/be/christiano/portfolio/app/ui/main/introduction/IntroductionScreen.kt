@@ -13,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -33,10 +32,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.extensions.startIntentMail
 import be.christiano.portfolio.app.extensions.startWeb
+import be.christiano.portfolio.app.ui.main.destinations.ExperienceScreenDestination
 import be.christiano.portfolio.app.ui.main.introduction.sections.AboutMeSection
 import be.christiano.portfolio.app.ui.main.introduction.sections.ExperienceSection
 import be.christiano.portfolio.app.ui.main.introduction.sections.MainSection
@@ -46,6 +45,7 @@ import be.christiano.portfolio.app.ui.main.introduction.sections.TestimonialsSec
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.navigate
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
@@ -75,24 +75,25 @@ fun IntroductionScreen(
                         viewModel.showSnackbar("Something went wrong, please try again later")
                     }
                 }
+
+                IntroductionUiEvent.OpenExperienceList -> {
+                    navController.navigate(ExperienceScreenDestination)
+                }
             }
         }
     }
 
     IntroductionScreenContent(
         state = state,
-        navController = navController,
         { viewModel.CreateSnackBarHost() },
         onEvent = viewModel::onEvent
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IntroductionScreenContent(
     state: IntroductionState,
-    navController: NavController,
-    createSnackbarHost: @Composable () -> Unit = {},
+    createSnackBarHost: @Composable () -> Unit = {},
     onEvent: (IntroductionEvent) -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -101,7 +102,7 @@ fun IntroductionScreenContent(
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            snackbarHost = { createSnackbarHost() },
+            snackbarHost = { createSnackBarHost() },
             floatingActionButton = {
                 ExtendedFloatingActionButton(text = {
                     Text(text = stringResource(R.string.let_s_chat))
@@ -171,7 +172,6 @@ fun IntroductionScreenPreview() {
     PortfolioTheme {
         IntroductionScreenContent(
             state = IntroductionState(),
-            navController = rememberNavController(),
             onEvent = {})
     }
 }

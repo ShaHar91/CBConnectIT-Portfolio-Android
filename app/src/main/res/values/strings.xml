@@ -41,4 +41,5 @@
     <string name="unsupported_feature">Unsupported feature</string>
     <string name="ok">OK</string>
     <string name="unsupported_feature_dynamic_colors_dialog_body">Dynamic colors (a.k.a. Material You) is only available for Android phones with version 12 or higher. If possible, please update to use this setting.</string>
+    <string name="experiences">Experiences</string>
 </resources>

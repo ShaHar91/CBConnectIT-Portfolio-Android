@@ -7,6 +7,7 @@ import be.christiano.portfolio.app.domain.model.Experience
 fun ExperienceEntity.toExperience() = Experience(
     id,
     jobPosition,
+    shortDescription,
     description,
     company,
     from,
@@ -19,6 +20,7 @@ fun List<ExperienceEntity>.toExperiences() = this.map { it.toExperience() }
 fun ExperienceDto.toExperience() = Experience(
     id,
     jobPosition,
+    shortDescription,
     description,
     company,
     from,
@@ -29,6 +31,7 @@ fun ExperienceDto.toExperience() = Experience(
 fun ExperienceDto.toExperienceEntity() = ExperienceEntity(
     id,
     jobPosition,
+    shortDescription,
     description,
     company,
     from,
