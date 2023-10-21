@@ -4,12 +4,14 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import be.christiano.portfolio.app.data.local.daos.ExperienceDao
+import be.christiano.portfolio.app.data.local.daos.LinkDao
 import be.christiano.portfolio.app.data.local.daos.ServiceDao
 import be.christiano.portfolio.app.data.local.daos.TagDao
 import be.christiano.portfolio.app.data.local.daos.TestimonialDao
 import be.christiano.portfolio.app.data.local.daos.WorkDao
 import be.christiano.portfolio.app.data.local.daos.WorkTagCrossRefDao
 import be.christiano.portfolio.app.data.local.entities.ExperienceEntity
+import be.christiano.portfolio.app.data.local.entities.LinkEntity
 import be.christiano.portfolio.app.data.local.entities.ServiceEntity
 import be.christiano.portfolio.app.data.local.entities.TagEntity
 import be.christiano.portfolio.app.data.local.entities.TestimonialEntity
@@ -24,7 +26,8 @@ import be.christiano.portfolio.app.data.local.utils.Converters
         TestimonialEntity::class,
         WorkEntity::class,
         TagEntity::class,
-        WorkTagCrossRefEntity::class
+        WorkTagCrossRefEntity::class,
+        LinkEntity::class,
     ],
     version = 1
 )
@@ -37,4 +40,5 @@ abstract class PortfolioDatabase : RoomDatabase() {
     abstract val workDao: WorkDao
     abstract val tagDao: TagDao
     abstract val workTagCrossRefDao: WorkTagCrossRefDao
+    abstract val linkDao: LinkDao
 }

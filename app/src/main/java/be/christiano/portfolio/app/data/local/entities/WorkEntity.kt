@@ -10,17 +10,16 @@ import androidx.room.Relation
 data class WorkEntity(
     @PrimaryKey
     val id: String,
+    val bannerImage: String,
     val image: String,
     val title: String,
+    val shortDescription: String,
     val description: String,
-    val link: String,
 ) {
     companion object {
         const val ENTITY_NAME = "work"
     }
 }
-
-//TODO: M-M relation!!
 
 @Entity(TagEntity.ENTITY_NAME)
 data class TagEntity(
@@ -36,6 +35,8 @@ data class TagEntity(
 data class WorkWithTags(
     @Embedded
     val work: WorkEntity,
+    @Relation(parentColumn = "id", entityColumn = "workId")
+    val links: List<LinkEntity>,
     @Relation(
         parentColumn = "id",
         entity = TagEntity::class,

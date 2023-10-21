@@ -36,6 +36,7 @@ import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.extensions.startIntentMail
 import be.christiano.portfolio.app.extensions.startWeb
 import be.christiano.portfolio.app.ui.main.destinations.ExperienceScreenDestination
+import be.christiano.portfolio.app.ui.main.destinations.PortfolioScreenDestination
 import be.christiano.portfolio.app.ui.main.introduction.sections.AboutMeSection
 import be.christiano.portfolio.app.ui.main.introduction.sections.ExperienceSection
 import be.christiano.portfolio.app.ui.main.introduction.sections.MainSection
@@ -65,7 +66,7 @@ fun IntroductionScreen(
             when (event) {
                 is IntroductionUiEvent.OpenSocialLink -> {
                     localContext.startWeb(
-                        event.social.link,
+                        event.link.url,
                         toolbarColor = colorScheme.surfaceColorAtElevation(3.dp).toArgb()
                     )
                 }
@@ -76,9 +77,8 @@ fun IntroductionScreen(
                     }
                 }
 
-                IntroductionUiEvent.OpenExperienceList -> {
-                    navController.navigate(ExperienceScreenDestination)
-                }
+                IntroductionUiEvent.OpenExperienceList -> navController.navigate(ExperienceScreenDestination)
+                IntroductionUiEvent.OpenPortfolio -> navController.navigate(PortfolioScreenDestination)
             }
         }
     }
@@ -172,6 +172,7 @@ fun IntroductionScreenPreview() {
     PortfolioTheme {
         IntroductionScreenContent(
             state = IntroductionState(),
-            onEvent = {})
+            onEvent = {}
+        )
     }
 }

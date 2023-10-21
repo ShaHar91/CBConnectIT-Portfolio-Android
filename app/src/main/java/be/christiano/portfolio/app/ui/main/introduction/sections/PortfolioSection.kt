@@ -57,10 +57,10 @@ fun PortfolioSection(
                     minimumHeightStateModifier
                         .fillParentMaxWidth()
                         .padding(horizontal = 8.dp),
-                    it.image,
+                    it.bannerImage,
                     it.title,
                     it.title,
-                    it.description,
+                    it.shortDescription,
                     tags = it.tags.map { tag -> tag.name }
                 )
             }

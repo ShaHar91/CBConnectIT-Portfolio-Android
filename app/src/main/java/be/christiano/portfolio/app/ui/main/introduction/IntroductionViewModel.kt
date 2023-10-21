@@ -3,6 +3,7 @@ package be.christiano.portfolio.app.ui.main.introduction
 import androidx.lifecycle.viewModelScope
 import be.christiano.portfolio.app.domain.enums.Social
 import be.christiano.portfolio.app.domain.model.Experience
+import be.christiano.portfolio.app.domain.model.Link
 import be.christiano.portfolio.app.domain.model.Service
 import be.christiano.portfolio.app.domain.model.Testimonial
 import be.christiano.portfolio.app.domain.model.Work
@@ -93,10 +94,10 @@ class IntroductionViewModel(
 
     fun onEvent(event: IntroductionEvent) = viewModelScope.launch {
         when (event) {
-            is IntroductionEvent.OpenSocialLink -> _eventFlow.send(IntroductionUiEvent.OpenSocialLink(event.social))
+            is IntroductionEvent.OpenSocialLink -> _eventFlow.send(IntroductionUiEvent.OpenSocialLink(event.link))
             is IntroductionEvent.OpenMailClient -> _eventFlow.send(IntroductionUiEvent.OpenMailClient)
             is IntroductionEvent.OpenServiceList -> showSnackbar("In Development!")
-            is IntroductionEvent.OpenPortfolioList -> showSnackbar("In Development!")
+            is IntroductionEvent.OpenPortfolioList ->  _eventFlow.send(IntroductionUiEvent.OpenPortfolio)
             is IntroductionEvent.OpenTestimonialsList -> showSnackbar("In Development!")
             is IntroductionEvent.OpenExperiencesList -> _eventFlow.send(IntroductionUiEvent.OpenExperienceList)
         }
@@ -104,7 +105,7 @@ class IntroductionViewModel(
 }
 
 sealed class IntroductionEvent {
-    data class OpenSocialLink(val social: Social) : IntroductionEvent()
+    data class OpenSocialLink(val link:Link) : IntroductionEvent()
     data object OpenMailClient : IntroductionEvent()
     data object OpenServiceList : IntroductionEvent()
     data object OpenPortfolioList : IntroductionEvent()
@@ -122,7 +123,8 @@ data class IntroductionState(
 )
 
 sealed class IntroductionUiEvent {
-    data class OpenSocialLink(val social: Social) : IntroductionUiEvent()
+    data class OpenSocialLink(val link:Link) : IntroductionUiEvent()
     data object OpenMailClient : IntroductionUiEvent()
     data object OpenExperienceList : IntroductionUiEvent()
+    data object OpenPortfolio : IntroductionUiEvent()
 }

@@ -1,10 +1,12 @@
 package be.christiano.portfolio.app.data.repository
 
+import be.christiano.portfolio.app.data.local.daos.LinkDao
 import be.christiano.portfolio.app.data.local.daos.TagDao
 import be.christiano.portfolio.app.data.local.daos.WorkDao
 import be.christiano.portfolio.app.data.local.daos.WorkTagCrossRefDao
 import be.christiano.portfolio.app.data.local.entities.WorkTagCrossRefEntity
 import be.christiano.portfolio.app.data.mapper.toEntities
+import be.christiano.portfolio.app.data.mapper.toLink
 import be.christiano.portfolio.app.data.mapper.toTag
 import be.christiano.portfolio.app.data.mapper.toWork
 import be.christiano.portfolio.app.data.mapper.toWorks
@@ -20,6 +22,7 @@ class WorkRepositoryImpl(
     private val workDao: WorkDao,
     private val tagDao: TagDao,
     private val workTagCrossRefDao: WorkTagCrossRefDao,
+    private val linkDao: LinkDao,
     private val transactionProvider: TransactionProvider
 ) : WorkRepository {
 
@@ -29,6 +32,7 @@ class WorkRepositoryImpl(
             transactionProvider.runAsTransaction {
                 workDao.insertMany(works.toEntities())
                 tagDao.insertMany(works.map { it.tags.toEntities() }.flatten())
+                linkDao.insertMany(works.map { it.links.toEntities(it.id) }.flatten())
                 val crossRefEntities = works.map { dto -> dto.tags.map { tag -> WorkTagCrossRefEntity(dto.id, tag.id) } }.flatten()
                 workTagCrossRefDao.insertMany(crossRefEntities)
             }
@@ -40,7 +44,7 @@ class WorkRepositoryImpl(
 
     override fun findAllWorks(): Flow<List<Work>> = workTagCrossRefDao.findAllWorksWithTags().map { list ->
         list.map { workWithTags ->
-            workWithTags.work.toWork(tags = workWithTags.tags.map { it.toTag() })
+            workWithTags.work.toWork(links = workWithTags.links.map { it.toLink() }, tags = workWithTags.tags.map { it.toTag() })
         }
     }
 }

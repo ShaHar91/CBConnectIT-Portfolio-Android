@@ -2,7 +2,6 @@ package be.christiano.portfolio.app.ui.main.introduction.sections.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ElevatedCard
@@ -15,31 +14,32 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import be.christiano.portfolio.app.domain.enums.Social
+import be.christiano.portfolio.app.domain.model.Link
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SocialBar(
+fun LinkBar(
     modifier: Modifier = Modifier,
-    onClick: (Social) -> Unit
+    links: List<Link> = emptyList(),
+    onClick: (Link) -> Unit
 ) {
     Row(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
     ) {
-        val socials = Social.values()
-        socials.forEachIndexed { index, social ->
+        links.forEachIndexed { index, link ->
             ElevatedCard(
                 modifier = Modifier.padding(
                     start = if (index != 0) 4.dp else 0.dp,
-                    end = if (index != socials.count() - 1) 4.dp else 0.dp
+                    end = if (index != links.count() - 1) 4.dp else 0.dp
                 ),
                 shape = RoundedCornerShape(6.dp),
-                onClick = { onClick(social) }
+                onClick = { onClick(link) }
             ) {
                 Icon(
                     modifier = Modifier.padding(10.dp),
-                    painter = painterResource(id = social.icon),
-                    contentDescription = social.name
+                    painter = painterResource(id = link.type.iconRes),
+                    contentDescription = link.type.name
                 )
             }
         }
@@ -49,10 +49,10 @@ fun SocialBar(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun SocialBarPreview() {
+fun LinkBarPreview() {
     PortfolioTheme {
         Surface {
-            SocialBar {}
+            LinkBar(links = Social.values().map { Link(it.type, it.link) }) {}
         }
     }
 }

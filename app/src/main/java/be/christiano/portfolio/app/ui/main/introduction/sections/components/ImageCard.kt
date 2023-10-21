@@ -128,9 +128,9 @@ fun PortfolioCardPreview() {
                 Spacer(modifier = Modifier.height(20.dp))
                 val portfolio = Work.previewData()
                 ImageCard(
-                    image = portfolio.image,
+                    image = portfolio.bannerImage,
                     text = portfolio.title,
-                    body = portfolio.description,
+                    body = portfolio.shortDescription,
                     imgDescription = portfolio.title,
                     tags = portfolio.tags.map { it.name }
                 )
