@@ -6,7 +6,12 @@
     "title": "Android Core",
     "short_description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     "description": "Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.",
-    "link": "https://github.com/wisemen-digital/AndroidCore",
+    "links": [
+      {
+        "type": "Github",
+        "url": "https://github.com/wisemen-digital/AndroidCore"
+      }
+    ],
     "tags": [
       {
         "id": "1",
@@ -33,11 +38,16 @@
   {
     "id": "2",
     "banner_image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/portfolio2.png",
-    "image":  "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/project_image.png",
+    "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/project_image.png",
     "title": "Measurements",
     "short_description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     "description": "Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.",
-    "link": "https://github.com/wisemen-digital/Measurements",
+    "links": [
+      {
+        "type": "Github",
+        "url": "https://github.com/wisemen-digital/Measurements"
+      }
+    ],
     "tags": [
       {
         "id": "1",
@@ -52,11 +62,20 @@
   {
     "id": "3",
     "banner_image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/portfolio3.png",
-    "image":  "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/project_image.png",
+    "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/project_image.png",
     "title": "Pokédex",
     "short_description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     "description": "Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.",
-    "link": "https://github.com/ShaHar91/DemoPokedex",
+    "links": [
+      {
+        "type": "Github",
+        "url": "https://github.com/ShaHar91/DemoPokedex"
+      },
+      {
+        "type": "PlayStore",
+        "url": "https://play.google.com/store/apps/details?id=be.christiano.demoPokedex"
+      }
+    ],
     "tags": [
       {
         "id": "2",
@@ -83,12 +102,16 @@
   {
     "id": "4",
     "banner_image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/portfolio4.jpg",
-    "image":  "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/project_image.png",
+    "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/project_image.png",
     "title": "FoodWatcher",
     "short_description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     "description": "Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.",
-    "description": "Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.",
-    "link": "https://github.com/ShaHar91/FoodWatcher-Android",
+    "links": [
+      {
+        "type": "Github",
+        "url": "https://github.com/ShaHar91/FoodWatcher-Android"
+      }
+    ],
     "tags": [
       {
         "id": "2",
@@ -111,11 +134,16 @@
   {
     "id": "5",
     "banner_image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/portfolio5.png",
-    "image":  "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/project_image.png",
+    "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/project_image.png",
     "title": "PoemCollection Backend",
     "short_description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     "description": "Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.",
-    "link": "https://github.com/ShaHar91/PoemCollection-backend-ktor",
+    "links": [
+      {
+        "type": "Github",
+        "url": "https://github.com/ShaHar91/PoemCollection-backend-ktor"
+      }
+    ],
     "tags": [
       {
         "id": "8",
