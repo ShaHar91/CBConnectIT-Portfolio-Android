@@ -2,27 +2,18 @@ package be.christiano.portfolio.app.ui.main.introduction.portfolio
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,21 +24,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import be.christiano.portfolio.app.R
+import be.christiano.portfolio.app.domain.model.Link
 import be.christiano.portfolio.app.domain.model.Work
 import be.christiano.portfolio.app.domain.model.previewData
 import be.christiano.portfolio.app.extensions.startWeb
 import be.christiano.portfolio.app.ui.components.DefaultAppBar
-import be.christiano.portfolio.app.ui.components.textflow.TextFlow
-import be.christiano.portfolio.app.ui.components.textflow.TextFlowObstacleAlignment
-import be.christiano.portfolio.app.ui.main.introduction.sections.components.LinkBar
+import be.christiano.portfolio.app.ui.main.introduction.sections.components.WorkDetail
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
-import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -89,7 +77,7 @@ fun PortfolioScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PortfolioScreenContent(
     state: PortfolioState,
@@ -105,67 +93,25 @@ fun PortfolioScreenContent(
         ) { paddingValues ->
             LazyColumn(
                 modifier = Modifier.padding(paddingValues),
+                horizontalAlignment = Alignment.CenterHorizontally,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 itemsIndexed(state.projects) { index, work ->
-                    Column {
-
-                        if (index != 0) {
-                            Spacer(modifier = Modifier.height(48.dp))
-                        }
-
-                        Text(text = work.title, style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold))
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        TextFlow(
-                            obstacleAlignment = if (index % 2 == 0) TextFlowObstacleAlignment.TopStart else TextFlowObstacleAlignment.TopEnd,
-                            text = work.description,
-                            style = MaterialTheme.typography.bodyLarge
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(
-                                    top = 8.dp,
-                                    bottom = 4.dp,
-                                    start = if (index % 2 == 0) 0.dp else 16.dp,
-                                    end = if (index % 2 == 0) 16.dp else 0.dp
-                                )
-                            ) {
-                                AsyncImage(
-                                    modifier = Modifier.size(width = 88.dp, height = 148.dp),
-                                    model = work.image,
-                                    contentDescription = ""
-                                )
-
-                                Spacer(modifier = Modifier.height(20.dp))
-
-                                LinkBar(links = work.links) {
-                                    onEvent(PortfolioEvent.OpenSocialLink(it))
-                                }
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        FlowRow(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
-                            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.Top),
-                        ) {
-                            work.tags.forEach {
-                                Text(
-                                    modifier = Modifier
-                                        .background(
-                                            color = MaterialTheme.colorScheme.secondaryContainer,
-                                            shape = RoundedCornerShape(6.dp)
-                                        )
-                                        .padding(horizontal = 6.dp, vertical = 4.dp),
-                                    text = it.name,
-                                    style = MaterialTheme.typography.labelSmall
-                                )
-                            }
-                        }
+                    if (index != 0) {
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .padding(vertical = 32.dp)
+                                .fillMaxWidth(0.4f), thickness = 2.dp, color = MaterialTheme.colorScheme.primary
+                        )
                     }
+
+                    WorkDetail(
+                        work = work,
+                        imageStartAligned = index % 2 == 0,
+                        onClick = {
+                            onEvent(PortfolioEvent.OpenSocialLink(it))
+                        }
+                    )
                 }
             }
         }
@@ -183,7 +129,7 @@ fun ExperienceScreenContentPreview() {
     PortfolioTheme {
         PortfolioScreenContent(
             navController = rememberNavController(),
-            state = PortfolioState(projects = listOf(Work.previewData())),
+            state = PortfolioState(projects = listOf(Work.previewData().copy(links = listOf(Link.previewData(), Link.previewData(), Link.previewData())))),
             onEvent = {}
         )
     }

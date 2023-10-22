@@ -1,6 +1,7 @@
 package be.christiano.portfolio.app.ui.main.introduction.sections
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -71,7 +72,10 @@ fun MainSection(
         Spacer(modifier = Modifier.height(24.dp))
 
         LinkBar(
-            modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
             links = Social.values().map { Link(it.type, it.link) },
             onClick = onClick
         )
