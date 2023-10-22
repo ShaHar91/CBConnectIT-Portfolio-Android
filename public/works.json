@@ -5,7 +5,7 @@
     "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/project_image.png",
     "title": "Android Core",
     "short_description": "Created this library in order to streamline and simplify the setup of new projects. Instead of copying a lot of classes and reimplementing it differently each time a single dependency was all we needed.",
-    "description": "Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.",
+    "description": "Created this library in order to streamline and simplify the setup of new projects. Instead of copying a lot of classes and reimplementing it differently each time, a single dependency was all we needed.\n\nBecause the company worked on a project basis, it happened that multiple projects were running at the same time and each time the setup we did was almost the same. Copy a lot of base and util classes over to the new project, maybe tweak them a little bit and then continue with the actual project. This resulted in a lot of different code bases and also some scattered knowledge between coworkers. To circumvent this issue, I created a base library where the base classes and some util class (later extension functions) where placed. All accessible by a user friendly Builder class to initialize all needed pieces.\n\nAlso the network layer had a complete makeover to add a (streamlined) default way of work, taking pieces of all previous projects and coworkers to create a cohesive and robust basis. It had also some plug and play functionalities to cater to some project specific needs. To name a few of the pieces that could be adjusted where adding new Serializers, Interceptors, Factories,...\n\nThe library was comprised out of different modules. For example, there was the actual Core module, then we had the Networking module with retrofit usability. Besides that we also had modules for local data, starting with Realm which was Deprecated in favor of Room after a couple of versions.",
     "links": [
       {
         "type": "Github",
@@ -41,7 +41,7 @@
     "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/project_image.png",
     "title": "Measurements",
     "short_description": "The iOS equivalent of converting measurements. With this library, the risk of calculation errors is almost non existent with the use of unit tests on almost every class and function.",
-    "description": "Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.",
+    "description": "The iOS equivalent of converting measurements. With this library, the risk of calculation errors is almost non existent with the use of unit tests on almost every class and function.",
     "links": [
       {
         "type": "Github",
@@ -65,7 +65,7 @@
     "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/project_image.png",
     "title": "Pokédex",
     "short_description": "A try-out project with Jetpack Compose, where I use Koin for DI, and try to implement clean architecture by using a clear separation of concerns.",
-    "description": "Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.",
+    "description": "A try-out project with Jetpack Compose, where I use Koin for DI, and try to implement clean architecture by using a clear separation of concerns.",
     "links": [
       {
         "type": "Github",
@@ -104,8 +104,8 @@
     "banner_image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/portfolio4.jpg",
     "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/project_image.png",
     "title": "FoodWatcher",
-    "short_description": "With this project I implemented a different data persistent layer depending on the build flavor name. One is pure local Room database use, the other is a link to Firebase",
-    "description": "Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.",
+    "short_description": "With this project I implemented a different data persistent layer depending on the build flavor name. One is pure local Room database use, the other is a link to Firebase.",
+    "description": "With this project I implemented a different data persistent layer depending on the build flavor name. One is pure local Room database use, the other is a link to Firebase.",
     "links": [
       {
         "type": "Github",
@@ -137,7 +137,7 @@
     "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/project_image.png",
     "title": "PoemCollection Backend",
     "short_description": "A backend created with the Ktor Server library to see what is possible with this technology. Still work in progress to actually request and process the data in an app.",
-    "description": "Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.Nam ac blandit arcu. Aenean vel tellus nisi. Curabitur at nisi consequat, fringilla neque ut, laoreet felis. Maecenas ac ultrices tellus. Curabitur in fermentum dolor. Praesent et elementum nisi. Aliquam laoreet condimentum semper. Sed posuere neque ac vulputate aliquam. Proin ac dolor diam. Quisque quis elementum magna. Curabitur lobortis lorem a viverra dapibus. Donec feugiat non velit at varius.",
+    "description": "A backend created with the Ktor Server library to see what is possible with this technology. Still work in progress to actually request and process the data in an app.",
     "links": [
       {
         "type": "Github",
