@@ -40,6 +40,7 @@ fun ImageCard(
     imgDescription: String,
     text: String,
     body: String,
+    bodyMaxLines: Int = 3,
     imgShape: Shape = RoundedCornerShape(6.dp),
     tags: List<String>? = null
 ) {
@@ -80,7 +81,7 @@ fun ImageCard(
                 modifier = Modifier
                     .fillMaxWidth(),
                 style = MaterialTheme.typography.bodyLarge,
-                maxLines = 3,
+                maxLines = bodyMaxLines,
                 overflow = TextOverflow.Ellipsis,
                 text = body
             )
@@ -130,8 +131,9 @@ fun PortfolioCardPreview() {
                 ImageCard(
                     image = portfolio.bannerImage,
                     text = portfolio.title,
-                    body = portfolio.shortDescription,
+                    body = "Created this library in order to streamline and simplify the setup of new projects. Instead of copying a lot of classes and reimplementing it differently each time a single dependency was all we needed.",
                     imgDescription = portfolio.title,
+                    bodyMaxLines = 5,
                     tags = portfolio.tags.map { it.name }
                 )
             }
