@@ -49,6 +49,7 @@ fun ServiceSection(
             density
         )
 
+        //TODO: add something like a snapHelper for this list! Same for all the other sections!
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {

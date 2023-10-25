@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="isCurrent"
+            type="Boolean" />
+    </data>
+
+    <ImageView
+        android:id="@+id/ivTechStack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:tintAttr="@{isCurrent ? com.google.android.material.R.attr.colorOnPrimary : com.google.android.material.R.attr.colorPrimary}"
+        tools:src="@drawable/ic_phone_android"
+        tools:tint="?colorPrimary" />
+</layout>

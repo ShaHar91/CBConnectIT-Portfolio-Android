@@ -1,9 +1,12 @@
 package be.christiano.portfolio.app.domain.model
 
 import be.christiano.portfolio.app.domain.enums.TechStack
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 data class Experience(
-    val id :String,
+    val id: String,
     val jobPosition: String,
     val shortDescription: String,
     val description: String,
@@ -13,6 +16,14 @@ data class Experience(
     val techStacks: List<TechStack>
 ) {
     companion object
+
+    val formattedDate: String
+        get() = run {
+            val start = LocalDateTime.parse(from).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+            val end = LocalDateTime.parse(to).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+
+            "$start - $end"
+        }
 }
 
 fun Experience.Companion.previewData() = Experience(

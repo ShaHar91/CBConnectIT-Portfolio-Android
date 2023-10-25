@@ -50,8 +50,7 @@ fun ExperienceHeader(
             style = typography.labelLarge,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            //TODO: get the "from" and "to" in the correct format!!
-            text = "${experience.from} - ${experience.to}"
+            text = experience.formattedDate
         )
 
         Spacer(modifier = Modifier.height(4.dp))

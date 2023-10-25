@@ -21,6 +21,11 @@
         <item name="postSplashScreenTheme">@style/Theme.Portfolio</item>
     </style>
 
+    <style name="Shape.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
     <style name="Shape.Service" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">20dp</item>

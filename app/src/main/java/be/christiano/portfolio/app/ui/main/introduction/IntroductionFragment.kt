@@ -18,7 +18,9 @@ import be.christiano.portfolio.app.extensions.startWeb
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegate
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegateImpl
 import be.christiano.portfolio.app.ui.main.base.dataBinding
+import be.christiano.portfolio.app.ui.main.introduction.adapters.ExperienceAdapter
 import be.christiano.portfolio.app.ui.main.introduction.adapters.ServiceAdapter
+import be.christiano.portfolio.app.ui.main.introduction.adapters.TestimonialAdapter
 import be.christiano.portfolio.app.ui.main.introduction.adapters.WorkAdapter
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
@@ -40,6 +42,14 @@ class IntroductionFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl(
         WorkAdapter()
     }
 
+    private val testimonialAdapter by lazy {
+        TestimonialAdapter()
+    }
+
+    private val experienceAdapter by lazy {
+        ExperienceAdapter()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = binding.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,6 +69,16 @@ class IntroductionFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl(
         binding.rvProjects.setHasFixedSize(false)
         val workPagerSnapHelper = PagerSnapHelper()
         workPagerSnapHelper.attachToRecyclerView(binding.rvProjects)
+
+        binding.rvTestimonials.adapter = testimonialAdapter
+        binding.rvTestimonials.setHasFixedSize(false)
+        val testimonialPagerSnapHelper = PagerSnapHelper()
+        testimonialPagerSnapHelper.attachToRecyclerView(binding.rvTestimonials)
+
+        binding.rvExperiences.adapter = experienceAdapter
+        binding.rvExperiences.setHasFixedSize(false)
+        val experiencePagerSnapHelper = PagerSnapHelper()
+        experiencePagerSnapHelper.attachToRecyclerView(binding.rvExperiences)
 
         binding.fabLetsChat.setOnClickListener {
             mViewModel.onEvent(IntroductionEvent.OpenMailClient)
@@ -95,6 +115,8 @@ class IntroductionFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl(
         mViewModel.state.collectLatest {
             serviceAdapter.submitList(it.services)
             workAdapter.submitList(it.projects)
+            testimonialAdapter.submitList(it.testimonials)
+            experienceAdapter.submitList(it.experiences)
         }
 
         mViewModel.eventFlow.collectLatest { event ->

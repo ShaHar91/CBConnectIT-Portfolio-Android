@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="isCurrent"
+            type="Boolean" />
+
+        <variable
+            name="iconColor"
+            type="Integer" />
+
+        <variable
+            name="item"
+            type="be.christiano.portfolio.app.domain.model.Experience" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:text="@{item.jobPosition}"
+            android:textAppearance="?textAppearanceTitleLarge"
+            android:textColor="?colorPrimary"
+            android:textStyle="bold"
+            tools:text="Android developer" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:text="@{item.formattedDate}"
+            android:textAppearance="?textAppearanceLabelLarge"
+            android:textColor="?colorOnSurface"
+            tools:text="May 2017 - October 2023" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:text="@{item.company}"
+            android:textAppearance="?textAppearanceBodyLarge"
+            android:textColor="?colorOnSurface"
+            tools:text="Wisemen (formerly Appwise)" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="?colorPrimary" />
+
+            <LinearLayout
+                android:id="@+id/llTechStackWrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@{isCurrent ? @drawable/bg_tech_stack_current : @drawable/bg_tech_stack_not_current}"
+                android:orientation="horizontal"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="4dp"
+                tools:background="@drawable/bg_tech_stack_current" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="?colorPrimary" />
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcvExperience"
+            style="@style/Widget.Material3.CardView.Elevated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="2dp">
+
+            <TextView
+                android:id="@+id/tvExperienceBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:gravity="center_horizontal"
+                android:text="@{item.shortDescription}"
+                tools:text="Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</layout>

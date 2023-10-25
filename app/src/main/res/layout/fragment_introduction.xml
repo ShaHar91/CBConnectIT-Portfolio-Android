@@ -103,13 +103,16 @@
                     app:subtitle="@{@string/what_they_say}"
                     app:title="@{@string/testimonials}" />
 
-                <TextView
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTestimonials"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:paddingVertical="40dp"
-                    android:text="Under construction"
-                    android:textAppearance="?textAppearanceHeadlineLarge" />
+                    android:layout_marginTop="24dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/list_item_testimonial" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -121,13 +124,16 @@
                     app:subtitle="@{@string/work_experience}"
                     app:title="@{@string/experiences}" />
 
-                <TextView
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvExperiences"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:paddingVertical="40dp"
-                    android:text="Under construction"
-                    android:textAppearance="?textAppearanceHeadlineLarge" />
+                    android:layout_marginTop="24dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="24dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/list_item_experience" />
 
                 <Space
                     android:layout_width="wrap_content"
