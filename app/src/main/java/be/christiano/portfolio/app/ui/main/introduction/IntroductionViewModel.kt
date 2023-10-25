@@ -33,7 +33,10 @@ class IntroductionViewModel(
 ) : BaseComposeViewModel() {
 
     private val _state = MutableStateFlow(
-        IntroductionState(experienceInYears = getUpdateExperienceInYears())
+        IntroductionState(
+            socialLinks = Social.values().map { Link(it.type, it.link) },
+            experienceInYears = getUpdateExperienceInYears()
+        )
     )
     val state = _state.asStateFlow()
 
@@ -97,7 +100,7 @@ class IntroductionViewModel(
             is IntroductionEvent.OpenSocialLink -> _eventFlow.send(IntroductionUiEvent.OpenSocialLink(event.link))
             is IntroductionEvent.OpenMailClient -> _eventFlow.send(IntroductionUiEvent.OpenMailClient)
             is IntroductionEvent.OpenServiceList -> showSnackbar("In Development!")
-            is IntroductionEvent.OpenPortfolioList ->  _eventFlow.send(IntroductionUiEvent.OpenPortfolio)
+            is IntroductionEvent.OpenPortfolioList -> _eventFlow.send(IntroductionUiEvent.OpenPortfolio)
             is IntroductionEvent.OpenTestimonialsList -> showSnackbar("In Development!")
             is IntroductionEvent.OpenExperiencesList -> _eventFlow.send(IntroductionUiEvent.OpenExperienceList)
         }
@@ -105,7 +108,7 @@ class IntroductionViewModel(
 }
 
 sealed class IntroductionEvent {
-    data class OpenSocialLink(val link:Link) : IntroductionEvent()
+    data class OpenSocialLink(val link: Link) : IntroductionEvent()
     data object OpenMailClient : IntroductionEvent()
     data object OpenServiceList : IntroductionEvent()
     data object OpenPortfolioList : IntroductionEvent()
@@ -115,6 +118,7 @@ sealed class IntroductionEvent {
 
 data class IntroductionState(
     val isLoading: Boolean = false,
+    val socialLinks: List<Link> = emptyList(),
     val experienceInYears: Int = 0,
     val services: List<Service> = emptyList(),
     val projects: List<Work> = emptyList(),
@@ -123,7 +127,7 @@ data class IntroductionState(
 )
 
 sealed class IntroductionUiEvent {
-    data class OpenSocialLink(val link:Link) : IntroductionUiEvent()
+    data class OpenSocialLink(val link: Link) : IntroductionUiEvent()
     data object OpenMailClient : IntroductionUiEvent()
     data object OpenExperienceList : IntroductionUiEvent()
     data object OpenPortfolio : IntroductionUiEvent()

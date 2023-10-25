@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -44,7 +46,7 @@ fun WorkDetail(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .thenIf(imageStartAligned) { Modifier.padding(start = 104.dp) },
+                .thenIf(imageStartAligned) { Modifier.padding(start = 136.dp) },
             text = work.title,
             style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
             color = MaterialTheme.colorScheme.onBackground
@@ -66,18 +68,18 @@ fun WorkDetail(
                         start = if (imageStartAligned) 0.dp else 16.dp,
                         end = if (imageStartAligned) 16.dp else 0.dp
                     )
-                    .width(88.dp)
+                    .widthIn(50.dp, 120.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 AsyncImage(
-                    modifier = Modifier.size(width = 88.dp, height = 148.dp),
+                    modifier = Modifier.aspectRatio(1f),
                     model = work.image,
-                    contentDescription = ""
+                    contentDescription = work.title
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 LinkBar(
-                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
                     verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.Top),
                     links = work.links,

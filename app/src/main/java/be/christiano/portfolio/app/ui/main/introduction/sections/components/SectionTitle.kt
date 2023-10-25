@@ -20,9 +20,11 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 
 @Composable
@@ -80,7 +82,7 @@ fun SectionTitle(
             ) {
                 Text(style = MaterialTheme.typography.labelLarge, text = actionText)
 
-                Icon(modifier = Modifier.size(18.dp), imageVector = Icons.Default.KeyboardArrowRight, contentDescription = "")
+                Icon(modifier = Modifier.size(18.dp), painter = painterResource(id = R.drawable.ic_keyboard_arrow_right), contentDescription = "")
             }
         }
     }

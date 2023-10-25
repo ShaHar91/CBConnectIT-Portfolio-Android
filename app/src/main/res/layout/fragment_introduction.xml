@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.main.introduction.IntroductionFragment">
 
     <data>
 
@@ -10,24 +11,128 @@
             type="be.christiano.portfolio.app.ui.main.introduction.IntroductionViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.main.introduction.IntroductionFragment">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/text_dashboard"
-            android:layout_width="match_parent"
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabLetsChat"
+            style="@style/Widget.Material3.ExtendedFloatingActionButton.Primary"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="Introduction Fragment!"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/let_s_chat"
+            android:text="@string/let_s_chat"
+            app:icon="@drawable/ic_mail" />
+
+
+        <ScrollView
+            android:id="@+id/scrollRoot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/sectionMain"
+                    layout="@layout/section_main" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="62dp" />
+
+                <include
+                    android:id="@+id/sectionAboutMe"
+                    layout="@layout/section_about_me"
+                    app:state="@{viewModel.state}" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="62dp" />
+
+                <include
+                    android:id="@+id/shService"
+                    layout="@layout/section_header"
+                    app:subtitle="@{@string/service_subtitle}"
+                    app:title="@{@string/service}" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvServices"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/list_item_service" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="62dp" />
+
+                <include
+                    android:id="@+id/shPortfolio"
+                    layout="@layout/section_header"
+                    app:subtitle="@{@string/portfolio_subtitle}"
+                    app:title="@{@string/portfolio}" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvProjects"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/list_item_project" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="62dp" />
+
+                <include
+                    android:id="@+id/shTestimonials"
+                    layout="@layout/section_header"
+                    app:subtitle="@{@string/what_they_say}"
+                    app:title="@{@string/testimonials}" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingVertical="40dp"
+                    android:text="Under construction"
+                    android:textAppearance="?textAppearanceHeadlineLarge" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="62dp" />
+
+                <include
+                    android:id="@+id/shExperiences"
+                    layout="@layout/section_header"
+                    app:subtitle="@{@string/work_experience}"
+                    app:title="@{@string/experiences}" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingVertical="40dp"
+                    android:text="Under construction"
+                    android:textAppearance="?textAppearanceHeadlineLarge" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="85dp" />
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
 </layout>
