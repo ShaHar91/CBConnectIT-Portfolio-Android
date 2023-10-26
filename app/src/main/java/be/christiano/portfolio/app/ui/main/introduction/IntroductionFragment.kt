@@ -1,14 +1,13 @@
 package be.christiano.portfolio.app.ui.main.introduction
 
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.PagerSnapHelper
 import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.databinding.FragmentIntroductionBinding
@@ -18,10 +17,11 @@ import be.christiano.portfolio.app.extensions.startWeb
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegate
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegateImpl
 import be.christiano.portfolio.app.ui.main.base.dataBinding
-import be.christiano.portfolio.app.ui.main.introduction.adapters.ExperienceAdapter
+import be.christiano.portfolio.app.ui.main.introduction.adapters.ExperienceHorizontalAdapter
 import be.christiano.portfolio.app.ui.main.introduction.adapters.ServiceAdapter
 import be.christiano.portfolio.app.ui.main.introduction.adapters.TestimonialAdapter
-import be.christiano.portfolio.app.ui.main.introduction.adapters.WorkAdapter
+import be.christiano.portfolio.app.ui.main.introduction.adapters.WorkHorizontalAdapter
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -39,7 +39,7 @@ class IntroductionFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl(
     }
 
     private val workAdapter by lazy {
-        WorkAdapter()
+        WorkHorizontalAdapter()
     }
 
     private val testimonialAdapter by lazy {
@@ -47,7 +47,7 @@ class IntroductionFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl(
     }
 
     private val experienceAdapter by lazy {
-        ExperienceAdapter()
+        ExperienceHorizontalAdapter()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = binding.root
@@ -111,42 +111,44 @@ class IntroductionFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl(
         }
     }
 
-    private fun initObservers() = viewLifecycleOwner.lifecycleScope.launch {
-        mViewModel.state.collectLatest {
-            serviceAdapter.submitList(it.services)
-            workAdapter.submitList(it.projects)
-            testimonialAdapter.submitList(it.testimonials)
-            experienceAdapter.submitList(it.experiences)
+    private fun initObservers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            mViewModel.state.collectLatest {
+                serviceAdapter.submitList(it.services)
+                workAdapter.submitList(it.projects)
+                testimonialAdapter.submitList(it.testimonials)
+                experienceAdapter.submitList(it.experiences)
+            }
         }
 
-        mViewModel.eventFlow.collectLatest { event ->
-            when (event) {
-                is IntroductionUiEvent.OpenSocialLink -> {
-                    val typedValue = TypedValue()
-                    requireActivity().theme.resolveAttribute(com.google.android.material.R.attr.colorSurfaceContainer, typedValue, true)
-                    val color = ContextCompat.getColor(requireActivity(), typedValue.resourceId) // SurfaceColors.SURFACE_2.getColor(this)
+        viewLifecycleOwner.lifecycleScope.launch {
+            mViewModel.eventFlow.collectLatest { event ->
+                when (event) {
+                    is IntroductionUiEvent.OpenSocialLink -> {
+                        val color = MaterialColors.getColor(requireView(),com.google.android.material.R.attr.colorSurfaceContainer )
 
-                    requireActivity().startWeb(
-                        event.link.url,
-                        toolbarColor = color
-                    )
-                }
-
-                IntroductionUiEvent.OpenExperienceList -> {
-                    Toast.makeText(requireContext(), "Experiences", Toast.LENGTH_SHORT).show()
-                }
-
-                IntroductionUiEvent.OpenMailClient -> {
-                    requireActivity().startIntentMail("bollachristiano@gmail.com", "Select an app") {
-                        Snackbar.make(requireView(), "Something went wrong, please try again later", Snackbar.LENGTH_SHORT).show()
+                        requireActivity().startWeb(
+                            event.link.url,
+                            toolbarColor = color
+                        )
                     }
-                }
 
-                IntroductionUiEvent.OpenPortfolio -> {
-                    Toast.makeText(requireContext(), "Portfolio", Toast.LENGTH_SHORT).show()
-                }
+                    IntroductionUiEvent.OpenExperienceList -> {
+                        IntroductionFragmentDirections.actionNavigationHomeToExperienceFragment().run(findNavController()::navigate)
+                    }
 
-                else -> Unit
+                    IntroductionUiEvent.OpenMailClient -> {
+                        requireActivity().startIntentMail("bollachristiano@gmail.com", "Select an app") {
+                            Snackbar.make(requireView(), "Something went wrong, please try again later", Snackbar.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    IntroductionUiEvent.OpenPortfolio -> {
+                        IntroductionFragmentDirections.actionNavigationHomeToPortfolioFragment().run(findNavController()::navigate)
+                    }
+
+                    else -> Unit
+                }
             }
         }
     }

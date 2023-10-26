@@ -2,18 +2,8 @@ package be.christiano.portfolio.app.ui.main
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.util.TypedValue
-import androidx.activity.SystemBarStyle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.graphics.toArgb
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import be.christiano.portfolio.app.R
@@ -22,7 +12,7 @@ import be.christiano.portfolio.app.ui.main.base.viewBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.DynamicColorsOptions
-import com.google.android.material.elevation.SurfaceColors
+import com.google.android.material.color.MaterialColors
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -41,9 +31,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        checkAndApplyDynamicColors()
-
         super.onCreate(savedInstanceState)
+        checkAndApplyDynamicColors()
 
         setContentView(binding.root)
 
@@ -64,9 +53,7 @@ class MainActivity : AppCompatActivity() {
                 }.build()
         )
 
-        val typedValue = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorSurfaceContainer, typedValue, true)
-        val color =ContextCompat.getColor(this, typedValue.resourceId) // SurfaceColors.SURFACE_2.getColor(this)
+        val color = MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorSurfaceContainer)
         window.statusBarColor = color
         window.navigationBarColor = color
     }

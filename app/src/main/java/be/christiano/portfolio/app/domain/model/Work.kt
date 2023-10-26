@@ -1,5 +1,6 @@
 package be.christiano.portfolio.app.domain.model
 
+import androidx.recyclerview.widget.DiffUtil
 import be.christiano.portfolio.app.domain.enums.LinkType
 
 data class Work(
@@ -12,7 +13,17 @@ data class Work(
     val links: List<Link>,
     val tags: List<Tag>
 ) {
-    companion object
+    companion object {
+         val WORK_DIFF = object : DiffUtil.ItemCallback<Work>() {
+            override fun areItemsTheSame(oldItem: Work, newItem: Work): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Work, newItem: Work): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
 }
 
 data class Tag(

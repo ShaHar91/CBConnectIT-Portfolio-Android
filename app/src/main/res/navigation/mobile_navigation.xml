@@ -8,18 +8,37 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="be.christiano.portfolio.app.ui.main.introduction.IntroductionFragment"
-        android:label="Introduction"
-        tools:layout="@layout/fragment_introduction" />
+        android:label="@string/introduction"
+        tools:layout="@layout/fragment_introduction">
+        <action
+            android:id="@+id/action_navigation_home_to_portfolioFragment"
+            app:destination="@id/portfolioFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_experienceFragment"
+            app:destination="@id/experienceFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="be.christiano.portfolio.app.ui.main.components.ComponentsFragment"
-        android:label="Components"
+        android:label="@string/components"
         tools:layout="@layout/fragment_components" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="be.christiano.portfolio.app.ui.main.settings.SettingsFragment"
-        android:label="Settings"
+        android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/experienceFragment"
+        android:name="be.christiano.portfolio.app.ui.main.introduction.experience.ExperienceFragment"
+        android:label="@string/work_experience"
+        tools:layout="@layout/fragment_experience" />
+
+    <fragment
+        android:id="@+id/portfolioFragment"
+        android:name="be.christiano.portfolio.app.ui.main.introduction.portfolio.PortfolioFragment"
+        android:label="@string/portfolio"
+        tools:layout="@layout/fragment_porfolio" />
 </navigation>

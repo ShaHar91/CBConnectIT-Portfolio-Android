@@ -1,5 +1,7 @@
 package be.christiano.portfolio.app.domain.model
 
+import androidx.recyclerview.widget.DiffUtil
+
 data class Testimonial(
     val id: String,
     val image: String,
@@ -7,7 +9,17 @@ data class Testimonial(
     val function: String,
     val review: String
 ) {
-    companion object
+    companion object {
+        val TESTIMONIAL_DIFF = object : DiffUtil.ItemCallback<Testimonial>() {
+            override fun areItemsTheSame(oldItem: Testimonial, newItem: Testimonial): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Testimonial, newItem: Testimonial): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
 }
 
 fun Testimonial.Companion.previewData() = Testimonial(

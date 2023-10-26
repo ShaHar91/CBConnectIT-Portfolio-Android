@@ -6,42 +6,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
-import android.widget.ImageView
 import androidx.annotation.AttrRes
 import androidx.core.view.updateLayoutParams
-import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import be.christiano.portfolio.app.databinding.ItemTechStackBinding
-import be.christiano.portfolio.app.databinding.ListItemExperienceBinding
+import be.christiano.portfolio.app.databinding.ListItemExperienceVertBinding
 import be.christiano.portfolio.app.domain.model.Experience
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.R as MaterialR
 
-class ExperienceAdapter : ListAdapter<Experience, ExperienceAdapter.ExperienceViewHolder>(WORK_DIFF) {
-
-    companion object {
-        private val WORK_DIFF = object : DiffUtil.ItemCallback<Experience>() {
-            override fun areItemsTheSame(oldItem: Experience, newItem: Experience): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: Experience, newItem: Experience): Boolean {
-                return oldItem == newItem
-            }
-        }
-    }
+class ExperienceVerticalAdapter : ListAdapter<Experience, ExperienceVerticalAdapter.ExperienceViewHolder>(Experience.EXPERIENCE_DIFF) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExperienceViewHolder {
-        return ExperienceViewHolder(ListItemExperienceBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ExperienceViewHolder(ListItemExperienceVertBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: ExperienceViewHolder, position: Int) {
         holder.bind(getItem(position), position)
     }
 
-    inner class ExperienceViewHolder(private val binding: ListItemExperienceBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ExperienceViewHolder(private val binding: ListItemExperienceVertBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Experience, position: Int) {
             fun getColor(@AttrRes color: Int): ColorStateList {
                 return MaterialColors.getColorStateList(binding.root.context, color, ColorStateList.valueOf(Color.BLACK))
@@ -59,7 +44,7 @@ class ExperienceAdapter : ListAdapter<Experience, ExperienceAdapter.ExperienceVi
             binding.tvExperienceBody.setTextColor(textColor)
 
             binding.llTechStackWrapper.removeAllViews()
-            
+
             item.techStacks.forEach {
                 val view = ItemTechStackBinding.inflate(LayoutInflater.from(binding.root.context), binding.llTechStackWrapper, false)
                 view.ivTechStack.updateLayoutParams {
@@ -73,9 +58,4 @@ class ExperienceAdapter : ListAdapter<Experience, ExperienceAdapter.ExperienceVi
             }
         }
     }
-}
-
-@BindingAdapter("tintAttr")
-fun setTintAttr(view: ImageView, @AttrRes color: Int) {
-    view.imageTintList = MaterialColors.getColorStateList(view.context, color, ColorStateList.valueOf(Color.BLACK))
 }

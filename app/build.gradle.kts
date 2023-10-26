@@ -5,6 +5,7 @@ plugins {
     id("com.google.devtools.ksp") version "1.9.0-1.0.13" // Depends on your kotlin version
     id("org.jetbrains.kotlin.plugin.serialization")
     id("kotlin-parcelize")
+    id("androidx.navigation.safeargs.kotlin")
 
 }
 

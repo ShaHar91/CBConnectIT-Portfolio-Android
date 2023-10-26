@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="be.christiano.portfolio.app.ui.main.introduction.IntroductionViewModel" />
@@ -25,7 +27,6 @@
             android:contentDescription="@string/let_s_chat"
             android:text="@string/let_s_chat"
             app:icon="@drawable/ic_mail" />
-
 
         <ScrollView
             android:id="@+id/scrollRoot"
@@ -140,5 +141,14 @@
                     android:layout_height="85dp" />
             </LinearLayout>
         </ScrollView>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="bottom"
+            android:indeterminate="true"
+            android:visibility="@{viewModel.state.loading ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
     </FrameLayout>
 </layout>
