@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import be.christiano.portfolio.app.R
@@ -12,6 +13,8 @@ import be.christiano.portfolio.app.ui.main.base.ToolbarDelegate
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegateImpl
 import be.christiano.portfolio.app.ui.main.base.dataBinding
 import be.christiano.portfolio.app.ui.main.introduction.adapters.WorkVerticalAdapter
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.divider.MaterialDividerItemDecoration
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -42,7 +45,15 @@ class PortfolioFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
 
     private fun initViews() {
         binding.rvItems.adapter = workAdapter
-        binding.rvItems.setHasFixedSize(true)
+        binding.rvItems.setHasFixedSize(false)
+
+        val decoration = MaterialDividerItemDecoration(requireContext(), LinearLayout.VERTICAL)
+        decoration.isLastItemDecorated = false
+        decoration.setDividerInsetEndResource(requireContext(), R.dimen.divider_margin)
+        decoration.setDividerInsetStartResource(requireContext(), R.dimen.divider_margin)
+        decoration.dividerColor = MaterialColors.getColor(requireView(), com.google.android.material.R.attr.colorPrimary)
+        decoration.setDividerThicknessResource(requireContext(), R.dimen.divider_thickness)
+        binding.rvItems.addItemDecoration(decoration)
     }
 
     private fun initObservers() {

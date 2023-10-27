@@ -1,5 +1,7 @@
 package be.christiano.portfolio.app.ui.main.introduction.sections
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -24,11 +27,14 @@ import be.christiano.portfolio.app.ui.main.introduction.sections.components.Expe
 import be.christiano.portfolio.app.ui.main.introduction.sections.components.SectionTitle
 import be.christiano.portfolio.app.ui.theme.PortfolioTheme
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExperienceSection(
     experiences: List<Experience>,
     actionClicked: () -> Unit
 ) {
+    val state = rememberLazyListState()
+    
     Column {
         SectionTitle(
             modifier = Modifier.padding(start = 24.dp, end = 12.dp),
@@ -49,7 +55,9 @@ fun ExperienceSection(
         )
 
         LazyRow(
-            contentPadding = PaddingValues(horizontal = 24.dp)
+            contentPadding = PaddingValues(horizontal = 24.dp),
+            state = state,
+            flingBehavior = rememberSnapFlingBehavior(lazyListState = state)
         ) {
             itemsIndexed(experiences) { index, item ->
                 ExperienceItem(

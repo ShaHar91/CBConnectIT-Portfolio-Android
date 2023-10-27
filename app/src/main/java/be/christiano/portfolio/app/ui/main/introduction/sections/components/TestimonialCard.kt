@@ -72,7 +72,7 @@ fun TestimonialCard(
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium,
                 maxLines = 10,
                 overflow = TextOverflow.Ellipsis,
                 text = review

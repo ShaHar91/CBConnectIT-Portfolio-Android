@@ -10,72 +10,58 @@
             type="be.christiano.portfolio.app.domain.model.Work" />
     </data>
 
-    <com.google.android.material.card.MaterialCardView
-        style="@style/Widget.Material3.CardView.Elevated"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginVertical="4dp">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clRoot"
+        <TextView
+            android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:text="@{item.title}"
+            android:textAppearance="?textAppearanceTitleLarge"
+            android:textColor="?colorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Android Development" />
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/ivBanner"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:padding="2dp"
-                android:scaleType="centerCrop"
-                app:layout_constraintDimensionRatio="162:95"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearance="@style/Shape.Project"
-                app:strokeColor="?colorPrimary"
-                app:strokeWidth="2dp"
-                tools:src="@tools:sample/backgrounds/scenic" />
+        <TextView
+            android:id="@+id/tvBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@{item.description}"
+            android:textAppearance="?textAppearanceBodyMedium"
+            android:textColor="?colorOnSurface"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            tools:text="Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
+        
+        <com.google.android.material.chip.ChipGroup
+            app:singleLine="false"
+            app:selectionRequired="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@{item.title}"
-                android:textAppearance="?textAppearanceTitleLarge"
-                android:textColor="?colorPrimary"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/ivBanner"
-                tools:text="Android Development" />
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/clFlow"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
 
-            <TextView
-                android:id="@+id/tvBody"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:ellipsize="end"
-                android:maxLines="3"
-                android:text="@{item.shortDescription}"
-                android:textAppearance="?textAppearanceBodyLarge"
-                android:textColor="?colorOnSurface"
-                app:layout_constraintTop_toBottomOf="@id/tvTitle"
-                tools:text="Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
-
-            <androidx.constraintlayout.helper.widget.Flow
-                android:id="@+id/flowTags"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                app:flow_horizontalAlign="start"
-                app:flow_horizontalBias="0"
-                app:flow_horizontalGap="10dp"
-                app:flow_horizontalStyle="packed"
-                app:flow_verticalGap="6dp"
-                app:flow_wrapMode="chain"
-                app:layout_constraintTop_toBottomOf="@id/tvBody" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
+<!--            <androidx.constraintlayout.helper.widget.Flow-->
+<!--                android:id="@+id/flowTags"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                app:flow_horizontalAlign="start"-->
+<!--                app:flow_horizontalBias="0"-->
+<!--                app:flow_horizontalGap="10dp"-->
+<!--                app:flow_horizontalStyle="packed"-->
+<!--                app:flow_verticalGap="6dp"-->
+<!--                app:flow_wrapMode="chain"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+    </LinearLayout>
 </layout>

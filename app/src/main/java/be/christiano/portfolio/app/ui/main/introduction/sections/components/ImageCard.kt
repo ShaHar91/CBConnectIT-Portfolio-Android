@@ -80,7 +80,7 @@ fun ImageCard(
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium,
                 maxLines = bodyMaxLines,
                 overflow = TextOverflow.Ellipsis,
                 text = body

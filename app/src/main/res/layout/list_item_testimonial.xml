@@ -67,7 +67,7 @@
                 android:ellipsize="end"
                 android:maxLines="10"
                 android:text="@{item.review}"
-                android:textAppearance="?textAppearanceBodyLarge"
+                android:textAppearance="?textAppearanceBodyMedium"
                 android:textColor="?colorOnSurface"
                 app:layout_constraintTop_toBottomOf="@id/tvFunction"
                 tools:text="Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />

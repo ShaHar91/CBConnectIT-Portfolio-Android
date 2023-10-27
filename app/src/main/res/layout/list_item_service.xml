@@ -57,7 +57,7 @@
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:text="@{service.description}"
-                android:textAppearance="?textAppearanceBodyLarge"
+                android:textAppearance="?textAppearanceBodyMedium"
                 android:textColor="?colorOnSurface"
                 app:layout_constraintTop_toBottomOf="@id/tvTitle"
                 tools:text="Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />

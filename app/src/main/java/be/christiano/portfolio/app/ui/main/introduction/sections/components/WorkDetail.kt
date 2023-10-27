@@ -57,7 +57,7 @@ fun WorkDetail(
         TextFlow(
             obstacleAlignment = if (imageStartAligned) TextFlowObstacleAlignment.TopStart else TextFlowObstacleAlignment.TopEnd,
             text = work.description,
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground
         ) {
             Column(

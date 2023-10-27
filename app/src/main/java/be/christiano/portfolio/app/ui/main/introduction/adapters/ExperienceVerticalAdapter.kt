@@ -49,7 +49,7 @@ class ExperienceVerticalAdapter : ListAdapter<Experience, ExperienceVerticalAdap
                 val view = ItemTechStackBinding.inflate(LayoutInflater.from(binding.root.context), binding.llTechStackWrapper, false)
                 view.ivTechStack.updateLayoutParams {
                     val some = 5 * view.root.resources.displayMetrics.density
-                    (this as? MarginLayoutParams)?.setMargins(some.toInt(), 0, some.toInt(), 0)
+                    (this as? MarginLayoutParams)?.setMargins(0, some.toInt(), 0, some.toInt())
                 }
                 view.root.id = View.generateViewId()
                 view.ivTechStack.setImageResource(it.iconRes)

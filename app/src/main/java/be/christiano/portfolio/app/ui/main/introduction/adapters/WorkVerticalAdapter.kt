@@ -24,19 +24,19 @@ class WorkVerticalAdapter : ListAdapter<Work, WorkVerticalAdapter.WorkViewHolder
         fun bind(item: Work) {
             binding.item = item
 
-            binding.ivBanner.load(item.bannerImage)
+//            binding.clFlow.removeAllViews()
 
-            val viewIds = item.tags.map {
-                val view = ItemTagBinding.inflate(LayoutInflater.from(binding.root.context), binding.flowTags.parent as ViewGroup, false)
-                view.root.id = View.generateViewId()
-                view.text = it.name
-                binding.clRoot.addView(view.root)
-
-                // return the view ID
-                view.root.id
-            }
-
-            binding.flowTags.referencedIds = viewIds.toIntArray()
+//            val viewIds = item.tags.map {
+//                val view = ItemTagBinding.inflate(LayoutInflater.from(binding.root.context), binding.flowTags.parent as ViewGroup, false)
+//                view.root.id = View.generateViewId()
+//                view.text = it.name
+//                binding.clFlow.addView(view.root)
+//
+//                // return the view ID
+//                view.root.id
+//            }
+//
+//            binding.flowTags.referencedIds = viewIds.toIntArray()
         }
     }
 }
