@@ -3,6 +3,7 @@ package be.christiano.portfolio.app.ui.main.introduction.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.children
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import be.christiano.portfolio.app.databinding.ItemTagBinding
@@ -24,19 +25,21 @@ class WorkVerticalAdapter : ListAdapter<Work, WorkVerticalAdapter.WorkViewHolder
         fun bind(item: Work) {
             binding.item = item
 
-//            binding.clFlow.removeAllViews()
+            val flow = binding.clFlow.children.first()
+            binding.clFlow.removeAllViews()
+            binding.clFlow.addView(flow)
 
-//            val viewIds = item.tags.map {
-//                val view = ItemTagBinding.inflate(LayoutInflater.from(binding.root.context), binding.flowTags.parent as ViewGroup, false)
-//                view.root.id = View.generateViewId()
-//                view.text = it.name
-//                binding.clFlow.addView(view.root)
-//
-//                // return the view ID
-//                view.root.id
-//            }
-//
-//            binding.flowTags.referencedIds = viewIds.toIntArray()
+            val viewIds = item.tags.map {
+                val view = ItemTagBinding.inflate(LayoutInflater.from(binding.root.context), binding.flowTags.parent as ViewGroup, false)
+                view.root.id = View.generateViewId()
+                view.text = it.name
+                binding.clFlow.addView(view.root)
+
+                // return the view ID
+                view.root.id
+            }
+
+            binding.flowTags.referencedIds = viewIds.toIntArray()
         }
     }
 }

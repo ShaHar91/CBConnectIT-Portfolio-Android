@@ -37,31 +37,25 @@
             android:textColor="?colorOnSurface"
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
             tools:text="Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
-        
-        <com.google.android.material.chip.ChipGroup
-            app:singleLine="false"
-            app:selectionRequired="false"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clFlow"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
 
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:id="@+id/clFlow"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content">-->
-
-<!--            <androidx.constraintlayout.helper.widget.Flow-->
-<!--                android:id="@+id/flowTags"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="10dp"-->
-<!--                android:orientation="horizontal"-->
-<!--                app:flow_horizontalAlign="start"-->
-<!--                app:flow_horizontalBias="0"-->
-<!--                app:flow_horizontalGap="10dp"-->
-<!--                app:flow_horizontalStyle="packed"-->
-<!--                app:flow_verticalGap="6dp"-->
-<!--                app:flow_wrapMode="chain"-->
-<!--                app:layout_constraintTop_toTopOf="parent" />-->
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/flowTags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                app:flow_horizontalAlign="start"
+                app:flow_horizontalBias="0"
+                app:flow_horizontalGap="10dp"
+                app:flow_horizontalStyle="packed"
+                app:flow_verticalGap="6dp"
+                app:flow_wrapMode="chain"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </layout>
