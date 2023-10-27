@@ -49,11 +49,8 @@ fastlane/test_output
 fastlane/README.md
 fastlane/build
 
-#keystore en json ignoren
-tc-signing.jks
-gc_fastlane_keys.json
-tc-signing.gradle
-repository-settings.gradle
+#keystore
+signing.jks
+signing.gradle
 
-#zodat Bitrise CI dirty kan managen fix for detached header
-Vendor
+app/google-services.json

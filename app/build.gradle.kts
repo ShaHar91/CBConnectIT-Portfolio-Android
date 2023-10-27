@@ -6,7 +6,15 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+}
 
+/**
+ * Check if a signing.gradle file exists and import it
+ */
+if (file(rootProject.projectDir.absolutePath + "/signing.gradle").exists()) {
+    apply(rootProject.projectDir.absolutePath + "/signing.gradle")
 }
 
 android {
@@ -27,9 +35,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("release")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -91,6 +103,7 @@ android {
 
 dependencies {
 
+    implementation(project(mapOf("path" to ":dataRow")))
 
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.core:core-ktx:1.12.0")
@@ -104,44 +117,47 @@ dependencies {
     implementation("androidx.databinding:databinding-runtime:8.1.1")
 //    implementation("androidx.datastore:datastore-core:1.0.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation(project(mapOf("path" to ":dataRow")))
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.activity:activity-compose:1.8.0")
 
+    // Compose
     implementation(platform("androidx.compose:compose-bom:2023.10.00"))
+    implementation("androidx.activity:activity-compose:1.8.0")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3:1.2.0-alpha10")
 
-//    // Compose Nav Destinations
-    implementation("io.github.raamcosta.compose-destinations:animations-core:1.9.54")
-    ksp("io.github.raamcosta.compose-destinations:ksp:1.9.54")
-
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
-    implementation("io.coil-kt:coil-compose:2.3.0")
-
-    implementation("androidx.browser:browser:1.6.0")
-
-    implementation("io.insert-koin:koin-android:3.4.0")
-    implementation("io.insert-koin:koin-androidx-navigation:3.4.0")
-    implementation("io.insert-koin:koin-androidx-compose:3.4.3")
-    testImplementation("io.insert-koin:koin-test-junit4:3.4.0")
+    // Compose (testing)
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    // Image Library for Compose
+    implementation("io.coil-kt:coil-compose:2.3.0")
+
+    // Compose Nav Destinations
+    implementation("io.github.raamcosta.compose-destinations:animations-core:1.9.54")
+    ksp("io.github.raamcosta.compose-destinations:ksp:1.9.54")
+
+    // Testing
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    // CustomTabs
+    implementation("androidx.browser:browser:1.6.0")
+
+    // Koin
+    implementation("io.insert-koin:koin-android:3.4.0")
+    implementation("io.insert-koin:koin-androidx-navigation:3.4.0")
+    testImplementation("io.insert-koin:koin-test-junit4:3.4.0")
+    implementation("io.insert-koin:koin-androidx-compose:3.4.3")
+
+    // Ktor
     implementation("io.ktor:ktor-client-core:2.3.5")
-    // Ktor network)
-//    implementation("io.ktor:ktor-client-cio:2.3.5")
     implementation("io.ktor:ktor-client-android:2.3.5")
-//    implementation("io.ktor:ktor-client-websockets:2.3.5")
     implementation("io.ktor:ktor-client-logging:2.3.5")
-    // Ktor serialization)
     implementation("io.ktor:ktor-client-content-negotiation:2.3.5")
     implementation("io.ktor:ktor-client-serialization:2.3.5")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.5")
@@ -155,4 +171,9 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.0")
 
     implementation("com.github.deano2390:FlowTextView:2.0.5")
+
+    // Firebase stuff
+    implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
 }
