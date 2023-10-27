@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Portfolio</string>
     <string name="introduction">Introduction</string>
     <string name="components">Components</string>
     <string name="settings">Settings</string>

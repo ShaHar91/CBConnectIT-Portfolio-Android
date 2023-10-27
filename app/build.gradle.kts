@@ -53,6 +53,40 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    flavorDimensions += "env"
+
+    productFlavors {
+        create("dev") {
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            dimension = "env"
+
+            resValue("string","app_name","CB-IT Portfolio Dev")
+        }
+
+        create("qa") {
+            applicationIdSuffix = ".test"
+            versionNameSuffix = "-test"
+            dimension = "env"
+
+            resValue("string","app_name","CB-IT Portfolio Test")
+        }
+
+        create("staging") {
+            applicationIdSuffix = ".staging"
+            versionNameSuffix = "-staging"
+            dimension = "env"
+
+            resValue("string","app_name","CB-IT Portfolio Staging")
+        }
+
+        create("production") {
+            dimension = "env"
+
+            resValue("string","app_name","CB-IT Portfolio")
+        }
+    }
 }
 
 dependencies {
@@ -61,7 +95,7 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0-alpha03")
+    implementation("com.google.android.material:material:1.11.0-beta01")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
@@ -78,7 +112,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3:1.2.0-alpha09")
+    implementation("androidx.compose.material3:material3:1.2.0-alpha10")
 
 //    // Compose Nav Destinations
     implementation("io.github.raamcosta.compose-destinations:animations-core:1.9.54")
@@ -114,9 +148,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
     // Room Database
-    implementation("androidx.room:room-runtime:2.5.2")
-    ksp("androidx.room:room-compiler:2.5.2")
+    implementation("androidx.room:room-runtime:2.6.0")
+    ksp("androidx.room:room-compiler:2.6.0")
 
     // optional - Kotlin Extensions and Coroutines support for Room
-    implementation("androidx.room:room-ktx:2.5.2")
+    implementation("androidx.room:room-ktx:2.6.0")
+
+    implementation("com.github.deano2390:FlowTextView:2.0.5")
 }

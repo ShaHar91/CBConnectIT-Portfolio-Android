@@ -16,7 +16,8 @@
     </style>
 
     <style name="Theme.Splash" parent="Theme.SplashScreen" >
-        <item name="windowSplashScreenBackground">#F5F5F5</item>
+        <item name="windowSplashScreenBackground">#520909</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/app_logo</item>
         <item name="windowSplashScreenAnimationDuration">600</item>
         <item name="postSplashScreenTheme">@style/Theme.Portfolio</item>
     </style>

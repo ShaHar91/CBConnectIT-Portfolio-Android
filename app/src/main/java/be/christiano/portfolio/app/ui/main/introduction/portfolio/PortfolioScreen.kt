@@ -40,12 +40,6 @@ import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
-//TODO wrap text around image
-// compose: https://stackoverflow.com/questions/70514385/how-do-i-wrap-text-around-an-image-or-a-composable
-//  https://github.com/oleksandrbalan/textflow
-
-// xml: https://stackoverflow.com/questions/2248759/how-to-layout-text-to-flow-around-an-image
-
 @Destination
 @Composable
 fun PortfolioScreen(

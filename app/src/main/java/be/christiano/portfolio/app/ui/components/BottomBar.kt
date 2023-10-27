@@ -69,11 +69,11 @@ enum class BottomBarDestination(
         icon = R.drawable.ic_home,
         label = R.string.introduction
     ),
-    Components(
-        direction = ComponentsScreenDestination,
-        icon = R.drawable.ic_components,
-        label = R.string.components
-    ),
+//    Components(
+//        direction = ComponentsScreenDestination,
+//        icon = R.drawable.ic_components,
+//        label = R.string.components
+//    ),
     Settings(
         direction = SettingsScreenDestination,
         icon = R.drawable.ic_settings,

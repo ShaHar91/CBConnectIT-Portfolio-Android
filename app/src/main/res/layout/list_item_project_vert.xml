@@ -5,6 +5,12 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="imageStartAligned"
+            type="Boolean" />
+
         <variable
             name="item"
             type="be.christiano.portfolio.app.domain.model.Work" />
@@ -13,35 +19,72 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="18dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="24dp">
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@{imageStartAligned ? @dimen/work_detail_title_margin: @dimen/none}"
             android:text="@{item.title}"
-            android:textAppearance="?textAppearanceTitleLarge"
-            android:textColor="?colorPrimary"
+            android:textAppearance="?textAppearanceHeadlineLarge"
+            android:textColor="?colorOnBackground"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Android Development" />
 
-        <TextView
-            android:id="@+id/tvBody"
+        <uk.co.deanwild.flowtextview.FlowTextView
+            android:id="@+id/ftvDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:text="@{item.description}"
-            android:textAppearance="?textAppearanceBodyMedium"
-            android:textColor="?colorOnSurface"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle"
-            tools:text="Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
+            tools:layout_height="400dp"
+            tools:text="Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.">
+
+            <LinearLayout
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="@{imageStartAligned ? false : true}"
+                android:layout_marginStart="@{imageStartAligned ? @dimen/none: @dimen/standard_margin}"
+                android:layout_marginEnd="@{!imageStartAligned ? @dimen/none: @dimen/standard_margin}"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/ivStartImage"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clLinks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.constraintlayout.helper.widget.Flow
+                        android:id="@+id/flowLinks"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        android:paddingBottom="2dp"
+                        app:flow_horizontalGap="10dp"
+                        app:flow_horizontalStyle="packed"
+                        app:flow_verticalGap="6dp"
+                        app:flow_wrapMode="chain"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+        </uk.co.deanwild.flowtextview.FlowTextView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clFlow"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
 
             <androidx.constraintlayout.helper.widget.Flow
                 android:id="@+id/flowTags"

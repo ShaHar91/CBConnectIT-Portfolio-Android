@@ -9,9 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import be.christiano.portfolio.app.R
 import be.christiano.portfolio.app.databinding.FragmentPorfolioBinding
+import be.christiano.portfolio.app.extensions.startWeb
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegate
 import be.christiano.portfolio.app.ui.main.base.ToolbarDelegateImpl
 import be.christiano.portfolio.app.ui.main.base.dataBinding
+import be.christiano.portfolio.app.ui.main.introduction.IntroductionUiEvent
 import be.christiano.portfolio.app.ui.main.introduction.adapters.WorkVerticalAdapter
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -28,7 +30,9 @@ class PortfolioFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
     }
 
     private val workAdapter by lazy {
-        WorkVerticalAdapter()
+        WorkVerticalAdapter {
+            mViewModel.onEvent(PortfolioEvent.OpenSocialLink(it))
+        }
     }
 
     override fun onCreateView(
@@ -60,6 +64,21 @@ class PortfolioFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
         viewLifecycleOwner.lifecycleScope.launch {
             mViewModel.state.collectLatest {
                 workAdapter.submitList(it.projects)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            mViewModel.eventFlow.collectLatest { event ->
+                when (event) {
+                    is PortfolioUiEvent.OpenSocialLink -> {
+                        val color = MaterialColors.getColor(requireView(), com.google.android.material.R.attr.colorSurfaceContainer)
+
+                        requireActivity().startWeb(
+                            event.link.url,
+                            toolbarColor = color
+                        )
+                    }
+                }
             }
         }
     }
