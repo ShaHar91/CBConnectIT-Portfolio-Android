@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "be.christiano.portfolio.dataRow"
+    namespace = "be.cbconnectit.portfolio.dataRow"
     compileSdk = 33
 
     defaultConfig {

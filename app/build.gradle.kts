@@ -18,11 +18,11 @@ if (file(rootProject.projectDir.absolutePath + "/signing.gradle").exists()) {
 }
 
 android {
-    namespace = "be.christiano.portfolio.app"
+    namespace = "be.cbconnectit.portfolio.app"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "be.christiano.portfolio.app"
+        applicationId = "be.cbconnectit.portfolio.app"
         minSdk = 28
         targetSdk = 34
         versionCode = 1

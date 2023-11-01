@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="be.christiano.portfolio.app.ui.main.introduction.IntroductionFragment"
+        android:name="be.cbconnectit.portfolio.app.ui.main.introduction.IntroductionFragment"
         android:label="@string/introduction"
         tools:layout="@layout/fragment_introduction">
         <action
@@ -20,25 +20,25 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="be.christiano.portfolio.app.ui.main.components.ComponentsFragment"
+        android:name="be.cbconnectit.portfolio.app.ui.main.components.ComponentsFragment"
         android:label="@string/components"
         tools:layout="@layout/fragment_components" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="be.christiano.portfolio.app.ui.main.settings.SettingsFragment"
+        android:name="be.cbconnectit.portfolio.app.ui.main.settings.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
 
     <fragment
         android:id="@+id/experienceFragment"
-        android:name="be.christiano.portfolio.app.ui.main.introduction.experience.ExperienceFragment"
+        android:name="be.cbconnectit.portfolio.app.ui.main.introduction.experience.ExperienceFragment"
         android:label="@string/work_experience"
         tools:layout="@layout/fragment_experience" />
 
     <fragment
         android:id="@+id/portfolioFragment"
-        android:name="be.christiano.portfolio.app.ui.main.introduction.portfolio.PortfolioFragment"
+        android:name="be.cbconnectit.portfolio.app.ui.main.introduction.portfolio.PortfolioFragment"
         android:label="@string/portfolio"
         tools:layout="@layout/fragment_porfolio" />
 </navigation>

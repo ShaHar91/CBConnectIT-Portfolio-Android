@@ -10,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="be.christiano.portfolio.app.ui.main.introduction.IntroductionViewModel" />
+            type="be.cbconnectit.portfolio.app.ui.main.introduction.IntroductionViewModel" />
     </data>
 
     <FrameLayout

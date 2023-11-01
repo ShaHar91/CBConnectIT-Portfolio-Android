@@ -13,7 +13,7 @@
 
         <variable
             name="item"
-            type="be.christiano.portfolio.app.domain.model.Work" />
+            type="be.cbconnectit.portfolio.app.domain.model.Work" />
     </data>
 
     <LinearLayout

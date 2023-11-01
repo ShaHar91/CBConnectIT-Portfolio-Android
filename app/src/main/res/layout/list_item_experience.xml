@@ -14,7 +14,7 @@
 
         <variable
             name="item"
-            type="be.christiano.portfolio.app.domain.model.Experience" />
+            type="be.cbconnectit.portfolio.app.domain.model.Experience" />
     </data>
 
     <LinearLayout

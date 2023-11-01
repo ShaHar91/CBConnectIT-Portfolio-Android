@@ -6,7 +6,7 @@
 
         <variable
             name="state"
-            type="be.christiano.portfolio.app.ui.main.introduction.IntroductionState" />
+            type="be.cbconnectit.portfolio.app.ui.main.introduction.IntroductionState" />
     </data>
 
     <LinearLayout

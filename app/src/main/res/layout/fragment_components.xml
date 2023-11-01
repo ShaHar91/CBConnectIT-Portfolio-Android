@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="be.christiano.portfolio.app.ui.main.components.ComponentsViewModel" />
+            type="be.cbconnectit.portfolio.app.ui.main.components.ComponentsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

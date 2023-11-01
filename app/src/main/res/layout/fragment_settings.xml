@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="be.christiano.portfolio.app.ui.main.settings.SettingsViewModel" />
+            type="be.cbconnectit.portfolio.app.ui.main.settings.SettingsViewModel" />
 
         <import type="android.view.View" />
     </data>
@@ -150,7 +150,7 @@
                 app:iconTint="?colorControlNormal"
                 tools:visibility="gone" />
 
-            <be.christiano.portfolio.dataRow.ToggleDataRow
+            <be.cbconnectit.portfolio.dataRow.ToggleDataRow
                 android:id="@+id/tdrDynamicMode"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
@@ -168,7 +168,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp" />
 
-        <be.christiano.portfolio.dataRow.DataRow
+        <be.cbconnectit.portfolio.dataRow.DataRow
             android:id="@+id/drVersion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
