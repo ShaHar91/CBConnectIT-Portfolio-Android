@@ -10,7 +10,7 @@ class ServiceApiImpl(
     private val client: RestApiBuilder
 ): ServiceApi {
     override suspend fun fetchAllServices(): List<ServiceDto> {
-        val call = client.api.get("/ShaHar91/Portfolio/master/public/services.json")
+        val call = client.api.get("services.json")
         val services = call.bodyAsText()
 
         return DefaultJson.decodeFromString(services)

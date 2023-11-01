@@ -10,6 +10,7 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 
 class RestApiBuilder {
@@ -30,7 +31,7 @@ class RestApiBuilder {
         }
 
         defaultRequest {
-            url("https://raw.githubusercontent.com")
+            url(BuildConfig.API_BASE_URL)
             contentType(ContentType.Application.Json)
         }
     }

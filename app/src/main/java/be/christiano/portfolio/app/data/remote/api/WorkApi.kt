@@ -10,7 +10,7 @@ class WorkApiImpl(
     private val client: RestApiBuilder
 ) : WorkApi {
     override suspend fun fetchAllWorks(): List<WorkDto> {
-        val call = client.api.get("/ShaHar91/Portfolio/master/public/works.json")
+        val call = client.api.get("works.json")
         val works = call.bodyAsText()
 
         return DefaultJson.decodeFromString(works)

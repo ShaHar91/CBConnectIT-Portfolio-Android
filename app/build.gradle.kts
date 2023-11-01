@@ -74,7 +74,8 @@ android {
             versionNameSuffix = "-dev"
             dimension = "env"
 
-            resValue("string","app_name","CB-IT Portfolio Dev")
+            resValue("string","app_name","CB connect IT Portfolio Dev")
+            buildConfigField("String", "API_BASE_URL", "\"https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/api/dev/\"")
         }
 
         create("qa") {
@@ -82,7 +83,8 @@ android {
             versionNameSuffix = "-test"
             dimension = "env"
 
-            resValue("string","app_name","CB-IT Portfolio Test")
+            resValue("string","app_name","CB connect IT Portfolio Test")
+            buildConfigField("String", "API_BASE_URL", "\"https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/api/qa/\"")
         }
 
         create("staging") {
@@ -90,13 +92,15 @@ android {
             versionNameSuffix = "-staging"
             dimension = "env"
 
-            resValue("string","app_name","CB-IT Portfolio Staging")
+            resValue("string","app_name","CB connect IT Portfolio Staging")
+            buildConfigField("String", "API_BASE_URL", "\"https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/api/staging/\"")
         }
 
         create("production") {
             dimension = "env"
 
-            resValue("string","app_name","CB-IT Portfolio")
+            resValue("string","app_name","CB connect IT Portfolio")
+            buildConfigField("String", "API_BASE_URL", "\"https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/api/prod/\"")
         }
     }
 }
