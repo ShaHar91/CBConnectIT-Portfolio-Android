@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/android_img.png",
+    "title": "Android Development",
+    "description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  },
+  {
+    "id": "2",
+    "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/tutoring_img.png",
+    "title": "Tutoring",
+    "description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  },
+  {
+    "id": "3",
+    "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/teamwork_img.png",
+    "title": "Teamwork",
+    "description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  }
+]
