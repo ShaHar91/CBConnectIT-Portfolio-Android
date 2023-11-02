@@ -1,0 +1,28 @@
+json_key_file("") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("be.cbconnectit.portfolio.app") # e.g. com.krausefx.app
+
+# Environment settings for sentry
+# lane specific settings
+for_platform :android do
+
+  for_lane :development do
+  	##can be found in Firebase console under project settings
+    setter(:firebase_app_id, '1:1087510076903:android:1fdc8266dfadefa0827142')
+    setter(:releaseNotes, 'Dit is een firebase development versie')
+  end
+
+  for_lane :test do
+    setter(:firebase_app_id, '1:1087510076903:android:12f18dc673fbf14e827142')
+    setter(:releaseNotes, 'Dit is een firebase qa versie')
+  end
+
+  for_lane :staging do
+    setter(:firebase_app_id, '1:1087510076903:android:085f31baa05ebe9f827142')
+    setter(:releaseNotes, 'Dit is een firebase staging versie')
+  end
+
+  for_lane :production do
+    setter(:firebase_app_id, '1:1087510076903:android:d9ced8bbe2562080827142')
+    setter(:releaseNotes, 'Dit is een firebase release versie')
+  end
+end

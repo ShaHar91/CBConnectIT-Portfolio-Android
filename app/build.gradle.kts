@@ -8,6 +8,8 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("com.gladed.androidgitversion") version "0.4.14"
+
 }
 
 /**
@@ -15,6 +17,19 @@ plugins {
  */
 if (file(rootProject.projectDir.absolutePath + "/signing.gradle").exists()) {
     apply(rootProject.projectDir.absolutePath + "/signing.gradle")
+}
+
+androidGitVersion {
+    codeFormat = "MNNPPPBBB"
+    format = "%tag%%.count%%-dirty%"
+    format = if (System.getenv("CI") == null) {
+        "%tag%%.count%%-dirty%"
+    } else {
+        //if it's a CI build ignore dirty because bundle execute demands bundler/gems to be up to date (forces it server-side) --> gemlock always changed
+        "%tag%%.count%"
+    }
+    //when their are uncommitted changes add dirty to version name
+    untrackedIsDirty = true
 }
 
 android {
@@ -25,8 +40,8 @@ android {
         applicationId = "be.cbconnectit.portfolio.app"
         minSdk = 28
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionName = androidGitVersion.name()
+        versionCode = androidGitVersion.code()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

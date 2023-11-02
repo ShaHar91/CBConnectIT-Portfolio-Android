@@ -1,0 +1,94 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "Submit a new devRelease Build to Firebase"
+  lane :development do |options|
+    gradle(task: "assembleDevRelease")
+
+    firebase_app_distribution(
+              app: CredentialsManager::AppfileConfig.try_fetch_value(:firebase_app_id),
+              testers: CredentialsManager::AppfileConfig.try_fetch_value(:testers),
+              release_notes: CredentialsManager::AppfileConfig.try_fetch_value(:releaseNotes)
+          )
+
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Submit a new qaRelease Build to Firebase"
+  lane :test do |options|
+    gradle(task: "assembleQaRelease")
+
+    firebase_app_distribution(
+              app: CredentialsManager::AppfileConfig.try_fetch_value(:firebase_app_id),
+              testers: CredentialsManager::AppfileConfig.try_fetch_value(:testers),
+              release_notes: CredentialsManager::AppfileConfig.try_fetch_value(:releaseNotes)
+          )
+
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Submit a new stagingRelease Build to Firebase"
+  lane :staging do |options|
+    gradle(task: "assembleStagingRelease")
+
+    firebase_app_distribution(
+              app: CredentialsManager::AppfileConfig.try_fetch_value(:firebase_app_id),
+              testers: CredentialsManager::AppfileConfig.try_fetch_value(:testers),
+              release_notes: CredentialsManager::AppfileConfig.try_fetch_value(:releaseNotes)
+          )
+
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Submit a new productionRelease Build to Firebase"
+  lane :production do |options|
+    gradle(task: "assembleProductionRelease")
+
+    firebase_app_distribution(
+              app: CredentialsManager::AppfileConfig.try_fetch_value(:firebase_app_id),
+              testers: CredentialsManager::AppfileConfig.try_fetch_value(:testers),
+              release_notes: CredentialsManager::AppfileConfig.try_fetch_value(:releaseNotes)
+          )
+
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+#   desc "Runs all the tests"
+#   lane :test do
+#     gradle(task: "test")
+#   end
+#
+#   desc "Submit a new Beta Build to Crashlytics Beta"
+#   lane :beta do
+#     gradle(task: "clean assembleRelease")
+#     crashlytics
+#
+#     # sh "your_script.sh"
+#     # You can also use other beta testing services here
+#   end
+#
+#   desc "Deploy a new version to the Google Play"
+#   lane :deploy do
+#     gradle(task: "clean assembleRelease")
+#     upload_to_play_store
+#   end
+end
