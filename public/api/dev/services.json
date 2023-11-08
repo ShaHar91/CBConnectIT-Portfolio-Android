@@ -3,18 +3,69 @@
     "id": "1",
     "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/android_img.png",
     "title": "Android Development",
-    "description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-  },
+    "short_description": "Whether it's a new app or optimizing an existing one, I offer Android development expertise. Let's collaborate to make your mobile application a success in the Google Play Store.",
+    "description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "banner_description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "sub_services": [
+      {
+        "title": "Android",
+        "description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/android_img.png",
+        "tag": {
+          "id": "9",
+          "name": "Android"
+        }
+      },
+      {
+        "title": "iOS",
+        "description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/ios_img.png",
+        "tag": {
+          "id": "10",
+          "name": "iOS"
+        }
+      },
+      {
+        "title": "KMP (Kotlin Multi Platform)",
+        "description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "tag": {
+          "id": "11",
+          "name": "KMP"
+        }
+      },
+      {
+        "title": "Flutter (React Native)",
+        "description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "tag": {
+          "id": "12",
+          "name": "Flutter"
+        }
+      }
+    ]},
   {
     "id": "2",
-    "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/tutoring_img.png",
-    "title": "Tutoring",
-    "description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-  },
+    "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/android_img.png",
+    "title": "Web Development",
+    "short_description": "From concept to deployment, I offer web development expertise to transform your online ideas into reality. Let's collaborate to create a user-friendly and feature-rich website that meets your needs.",
+    "description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "banner_description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "sub_services": [
+      {
+        "title": "Placeholder",
+        "description": "This is a placeholder since I'm not sure if I want to show web per programming language or per framework...",
+        "tag": {
+          "id": "13",
+          "name": "Web Placeholder Tag"
+        }
+      }
+    ]},
   {
     "id": "3",
-    "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/teamwork_img.png",
-    "title": "Teamwork",
-    "description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    "image": "https://raw.githubusercontent.com/ShaHar91/Portfolio/master/public/tutoring_img.png",
+    "title": "Tutoring",
+    "short_description": "Looking to bring your (or your peer's) skills to the next level, or just need someone to look into a bug/error? Let's work together to maximize your potential and achieve your aspirations.",
+    "description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "banner_description": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "extra_info": "Lorum ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
   }
 ]

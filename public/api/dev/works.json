@@ -32,6 +32,10 @@
       {
         "id": "5",
         "name": "MVVM"
+      },
+      {
+        "id": "9",
+        "name": "Android"
       }
     ]
   },
@@ -56,6 +60,10 @@
       {
         "id": "3",
         "name": "Kotlin"
+      },
+      {
+        "id": "9",
+        "name": "Android"
       }
     ]
   },
@@ -96,6 +104,10 @@
       {
         "id": "5",
         "name": "MVVM"
+      },
+      {
+        "id": "9",
+        "name": "Android"
       }
     ]
   },
@@ -128,6 +140,10 @@
       {
         "id": "5",
         "name": "MVVM"
+      },
+      {
+        "id": "9",
+        "name": "Android"
       }
     ]
   },
