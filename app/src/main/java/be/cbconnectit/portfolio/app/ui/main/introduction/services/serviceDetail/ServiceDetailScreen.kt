@@ -2,7 +2,6 @@ package be.cbconnectit.portfolio.app.ui.main.introduction.services.serviceDetail
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +22,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -57,26 +55,26 @@ fun ServiceDetailScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
-    LaunchedEffect(key1 = viewModel.eventFlow) {
-        viewModel.eventFlow.collectLatest { event ->
+    LaunchedEffect(Unit) {
+        viewModel.effect.collectLatest { event ->
             when (event) {
-                is ServiceDetailUiEvent.OpenProjectByTag -> navController.navigate(PortfolioScreenDestination(arrayOf(event.tagId)))
+                is ServiceDetailContract.Effect.OpenProjectByTag -> navController.navigate(PortfolioScreenDestination(arrayOf(event.tagId)))
             }
         }
     }
     ServiceDetailScreenContent(
         state = state,
         navController = navController,
-        onEvent = viewModel::onEvent
+        sendIntent = viewModel::sendIntent
     ) { viewModel.CreateSnackBarHost() }
 }
 
 @OptIn(ExperimentalToolbarApi::class)
 @Composable
 fun ServiceDetailScreenContent(
-    state: ServiceDetailState,
+    state: ServiceDetailContract.State,
     navController: NavController,
-    onEvent: (ServiceDetailEvent) -> Unit,
+    sendIntent: (ServiceDetailContract.Intent) -> Unit,
     createSnackBarHost: @Composable () -> Unit = {},
 ) {
     val toolbarState = rememberCollapsingToolbarScaffoldState()
@@ -103,7 +101,7 @@ fun ServiceDetailScreenContent(
                 navController = navController,
                 title = state.parentService?.title ?: "",
                 body = state.parentService?.bannerDescription ?: "",
-                imageUrl =  state.parentService?.bannerImageUrl
+                imageUrl = state.parentService?.bannerImageUrl
             )
         }
     ) {
@@ -115,7 +113,7 @@ fun ServiceDetailScreenContent(
             state.services.forEachIndexed { index, service ->
                 ServiceItem(service = service, shouldColorBackground = index % 2 == 1) {
                     service.tag?.let {
-                        onEvent(ServiceDetailEvent.OpenProjectByTag(it.id))
+                        sendIntent(ServiceDetailContract.Intent.OpenProjectByTag(it.id))
                     }
                 }
             }
@@ -155,8 +153,8 @@ fun ServiceDetailScreenContentPreview() {
     PortfolioTheme {
         ServiceDetailScreenContent(
             navController = rememberNavController(),
-            state = ServiceDetailState(services = listOf(Service.previewData())),
-            onEvent = {}
+            state = ServiceDetailContract.State(services = listOf(Service.previewData())),
+            sendIntent = {}
         )
     }
 }

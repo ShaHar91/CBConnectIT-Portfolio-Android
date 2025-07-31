@@ -1,43 +1,62 @@
 package be.cbconnectit.portfolio.app.ui.main.introduction.services.serviceDetail
 
 import androidx.lifecycle.viewModelScope
-import be.cbconnectit.portfolio.app.domain.model.Service
 import be.cbconnectit.portfolio.app.domain.repository.ServiceRepository
 import be.cbconnectit.portfolio.app.ui.base.BaseComposeViewModel
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ServiceDetailViewModel(
     private val serviceRepository: ServiceRepository,
     serviceId: String
-) : BaseComposeViewModel() {
+) : BaseComposeViewModel(), ServiceDetailContract {
 
-    private val _state = MutableStateFlow(ServiceDetailState())
-    val state = _state.asStateFlow()
+    private val _state = MutableStateFlow(ServiceDetailContract.State())
+    override val state = _state.asStateFlow()
 
-    private val _eventFlow = Channel<ServiceDetailUiEvent>()
-    val eventFlow = _eventFlow.receiveAsFlow()
+    private val _effect = MutableSharedFlow<ServiceDetailContract.Effect>()
+    override val effect = _effect.asSharedFlow()
 
     init {
         fetchServiceDetailData()
 
-        serviceRepository.findParentServiceName(serviceId).onEach { service ->
-            _state.update { it.copy(parentService = service) }
-        }.launchIn(viewModelScope)
-
-        serviceRepository.findAllServices(serviceId).onEach { services ->
-            _state.update { it.copy(services = services) }
+        combine(
+            serviceRepository.findParentServiceName(serviceId),
+            serviceRepository.findAllServices(serviceId)
+        ) { parentService, services ->
+            val currentState = _state.value
+            currentState.copy(
+                parentService = parentService,
+                services = services,
+            )
+        }.onEach { newState ->
+            updateState { newState }
         }.launchIn(viewModelScope)
     }
 
+    override fun sendIntent(intent: ServiceDetailContract.Intent) = viewModelScope.launch {
+        when (intent) {
+            is ServiceDetailContract.Intent.OpenProjectByTag -> emitEffect(ServiceDetailContract.Effect.OpenProjectByTag(intent.tagId))
+        }
+    }
+
+    override fun emitEffect(effect: ServiceDetailContract.Effect) = viewModelScope.launch {
+        _effect.emit(effect)
+    }
+
+    override fun updateState(block: (ServiceDetailContract.State) -> ServiceDetailContract.State) {
+        _state.update(block)
+    }
+
     private fun fetchServiceDetailData() = viewModelScope.launch {
-        _state.update { it.copy(isLoading = true) }
+        updateState { it.copy(isLoading = true) }
 
         val call = serviceRepository.fetchAllServices()
         if (call.isFailure) {
@@ -47,26 +66,6 @@ class ServiceDetailViewModel(
             }
         }
 
-        _state.update { it.copy(isLoading = false) }
+        updateState { it.copy(isLoading = false) }
     }
-
-    fun onEvent(event: ServiceDetailEvent) = viewModelScope.launch {
-        when (event) {
-            is ServiceDetailEvent.OpenProjectByTag -> _eventFlow.send(ServiceDetailUiEvent.OpenProjectByTag(event.tagId))
-        }
-    }
-}
-
-sealed class ServiceDetailEvent {
-    data class OpenProjectByTag(val tagId: String) : ServiceDetailEvent()
-}
-
-data class ServiceDetailState(
-    val isLoading: Boolean = false,
-    val services: List<Service> = emptyList(),
-    val parentService: Service? = null
-)
-
-sealed class ServiceDetailUiEvent {
-    data class OpenProjectByTag(val tagId: String) : ServiceDetailUiEvent()
 }

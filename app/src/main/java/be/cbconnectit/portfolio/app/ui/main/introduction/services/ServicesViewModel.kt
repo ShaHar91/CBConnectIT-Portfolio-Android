@@ -1,38 +1,37 @@
 package be.cbconnectit.portfolio.app.ui.main.introduction.services
 
 import androidx.lifecycle.viewModelScope
-import be.cbconnectit.portfolio.app.domain.model.Service
 import be.cbconnectit.portfolio.app.domain.repository.ServiceRepository
 import be.cbconnectit.portfolio.app.ui.base.BaseComposeViewModel
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ServicesViewModel(
     private val serviceRepository: ServiceRepository
-) : BaseComposeViewModel() {
+) : BaseComposeViewModel(), ServicesContract {
 
-    private val _state = MutableStateFlow(ServicesState())
-    val state = _state.asStateFlow()
+    private val _state = MutableStateFlow(ServicesContract.State())
+    override val state = _state.asStateFlow()
 
-    private val _eventFlow = Channel<ServicesUiEvent>()
-    val eventFlow = _eventFlow.receiveAsFlow()
+    private val _effect = MutableSharedFlow<ServicesContract.Effect>()
+    override val effect = _effect.asSharedFlow()
 
     init {
         fetchServicesData()
 
         serviceRepository.findAllServices().onEach { services ->
-            _state.update { it.copy(services = services) }
+            updateState { it.copy(services = services) }
         }.launchIn(viewModelScope)
     }
 
     private fun fetchServicesData() = viewModelScope.launch {
-        _state.update { it.copy(isLoading = true) }
+        updateState { it.copy(isLoading = true) }
 
         val call = serviceRepository.fetchAllServices()
         if (call.isFailure) {
@@ -42,25 +41,20 @@ class ServicesViewModel(
             }
         }
 
-        _state.update { it.copy(isLoading = false) }
+        updateState { it.copy(isLoading = false) }
     }
 
-    fun onEvent(event: ServicesEvent) = viewModelScope.launch {
-        when (event) {
-            is ServicesEvent.OpenServiceDetail -> _eventFlow.send(ServicesUiEvent.OpenServiceDetail(event.serviceId))
+    override fun sendIntent(intent: ServicesContract.Intent) = viewModelScope.launch {
+        when (intent) {
+            is ServicesContract.Intent.OpenServiceDetail -> emitEffect(ServicesContract.Effect.OpenServiceDetail(intent.serviceId))
         }
     }
-}
 
-sealed class ServicesEvent {
-    data class OpenServiceDetail(val serviceId: String) : ServicesEvent()
-}
+    override fun emitEffect(effect: ServicesContract.Effect) = viewModelScope.launch {
+        _effect.emit(effect)
+    }
 
-data class ServicesState(
-    val isLoading: Boolean = false,
-    val services: List<Service> = emptyList()
-)
-
-sealed class ServicesUiEvent {
-    data class OpenServiceDetail(val serviceId: String) : ServicesUiEvent()
+    override fun updateState(block: (ServicesContract.State) -> ServicesContract.State) {
+        _state.update(block)
+    }
 }
