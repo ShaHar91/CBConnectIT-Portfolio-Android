@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.androidgitversion)
+    alias(libs.plugins.kotlin.compose)
 }
 
 /**
@@ -32,7 +33,7 @@ androidGitVersion {
 
 android {
     namespace = "be.cbconnectit.portfolio.app"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "be.cbconnectit.portfolio.app"
@@ -70,9 +71,6 @@ android {
         dataBinding = true
         buildConfig = true
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }
     packaging {
         resources {
@@ -133,6 +131,7 @@ dependencies {
     implementation(libs.constraintlayout.compose)
 
     // Compose
+    compileOnly(libs.compose.compiler.gradle.plugin)
     implementation(platform(libs.compose.bom))
     implementation(libs.activity.compose)
     implementation(libs.compose.ui)

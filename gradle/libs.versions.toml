@@ -1,22 +1,22 @@
 [versions]
-kotlin = "1.9.0"
-android-gradle-plugin = "8.7.0"
+kotlin = "2.1.20"
+android-gradle-plugin = "8.10.1"
 serialization = "1.6.10"
-compose-bom = "2024.05.00"
-androidxComposeCompiler = "1.5.2"
-activity-compose = "1.8.0"
+compose-bom = "2025.07.00"
+activity-compose = "1.10.1"
 compose-ui = "1.5.2"
-coil = "2.3.0"
+coil = "2.7.0"
 room = "2.6.0"
 ktor = "2.3.5"
-serialization-json = "1.5.1"
-koin = "3.4.0"
-koin-compose = "3.4.3"
+serialization-json = "1.8.1"
+koin = "3.5.6"
+koin-compose = "3.5.6"
 navigation = "2.7.3"
 navigation-safe-args = "2.7.4"
 crashlytics = "2.9.9"
 firebase-bom = "32.4.0"
-google-services = "4.4.0"
+google-services = "4.4.3"
+lifecycle = "2.9.2"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
@@ -25,23 +25,25 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
-compose-destinations-ksp = { id = "com.google.devtools.ksp", version = "1.9.0-1.0.13" }
+compose-destinations-ksp = { id = "com.google.devtools.ksp", version = "2.1.20-1.0.31" }
 androidgitversion = { id = "com.gladed.androidgitversion", version = "0.4.14" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 [libraries]
+compose-compiler-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 
 # AndroidX
-androidx-core = { module = "androidx.core:core-ktx", version = "1.12.0" }
+androidx-core = { module = "androidx.core:core-ktx", version = "1.16.0" }
 androidx-splashcreen = { module = "androidx.core:core-splashscreen", version = "1.0.1" }
-appcompat = { module = "androidx.appcompat:appcompat", version = "1.6.1" }
-material = { module = "com.google.android.material:material", version = "1.11.0-beta01" }
-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.4" }
-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.0.1" }
+appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.1" }
+material = { module = "com.google.android.material:material", version = "1.12.0" }
+constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.2.1" }
+constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.1.1" }
 
 # Lifecycle
-lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version = "2.6.2" }
-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version = "2.6.2" }
-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version = "2.6.2" }
+lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version = "lifecycle" }
+lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version = "lifecycle" }
+lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version = "lifecycle" }
 
 # Navigation
 navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
@@ -95,9 +97,9 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 
 # Misc
 junit = { module = "junit:junit", version = "4.13.2" }
-androidx-junit = { module = "androidx.test.ext:junit", version = "1.1.5" }
-espresso = { module = "androidx.test.espresso:espresso-core", version = "3.5.1" }
-browser = { module = "androidx.browser:browser", version = "1.6.0" }
+androidx-junit = { module = "androidx.test.ext:junit", version = "1.3.0" }
+espresso = { module = "androidx.test.espresso:espresso-core", version = "3.7.0" }
+browser = { module = "androidx.browser:browser", version = "1.9.0" }
 
 flowtextview = { module = "com.github.deano2390:FlowTextView", version = "2.0.5" }
 compose-markdown = { module = "com.github.jeziellago:compose-markdown", version = "0.5.0" }
