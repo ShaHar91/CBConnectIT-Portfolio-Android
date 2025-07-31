@@ -8,16 +8,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,7 +39,6 @@ import be.cbconnectit.portfolio.app.ui.main.destinations.ExperienceScreenDestina
 import be.cbconnectit.portfolio.app.ui.main.destinations.PortfolioScreenDestination
 import be.cbconnectit.portfolio.app.ui.main.destinations.ServiceDetailScreenDestination
 import be.cbconnectit.portfolio.app.ui.main.destinations.ServicesScreenDestination
-import be.cbconnectit.portfolio.app.ui.main.introduction.sections.AboutMeSection
 import be.cbconnectit.portfolio.app.ui.main.introduction.sections.ExperienceSection
 import be.cbconnectit.portfolio.app.ui.main.introduction.sections.MainSection
 import be.cbconnectit.portfolio.app.ui.main.introduction.sections.PortfolioSection
@@ -63,26 +62,27 @@ fun IntroductionScreen(
     val localContext = LocalContext.current
     val colorScheme = MaterialTheme.colorScheme
 
-    LaunchedEffect(key1 = true) {
-        viewModel.eventFlow.collectLatest { event ->
+    LaunchedEffect(Unit) {
+        viewModel.effect.collectLatest { event ->
             when (event) {
-                is IntroductionUiEvent.OpenSocialLink -> {
+                is IntroductionContract.Effect.OpenSocialLink -> {
                     localContext.startWeb(
                         event.link.url,
                         toolbarColor = colorScheme.surfaceColorAtElevation(3.dp).toArgb()
                     )
                 }
 
-                is IntroductionUiEvent.OpenMailClient -> {
+                is IntroductionContract.Effect.OpenMailClient -> {
                     localContext.startIntentMail("bollachristiano@gmail.com", "Select an app") {
                         viewModel.showSnackbar("Something went wrong, please try again later")
                     }
                 }
 
-                IntroductionUiEvent.OpenExperienceList -> navController.navigate(ExperienceScreenDestination)
-                IntroductionUiEvent.OpenPortfolio -> navController.navigate(PortfolioScreenDestination(arrayOf()))
-                is IntroductionUiEvent.OpenServiceDetail -> navController.navigate(ServiceDetailScreenDestination(serviceId = event.serviceId))
-                IntroductionUiEvent.OpenServiceList -> navController.navigate(ServicesScreenDestination)
+                IntroductionContract.Effect.OpenExperienceList -> navController.navigate(ExperienceScreenDestination)
+                IntroductionContract.Effect.OpenPortfolio -> navController.navigate(PortfolioScreenDestination(arrayOf()))
+                is IntroductionContract.Effect.OpenServiceDetail -> navController.navigate(ServiceDetailScreenDestination(serviceId = event.serviceId))
+                IntroductionContract.Effect.OpenServiceList -> navController.navigate(ServicesScreenDestination)
+                else -> Unit
             }
         }
     }
@@ -90,15 +90,18 @@ fun IntroductionScreen(
     IntroductionScreenContent(
         state = state,
         { viewModel.CreateSnackBarHost() },
-        onEvent = viewModel::onEvent
+        sendIntent = viewModel::sendIntent
     )
 }
 
+// TODO: Add pull to refresh functionality to the service screen!!!!
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IntroductionScreenContent(
-    state: IntroductionState,
+    state: IntroductionContract.State,
     createSnackBarHost: @Composable () -> Unit = {},
-    onEvent: (IntroductionEvent) -> Unit
+    sendIntent: (IntroductionContract.Intent) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -113,60 +116,66 @@ fun IntroductionScreenContent(
                 }, icon = {
                     Icon(painterResource(id = R.drawable.ic_mail), "")
                 }, onClick = {
-                    onEvent(IntroductionEvent.OpenMailClient)
+                    sendIntent(IntroductionContract.Intent.OpenMailClient)
                 })
             }
         ) { paddingValues ->
-            Column(
-                modifier = Modifier.verticalScroll(scrollState)
+            PullToRefreshBox(
+                isRefreshing = state.isRefreshing,
+                onRefresh = { sendIntent(IntroductionContract.Intent.RefreshData) },
+                modifier = Modifier.fillMaxSize(),
             ) {
-                Spacer(modifier = Modifier.height(40.dp))
+                Column(
+                    modifier = Modifier.verticalScroll(scrollState)
+                ) {
+                    Spacer(modifier = Modifier.height(40.dp))
 
-                MainSection {
-                    onEvent(IntroductionEvent.OpenSocialLink(it))
-                }
-
-                // This spacer is not the correct size because the MainImage has an offset which is being calculated in this
-                Spacer(modifier = Modifier.height(40.dp))
-
-                AboutMeSection(state.experienceInYears)
-
-                Spacer(modifier = Modifier.height(62.dp))
-
-                ServiceSection(
-                    state.services,
-                    headerActionClicked = {
-                        onEvent(IntroductionEvent.OpenServiceList)
-                    },
-                    serviceActionClicked = { onEvent(IntroductionEvent.OpenServiceDetail(it)) }
-                )
-
-                Spacer(modifier = Modifier.height(62.dp))
-
-                PortfolioSection(
-                    projects = state.projects,
-                    selectedWork = state.selectedProject,
-                    onWorkClicked = {
-                        onEvent(IntroductionEvent.UpdateSelectedWork(it))
-                    },
-                    actionClicked = {
-                        onEvent(IntroductionEvent.OpenPortfolioList)
+                    MainSection {
+                        sendIntent(IntroductionContract.Intent.OpenSocialLink(it))
                     }
-                )
 
-                Spacer(modifier = Modifier.height(62.dp))
+//                    // This spacer is not the correct size because the MainImage has an offset which is being calculated in this
+//                    Spacer(modifier = Modifier.height(40.dp))
+//
+//                    AboutMeSection(state.experienceInYears)
 
-                TestimonialsSection(state.testimonials) {
-                    onEvent(IntroductionEvent.OpenTestimonialsList)
+                    Spacer(modifier = Modifier.height(62.dp))
+
+                    ServiceSection(
+                        state.services,
+                        headerActionClicked = {
+                            sendIntent(IntroductionContract.Intent.OpenServiceList)
+                        },
+                        serviceActionClicked = { sendIntent(IntroductionContract.Intent.OpenServiceDetail(it)) }
+                    )
+
+                    Spacer(modifier = Modifier.height(62.dp))
+
+                    PortfolioSection(
+                        projects = state.projects,
+                        selectedWork = state.selectedProject,
+                        onWorkClicked = {
+                            sendIntent(IntroductionContract.Intent.UpdateSelectedWork(it))
+                        },
+                        actionClicked = {
+                            sendIntent(IntroductionContract.Intent.OpenPortfolioList)
+                        }
+                    )
+
+                    Spacer(modifier = Modifier.height(62.dp))
+
+                    TestimonialsSection(state.testimonials) {
+                        sendIntent(IntroductionContract.Intent.OpenTestimonialsList)
+                    }
+
+                    Spacer(modifier = Modifier.height(62.dp))
+
+                    ExperienceSection(state.experiences) {
+                        sendIntent(IntroductionContract.Intent.OpenExperiencesList)
+                    }
+
+                    Spacer(modifier = Modifier.height(100.dp))
                 }
-
-                Spacer(modifier = Modifier.height(62.dp))
-
-                ExperienceSection(state.experiences) {
-                    onEvent(IntroductionEvent.OpenExperiencesList)
-                }
-
-                Spacer(modifier = Modifier.height(100.dp))
             }
         }
 
@@ -174,8 +183,6 @@ fun IntroductionScreenContent(
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
         }
     }
-
-    //TODO: maybe add a SwipeToRefresh to the layout?
 }
 
 @Preview
@@ -184,8 +191,8 @@ fun IntroductionScreenContent(
 fun IntroductionScreenPreview() {
     PortfolioTheme {
         IntroductionScreenContent(
-            state = IntroductionState(),
-            onEvent = {}
+            state = IntroductionContract.State(),
+            sendIntent = {}
         )
     }
 }

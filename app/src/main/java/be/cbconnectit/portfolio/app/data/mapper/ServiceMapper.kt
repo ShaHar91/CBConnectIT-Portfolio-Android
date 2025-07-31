@@ -7,6 +7,7 @@ import be.cbconnectit.portfolio.app.domain.model.Service
 fun ServiceEntity.toService() = Service(
     id,
     imageUrl,
+    bannerImageUrl,
     title,
     shortDescription,
     description,
@@ -23,6 +24,7 @@ fun List<ServiceEntity>.toServices() = this.map { it.toService() }
 fun ServiceDto.toService() = Service(
     id,
     imageUrl,
+    bannerImageUrl,
     title,
     shortDescription,
     description,
@@ -37,6 +39,7 @@ fun ServiceDto.toService() = Service(
 fun ServiceDto.toServiceEntity(parentId: String?) = ServiceEntity(
     id,
     imageUrl,
+    bannerImageUrl,
     title,
     shortDescription,
     description,

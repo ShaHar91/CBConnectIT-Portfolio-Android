@@ -85,6 +85,7 @@ fun MainScreen() {
     val bottomSheetNavigator = rememberBottomSheetNavigator()
     navController.navigatorProvider += bottomSheetNavigator
 
+    // TODO: fix for the nested Scaffolds -- https://medium.com/@giuliopime/bottom-navigation-bar-with-nested-scaffolds-e7db3a0a1656
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator,
         sheetShape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)

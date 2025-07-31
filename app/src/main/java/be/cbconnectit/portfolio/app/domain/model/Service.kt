@@ -7,6 +7,7 @@ import be.cbconnectit.portfolio.app.R
 data class Service(
     val id: String,
     val imageUrl: String,
+    val bannerImageUrl: String?= null,
     val title: String,
     val shortDescription: String? = null,
     val description: String,

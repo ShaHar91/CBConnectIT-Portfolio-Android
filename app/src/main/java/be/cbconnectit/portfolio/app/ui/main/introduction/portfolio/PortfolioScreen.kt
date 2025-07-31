@@ -90,9 +90,8 @@ fun PortfolioScreenContent(
             snackbarHost = { createSnackBarHost() }
         ) { paddingValues ->
             LazyColumn(
-                modifier = Modifier.padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = paddingValues.calculateTopPadding() + 16.dp, bottom = 40.dp)
             ) {
                 itemsIndexed(state.projects) { index, work ->
                     if (index != 0) {

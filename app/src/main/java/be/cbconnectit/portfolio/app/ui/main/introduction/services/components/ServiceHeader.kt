@@ -49,7 +49,8 @@ fun ServiceHeader(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 56.dp)
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .padding(start = 40.dp),
                 color = MaterialTheme.colorScheme.onPrimary,
                 text = title,
                 style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold)

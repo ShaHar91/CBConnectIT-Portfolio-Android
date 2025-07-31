@@ -80,33 +80,33 @@ class IntroductionFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl(
         experiencePagerSnapHelper.attachToRecyclerView(binding.rvExperiences)
 
         binding.fabLetsChat.setOnClickListener {
-            mViewModel.onEvent(IntroductionEvent.OpenMailClient)
+            mViewModel.sendIntent(IntroductionContract.Intent.OpenMailClient)
         }
 
         binding.sectionMain.mcvGithub.setOnClickListener {
             val link = mViewModel.state.value.socialLinks.first { it.type == LinkType.Github }
-            mViewModel.onEvent(IntroductionEvent.OpenSocialLink(link))
+            mViewModel.sendIntent(IntroductionContract.Intent.OpenSocialLink(link))
         }
 
         binding.sectionMain.mcvLinkedIn.setOnClickListener {
             val link = mViewModel.state.value.socialLinks.first { it.type == LinkType.LinkedIn }
-            mViewModel.onEvent(IntroductionEvent.OpenSocialLink(link))
+            mViewModel.sendIntent(IntroductionContract.Intent.OpenSocialLink(link))
         }
 
         binding.shPortfolio.btnSeeMore.setOnClickListener {
-            mViewModel.onEvent(IntroductionEvent.OpenPortfolioList)
+            mViewModel.sendIntent(IntroductionContract.Intent.OpenPortfolioList)
         }
 
         binding.shService.btnSeeMore.setOnClickListener {
-            mViewModel.onEvent(IntroductionEvent.OpenServiceList)
+            mViewModel.sendIntent(IntroductionContract.Intent.OpenServiceList)
         }
 
         binding.shTestimonials.btnSeeMore.setOnClickListener {
-            mViewModel.onEvent(IntroductionEvent.OpenTestimonialsList)
+            mViewModel.sendIntent(IntroductionContract.Intent.OpenTestimonialsList)
         }
 
         binding.shExperiences.btnSeeMore.setOnClickListener {
-            mViewModel.onEvent(IntroductionEvent.OpenExperiencesList)
+            mViewModel.sendIntent(IntroductionContract.Intent.OpenExperiencesList)
         }
     }
 
@@ -121,9 +121,9 @@ class IntroductionFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl(
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            mViewModel.eventFlow.collectLatest { event ->
+            mViewModel.effect.collectLatest { event ->
                 when (event) {
-                    is IntroductionUiEvent.OpenSocialLink -> {
+                    is IntroductionContract.Effect.OpenSocialLink -> {
                         val color = MaterialColors.getColor(requireView(),com.google.android.material.R.attr.colorSurfaceContainer )
 
                         requireActivity().startWeb(
@@ -132,17 +132,17 @@ class IntroductionFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl(
                         )
                     }
 
-                    IntroductionUiEvent.OpenExperienceList -> {
+                    IntroductionContract.Effect.OpenExperienceList -> {
                         IntroductionFragmentDirections.actionNavigationHomeToExperienceFragment().run(findNavController()::navigate)
                     }
 
-                    IntroductionUiEvent.OpenMailClient -> {
+                    IntroductionContract.Effect.OpenMailClient -> {
                         requireActivity().startIntentMail("bollachristiano@gmail.com", "Select an app") {
                             Snackbar.make(requireView(), "Something went wrong, please try again later", Snackbar.LENGTH_SHORT).show()
                         }
                     }
 
-                    IntroductionUiEvent.OpenPortfolio -> {
+                    IntroductionContract.Effect.OpenPortfolio -> {
                         IntroductionFragmentDirections.actionNavigationHomeToPortfolioFragment().run(findNavController()::navigate)
                     }
 

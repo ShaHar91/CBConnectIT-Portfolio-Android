@@ -5,7 +5,6 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
-import kotlinx.serialization.SerialName
 
 @Entity(ServiceEntity.ENTITY_NAME)
 data class ServiceEntity(
@@ -13,6 +12,8 @@ data class ServiceEntity(
     val id: String,
     @ColumnInfo("image_url")
     val imageUrl: String,
+    @ColumnInfo("banner_image_url")
+    val bannerImageUrl: String? = null,
     val title: String,
     @ColumnInfo("short_description")
     val shortDescription: String? = null,

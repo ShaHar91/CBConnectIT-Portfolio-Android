@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import be.cbconnectit.portfolio.app.domain.model.Service
 import be.cbconnectit.portfolio.app.domain.repository.ServiceRepository
 import be.cbconnectit.portfolio.app.ui.base.BaseComposeViewModel
-import be.cbconnectit.portfolio.app.ui.main.introduction.IntroductionUiEvent
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

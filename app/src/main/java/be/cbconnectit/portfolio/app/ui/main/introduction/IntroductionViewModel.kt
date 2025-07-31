@@ -2,23 +2,19 @@ package be.cbconnectit.portfolio.app.ui.main.introduction
 
 import androidx.lifecycle.viewModelScope
 import be.cbconnectit.portfolio.app.domain.enums.Social
-import be.cbconnectit.portfolio.app.domain.model.Experience
 import be.cbconnectit.portfolio.app.domain.model.Link
-import be.cbconnectit.portfolio.app.domain.model.Service
-import be.cbconnectit.portfolio.app.domain.model.Testimonial
-import be.cbconnectit.portfolio.app.domain.model.Work
 import be.cbconnectit.portfolio.app.domain.repository.ExperienceRepository
 import be.cbconnectit.portfolio.app.domain.repository.ServiceRepository
 import be.cbconnectit.portfolio.app.domain.repository.TestimonialRepository
 import be.cbconnectit.portfolio.app.domain.repository.WorkRepository
 import be.cbconnectit.portfolio.app.ui.base.BaseComposeViewModel
 import kotlinx.coroutines.async
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -30,18 +26,13 @@ class IntroductionViewModel(
     private val experienceRepo: ExperienceRepository,
     private val workRepository: WorkRepository,
     private val testimonialRepository: TestimonialRepository
-) : BaseComposeViewModel() {
+) : BaseComposeViewModel(), IntroductionContract {
 
-    private val _state = MutableStateFlow(
-        IntroductionState(
-            socialLinks = Social.entries.map { Link(type = it.type, url = it.link) },
-            experienceInYears = getUpdateExperienceInYears()
-        )
-    )
-    val state = _state.asStateFlow()
+    private val _state = MutableStateFlow(getInitialState())
+    override val state = _state.asStateFlow()
 
-    private val _eventFlow = Channel<IntroductionUiEvent>()
-    val eventFlow = _eventFlow.receiveAsFlow()
+    private val _effect = MutableSharedFlow<IntroductionContract.Effect>()
+    override val effect = _effect.asSharedFlow()
 
     init {
         fetchAllData()
@@ -65,8 +56,35 @@ class IntroductionViewModel(
         }.launchIn(viewModelScope)
     }
 
-    private fun fetchAllData() = viewModelScope.launch {
-        _state.update { it.copy(isLoading = true) }
+    private fun getInitialState() = IntroductionContract.State(
+        socialLinks = Social.entries.map { Link(type = it.type, url = it.link) },
+        experienceInYears = getUpdateExperienceInYears()
+    )
+
+    override fun sendIntent(event: IntroductionContract.Intent) = viewModelScope.launch {
+        when (event) {
+            is IntroductionContract.Intent.OpenSocialLink -> emitEffect(IntroductionContract.Effect.OpenSocialLink(event.link))
+            is IntroductionContract.Intent.OpenMailClient -> emitEffect(IntroductionContract.Effect.OpenMailClient)
+            is IntroductionContract.Intent.OpenServiceList -> emitEffect(IntroductionContract.Effect.OpenServiceList)
+            is IntroductionContract.Intent.OpenServiceDetail -> emitEffect(IntroductionContract.Effect.OpenServiceDetail(event.serviceId))
+            is IntroductionContract.Intent.OpenPortfolioList -> emitEffect(IntroductionContract.Effect.OpenPortfolio)
+            is IntroductionContract.Intent.OpenTestimonialsList -> showSnackbar("In Development!")
+            is IntroductionContract.Intent.OpenExperiencesList -> emitEffect(IntroductionContract.Effect.OpenExperienceList)
+            is IntroductionContract.Intent.UpdateSelectedWork -> _state.update { it.copy(selectedProject = event.work) }
+            is IntroductionContract.Intent.RefreshData -> fetchAllData(isRefreshing = true)
+        }
+    }
+
+    override fun emitEffect(effect: IntroductionContract.Effect) = viewModelScope.launch {
+        _effect.emit(effect)
+    }
+
+    override fun updateState(block: (IntroductionContract.State) -> IntroductionContract.State) {
+        _state.update(block)
+    }
+
+    private fun fetchAllData(isRefreshing: Boolean = false) = viewModelScope.launch {
+        _state.update { it.copy(isLoading = true, isRefreshing = isRefreshing) }
 
         val servicesAsync = async { serviceRepo.fetchAllServices() }
         val experiencesAsync = async { experienceRepo.fetchAllExperiences() }
@@ -86,7 +104,7 @@ class IntroductionViewModel(
             }
         }
 
-        _state.update { it.copy(isLoading = false) }
+        _state.update { it.copy(isLoading = false, isRefreshing = false) }
     }
 
     private fun getUpdateExperienceInYears(): Int {
@@ -96,50 +114,5 @@ class IntroductionViewModel(
 
         return yearsBetween.toInt()
     }
-
-    fun onEvent(event: IntroductionEvent) = viewModelScope.launch {
-        when (event) {
-            is IntroductionEvent.OpenSocialLink -> _eventFlow.send(IntroductionUiEvent.OpenSocialLink(event.link))
-            is IntroductionEvent.OpenMailClient -> _eventFlow.send(IntroductionUiEvent.OpenMailClient)
-            is IntroductionEvent.OpenServiceList -> _eventFlow.send(IntroductionUiEvent.OpenServiceList)
-            is IntroductionEvent.OpenServiceDetail -> _eventFlow.send(IntroductionUiEvent.OpenServiceDetail(event.serviceId))
-            is IntroductionEvent.OpenPortfolioList -> _eventFlow.send(IntroductionUiEvent.OpenPortfolio)
-            is IntroductionEvent.OpenTestimonialsList -> showSnackbar("In Development!")
-            is IntroductionEvent.OpenExperiencesList -> _eventFlow.send(IntroductionUiEvent.OpenExperienceList)
-            is IntroductionEvent.UpdateSelectedWork -> _state.update {
-                it.copy(selectedProject = event.work)
-            }
-        }
-    }
 }
 
-sealed class IntroductionEvent {
-    data class OpenSocialLink(val link: Link) : IntroductionEvent()
-    data object OpenMailClient : IntroductionEvent()
-    data object OpenServiceList : IntroductionEvent()
-    data class OpenServiceDetail(val serviceId: String) : IntroductionEvent()
-    data object OpenPortfolioList : IntroductionEvent()
-    data class UpdateSelectedWork(val work: Work) : IntroductionEvent()
-    data object OpenTestimonialsList : IntroductionEvent()
-    data object OpenExperiencesList : IntroductionEvent()
-}
-
-data class IntroductionState(
-    val isLoading: Boolean = false,
-    val socialLinks: List<Link> = emptyList(),
-    val experienceInYears: Int = 0,
-    val services: List<Service> = emptyList(),
-    val projects: List<Work> = emptyList(),
-    val testimonials: List<Testimonial> = emptyList(),
-    val experiences: List<Experience> = emptyList(),
-    val selectedProject: Work? = null
-)
-
-sealed class IntroductionUiEvent {
-    data class OpenSocialLink(val link: Link) : IntroductionUiEvent()
-    data object OpenMailClient : IntroductionUiEvent()
-    data object OpenExperienceList : IntroductionUiEvent()
-    data object OpenPortfolio : IntroductionUiEvent()
-    data object OpenServiceList : IntroductionUiEvent()
-    data class OpenServiceDetail(val serviceId: String) : IntroductionUiEvent()
-}

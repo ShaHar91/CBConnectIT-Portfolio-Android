@@ -3,6 +3,7 @@ package be.cbconnectit.portfolio.app.ui.main.introduction.experience
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -59,7 +60,7 @@ fun ExperienceScreenContent(
             snackbarHost = { createSnackBarHost() }
         ) { paddingValues ->
             LazyColumn(
-                modifier = Modifier.padding(paddingValues)
+                modifier = Modifier.padding(PaddingValues(top = paddingValues.calculateTopPadding()))
             ) {
                 itemsIndexed(state.experiences) { index, experience ->
                     ExperienceItem(
