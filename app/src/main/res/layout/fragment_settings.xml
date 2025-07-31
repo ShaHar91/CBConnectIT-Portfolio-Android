@@ -150,17 +150,17 @@
                 app:iconTint="?colorControlNormal"
                 tools:visibility="gone" />
 
-            <be.cbconnectit.portfolio.dataRow.ToggleDataRow
-                android:id="@+id/tdrDynamicMode"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:checked="@{viewModel.state.dynamicModeEnabled}"
-                app:enabled="@{viewModel.state.hasDynamicSupport}"
-                app:labelText="@string/dynamic_material_you"
-                app:labelTextAppearance="?attr/textAppearanceTitleSmall"
-                app:labelTextColor="@color/app_primary_text_color"
-                app:paddingContentVertical="0dp" />
+<!--            <be.cbconnectit.portfolio.dataRow.ToggleDataRow-->
+<!--                android:id="@+id/tdrDynamicMode"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:checked="@{viewModel.state.dynamicModeEnabled}"-->
+<!--                app:enabled="@{viewModel.state.hasDynamicSupport}"-->
+<!--                app:labelText="@string/dynamic_material_you"-->
+<!--                app:labelTextAppearance="?attr/textAppearanceTitleSmall"-->
+<!--                app:labelTextColor="@color/app_primary_text_color"-->
+<!--                app:paddingContentVertical="0dp" />-->
         </LinearLayout>
 
         <com.google.android.material.divider.MaterialDivider
@@ -168,17 +168,17 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp" />
 
-        <be.cbconnectit.portfolio.dataRow.DataRow
-            android:id="@+id/drVersion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxCornerRadius="0dp"
-            app:boxElevation="0dp"
-            app:labelText="App version"
-            app:labelTextAppearance="?attr/textAppearanceTitleSmall"
-            app:layout_constraintTop_toBottomOf="@id/llDisplayMode"
-            app:valueText="@{viewModel.state.appVersion}"
-            app:valueTextAppearance="?attr/textAppearanceTitleSmall"
-            tools:valueText="v1.0" />
+<!--        <be.cbconnectit.portfolio.dataRow.DataRow-->
+<!--            android:id="@+id/drVersion"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:boxCornerRadius="0dp"-->
+<!--            app:boxElevation="0dp"-->
+<!--            app:labelText="App version"-->
+<!--            app:labelTextAppearance="?attr/textAppearanceTitleSmall"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/llDisplayMode"-->
+<!--            app:valueText="@{viewModel.state.appVersion}"-->
+<!--            app:valueTextAppearance="?attr/textAppearanceTitleSmall"-->
+<!--            tools:valueText="v1.0" />-->
     </LinearLayout>
 </layout>

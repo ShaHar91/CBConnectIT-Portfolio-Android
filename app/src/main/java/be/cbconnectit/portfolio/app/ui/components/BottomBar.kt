@@ -23,7 +23,7 @@ import com.ramcosta.composedestinations.utils.isRouteOnBackStackAsState
 @Composable
 fun BottomBar(navController: NavHostController) {
     NavigationBar {
-        BottomBarDestination.values().forEach { destination ->
+        BottomBarDestination.entries.forEach { destination ->
             val isCurrentDestOnBackstack = navController.isRouteOnBackStackAsState(destination.direction).value
             NavigationBarItem(
                 selected = isCurrentDestOnBackstack,

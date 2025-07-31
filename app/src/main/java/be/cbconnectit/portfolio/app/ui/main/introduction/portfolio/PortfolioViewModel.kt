@@ -61,8 +61,8 @@ class PortfolioViewModel(
     }
 }
 
-sealed class PortfolioEvent {
-    data class OpenSocialLink(val link: Link) : PortfolioEvent()
+sealed interface PortfolioEvent {
+    data class OpenSocialLink(val link: Link) : PortfolioEvent
 }
 
 data class PortfolioState(
@@ -70,6 +70,6 @@ data class PortfolioState(
     val projects: List<Work> = emptyList(),
 )
 
-sealed class PortfolioUiEvent {
-    data class OpenSocialLink(val link: Link) : PortfolioUiEvent()
+sealed interface PortfolioUiEvent {
+    data class OpenSocialLink(val link: Link) : PortfolioUiEvent
 }

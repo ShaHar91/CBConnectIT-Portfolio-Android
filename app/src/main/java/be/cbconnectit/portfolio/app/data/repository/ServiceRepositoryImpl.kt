@@ -1,5 +1,6 @@
 package be.cbconnectit.portfolio.app.data.repository
 
+import android.util.Log
 import be.cbconnectit.portfolio.app.data.local.daos.ServiceDao
 import be.cbconnectit.portfolio.app.data.local.daos.TagDao
 import be.cbconnectit.portfolio.app.data.mapper.toEntities
@@ -37,6 +38,7 @@ class ServiceRepositoryImpl(
 
             Result.success(services.toServices())
         } catch (exception: Exception) {
+            Log.d("TAG", "fetchAllServices: $exception")
             Result.failure(exception)
         }
     }

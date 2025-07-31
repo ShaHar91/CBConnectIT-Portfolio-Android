@@ -34,7 +34,8 @@ class WorkVerticalAdapter(
             binding.item = item
             binding.imageStartAligned = position % 2 == 0
 
-            binding.ivStartImage.load(item.imageUrl)
+            // TODO: something goes wrong with the databinding!!
+//            binding.ivStartImage.load(item.imageUrl)
 
             // <editor-fold desc="Dynamic tags">
             val flow = binding.clFlow.children.first()
@@ -55,30 +56,30 @@ class WorkVerticalAdapter(
             // </editor-fold>
 
             // <editor-fold desc="Dynamic techStacks">
-            val techStacks = binding.clLinks.children.first()
-            binding.clLinks.removeAllViews()
-            binding.clLinks.addView(techStacks)
-
-            val linkViewIds = item.links.map { link ->
-                val view = ItemLinkBinding.inflate(LayoutInflater.from(ctx), binding.flowLinks.parent as ViewGroup, false)
-                view.root.id = View.generateViewId()
-                view.iconDrawable = ContextCompat.getDrawable(ctx, link.type.iconRes)
-                binding.clLinks.addView(view.root)
-
-                view.root.setOnClickListener {
-                    onItemClicked(link)
-                }
-
-                // return the view ID
-                view.root.id
-            }
-
-            binding.flowLinks.referencedIds = linkViewIds.toIntArray()
-            // </editor-fold>
-
-            // Had to do it like this because the Custom View was not made with Material design in mind and uses a HTML text converter which removes any styling
-            binding.ftvDescription.textColor = MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorOnBackground)
-            binding.ftvDescription.setTextSize(ctx.resources.getDimension(R.dimen.body_text_size))
+//            val techStacks = binding.clLinks.children.first()
+//            binding.clLinks.removeAllViews()
+//            binding.clLinks.addView(techStacks)
+//
+//            val linkViewIds = item.links.map { link ->
+//                val view = ItemLinkBinding.inflate(LayoutInflater.from(ctx), binding.flowLinks.parent as ViewGroup, false)
+//                view.root.id = View.generateViewId()
+//                view.iconDrawable = ContextCompat.getDrawable(ctx, link.type.iconRes)
+//                binding.clLinks.addView(view.root)
+//
+//                view.root.setOnClickListener {
+//                    onItemClicked(link)
+//                }
+//
+//                // return the view ID
+//                view.root.id
+//            }
+//
+//            binding.flowLinks.referencedIds = linkViewIds.toIntArray()
+//            // </editor-fold>
+//
+//            // Had to do it like this because the Custom View was not made with Material design in mind and uses a HTML text converter which removes any styling
+//            binding.ftvDescription.textColor = MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorOnBackground)
+//            binding.ftvDescription.setTextSize(ctx.resources.getDimension(R.dimen.body_text_size))
         }
     }
 }

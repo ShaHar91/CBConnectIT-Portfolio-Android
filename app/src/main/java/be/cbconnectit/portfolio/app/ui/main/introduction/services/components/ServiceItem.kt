@@ -75,7 +75,7 @@ fun ServiceItem(
                 AsyncImage(
                     modifier = Modifier.fillMaxWidth(0.65f),
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(service.typeImage() ?: service.imageUrl)
+                        .data(service.imageUrl)
                         .decoderFactory(SvgDecoder.Factory())
                         .build(),
                     alignment = Alignment.Center,

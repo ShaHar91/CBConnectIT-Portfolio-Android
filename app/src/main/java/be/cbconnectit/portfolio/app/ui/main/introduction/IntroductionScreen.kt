@@ -118,9 +118,7 @@ fun IntroductionScreenContent(
             }
         ) { paddingValues ->
             Column(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .verticalScroll(scrollState)
+                modifier = Modifier.verticalScroll(scrollState)
             ) {
                 Spacer(modifier = Modifier.height(40.dp))
 
@@ -168,7 +166,7 @@ fun IntroductionScreenContent(
                     onEvent(IntroductionEvent.OpenExperiencesList)
                 }
 
-                Spacer(modifier = Modifier.height(85.dp))
+                Spacer(modifier = Modifier.height(100.dp))
             }
         }
 

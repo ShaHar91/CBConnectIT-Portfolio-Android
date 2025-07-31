@@ -155,15 +155,16 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
             mViewModel.onEvent(SettingsEvent.ChangeDisplayMode(displayMode))
         }
 
-        binding.tdrDynamicMode.valueSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (buttonView.isPressed || buttonView.isFocused) {
-                lifecycleScope.launch {
-                    mViewModel.onEvent(SettingsEvent.ChangeDynamicMode(isChecked))
-                    delay(250)
-                    requireActivity().recreate()
-                }
-            }
-        }
+        // TODO: something goes wrong with the databinding!!
+//        binding.tdrDynamicMode.valueSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+//            if (buttonView.isPressed || buttonView.isFocused) {
+//                lifecycleScope.launch {
+//                    mViewModel.onEvent(SettingsEvent.ChangeDynamicMode(isChecked))
+//                    delay(250)
+//                    requireActivity().recreate()
+//                }
+//            }
+//        }
     }
 
     private fun initCheckedDisplayMode() {
