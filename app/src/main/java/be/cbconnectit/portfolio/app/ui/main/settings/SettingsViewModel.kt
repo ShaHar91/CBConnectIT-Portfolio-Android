@@ -1,38 +1,32 @@
 package be.cbconnectit.portfolio.app.ui.main.settings
 
-import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.cbconnectit.portfolio.app.BuildConfig
 import be.cbconnectit.portfolio.app.data.preferences.UserPreferences
-import be.cbconnectit.portfolio.app.domain.enums.LayoutSystem
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
     private val dataStore: UserPreferences
-) : ViewModel() {
+) : ViewModel(), SettingsContract {
 
-    private val _state = MutableStateFlow(
-        SettingsState(
-            appVersion = "v${BuildConfig.VERSION_NAME}"
-        )
-    )
-    val state = _state.asStateFlow()
+    private val _state = MutableStateFlow(SettingsContract.State(appVersion = "v${BuildConfig.VERSION_NAME}"))
+    override val state = _state.asStateFlow()
 
-    private val _eventFlow = Channel<SettingsUiEvent>()
-    val eventFlow = _eventFlow.receiveAsFlow()
+    private val _effect = MutableSharedFlow<SettingsContract.Effect>()
+    override val effect = _effect.asSharedFlow()
 
     init {
         viewModelScope.launch {
             val userPrefs = dataStore.userPrefs.first()
-            _state.update {
+            updateState {
                 it.copy(
                     dynamicModeEnabled = userPrefs.dynamicEnabled,
                     selectedDisplayMode = AppCompatDelegate.getDefaultNightMode(),
@@ -43,75 +37,54 @@ class SettingsViewModel(
         }
     }
 
-    fun onEvent(event: SettingsEvent) = viewModelScope.launch {
-        when (event) {
-            is SettingsEvent.ChangeDisplayMode -> {
-                AppCompatDelegate.setDefaultNightMode(event.displayMode)
-                dataStore.changeDisplayMode(event.displayMode)
-                _state.update { it.copy(selectedDisplayMode = event.displayMode) }
+    override fun sendIntent(intent: SettingsContract.Intent) = viewModelScope.launch {
+        when (intent) {
+            is SettingsContract.Intent.ChangeDisplayMode -> {
+                AppCompatDelegate.setDefaultNightMode(intent.displayMode)
+                dataStore.changeDisplayMode(intent.displayMode)
+                updateState { it.copy(selectedDisplayMode = intent.displayMode) }
             }
 
-            is SettingsEvent.ChangeSelectedLayoutSystem -> {
+            is SettingsContract.Intent.ChangeSelectedLayoutSystem -> {
                 // Don't do anything when the same item is being selected
-                if (event.layoutSystem == _state.value.selectedLayoutSystem) {
-                    _state.update { it.copy(selectedLayoutSystemExpanded = false) }
+                if (intent.layoutSystem == _state.value.selectedLayoutSystem) {
+                    updateState { it.copy(selectedLayoutSystemExpanded = false) }
                     return@launch
                 }
 
-                _state.update { it.copy(selectedLayoutSystem = event.layoutSystem, showConfirmationDialog = true) }
+                updateState { it.copy(selectedLayoutSystem = intent.layoutSystem, showConfirmationDialog = true) }
             }
 
-            is SettingsEvent.PersistSelectedLayoutSystem -> {
-                _state.update { it.copy(selectedLayoutSystemExpanded = false, showConfirmationDialog = false) }
+            is SettingsContract.Intent.PersistSelectedLayoutSystem -> {
+                updateState { it.copy(selectedLayoutSystemExpanded = false, showConfirmationDialog = false) }
                 _state.value.selectedLayoutSystem?.let { dataStore.changeLayoutSystem(it) }
-                _eventFlow.send(SettingsUiEvent.RestartApplication)
+                emitEffect(SettingsContract.Effect.RestartApplication)
             }
 
-            is SettingsEvent.ResetSelectedLayoutSystem -> {
-                _state.update { it.copy(selectedLayoutSystem = it.currentLayoutSystem, selectedLayoutSystemExpanded = false, showConfirmationDialog = false) }
+            is SettingsContract.Intent.ResetSelectedLayoutSystem -> {
+                updateState { it.copy(selectedLayoutSystem = it.currentLayoutSystem, selectedLayoutSystemExpanded = false, showConfirmationDialog = false) }
             }
 
-            is SettingsEvent.ChangeDynamicMode -> {
-                dataStore.changeDynamicEnabled(event.dynamicModeEnabled)
-                _state.update { it.copy(dynamicModeEnabled = event.dynamicModeEnabled) }
+            is SettingsContract.Intent.ChangeDynamicMode -> {
+                dataStore.changeDynamicEnabled(intent.dynamicModeEnabled)
+                updateState { it.copy(dynamicModeEnabled = intent.dynamicModeEnabled) }
             }
 
-            is SettingsEvent.UpdateSelectedLayoutSystemExpanded -> {
-                _state.update { it.copy(selectedLayoutSystemExpanded = event.expanded) }
+            is SettingsContract.Intent.UpdateSelectedLayoutSystemExpanded -> {
+                updateState { it.copy(selectedLayoutSystemExpanded = intent.expanded) }
             }
 
-            is SettingsEvent.ShowUnsupportedDynamicFeatureDialog -> {
-                _state.update { it.copy(showUnsupportedDynamicFeatureDialog = event.shown) }
+            is SettingsContract.Intent.ShowUnsupportedDynamicFeatureDialog -> {
+                updateState { it.copy(showUnsupportedDynamicFeatureDialog = intent.shown) }
             }
         }
     }
-}
 
-sealed class SettingsEvent {
-    data class ChangeDisplayMode(val displayMode: Int) : SettingsEvent()
-    data class ChangeSelectedLayoutSystem(val layoutSystem: LayoutSystem) : SettingsEvent()
-    data object PersistSelectedLayoutSystem : SettingsEvent()
-    data object ResetSelectedLayoutSystem : SettingsEvent()
-    data class ChangeDynamicMode(val dynamicModeEnabled: Boolean) : SettingsEvent()
-    data class UpdateSelectedLayoutSystemExpanded(val expanded: Boolean) : SettingsEvent()
-    data class ShowUnsupportedDynamicFeatureDialog(val shown: Boolean) : SettingsEvent()
-}
+    override fun emitEffect(effect: SettingsContract.Effect) = viewModelScope.launch {
+        _effect.emit(effect)
+    }
 
-data class SettingsState(
-    val isLoading: Boolean = false,
-    val selectedDisplayMode: Int = AppCompatDelegate.MODE_NIGHT_UNSPECIFIED,
-    val currentLayoutSystem: LayoutSystem? = null,
-    val selectedLayoutSystem: LayoutSystem? = null,
-    val selectedLayoutSystemExpanded: Boolean = false,
-    val dynamicModeEnabled: Boolean = true,
-    val language: String = "-",
-    val appVersion: String = "-",
-    val showConfirmationDialog: Boolean = false,
-    val showUnsupportedDynamicFeatureDialog: Boolean = false
-) {
-    val hasDynamicSupport = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-}
-
-sealed class SettingsUiEvent {
-    data object RestartApplication : SettingsUiEvent()
+    override fun updateState(block: (SettingsContract.State) -> SettingsContract.State) {
+        _state.update(block)
+    }
 }

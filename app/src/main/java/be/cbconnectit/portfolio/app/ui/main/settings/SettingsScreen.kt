@@ -62,11 +62,11 @@ fun SettingsScreen(
     val activity = LocalContext.current.findActivity()
 
     LaunchedEffect(key1 = true) {
-        viewModel.eventFlow.collectLatest { event ->
+        viewModel.effect.collectLatest { event ->
             when (event) {
-                SettingsUiEvent.RestartApplication -> {
+                SettingsContract.Effect.RestartApplication -> {
                     val i = activity.packageManager.getLaunchIntentForPackage(activity.packageName)
-                    startActivity(activity, Intent.makeRestartActivityTask(i?.component), null)
+                    activity.startActivity(Intent.makeRestartActivityTask(i?.component), null)
                     Runtime.getRuntime().exit(0)
                 }
             }
@@ -76,16 +76,16 @@ fun SettingsScreen(
     SettingsScreenContent(
         state = state,
         navController = navController,
-        onEvent = viewModel::onEvent
+        sendIntent = viewModel::sendIntent
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreenContent(
-    state: SettingsState,
+    state: SettingsContract.State,
     navController: NavController,
-    onEvent: (SettingsEvent) -> Unit
+    sendIntent: (SettingsContract.Intent) -> Unit
 ) {
     if (state.showConfirmationDialog) {
         ConfirmationDialog(
@@ -93,8 +93,8 @@ fun SettingsScreenContent(
             text = stringResource(R.string.change_layout_mode_body),
             confirmButtonText = stringResource(R.string.common_continue),
             dismissButtonText = stringResource(R.string.cancel),
-            onDismissRequest = { onEvent(SettingsEvent.ResetSelectedLayoutSystem) },
-            onConfirmButtonClicked = { onEvent(SettingsEvent.PersistSelectedLayoutSystem) }
+            onDismissRequest = { sendIntent(SettingsContract.Intent.ResetSelectedLayoutSystem) },
+            onConfirmButtonClicked = { sendIntent(SettingsContract.Intent.PersistSelectedLayoutSystem) }
         )
     }
 
@@ -103,7 +103,7 @@ fun SettingsScreenContent(
             title = stringResource(R.string.unsupported_feature),
             text = stringResource(R.string.unsupported_feature_dynamic_colors_dialog_body),
             confirmButtonText = stringResource(R.string.ok),
-            onDismissRequest = { onEvent(SettingsEvent.ShowUnsupportedDynamicFeatureDialog(false)) }
+            onDismissRequest = { sendIntent(SettingsContract.Intent.ShowUnsupportedDynamicFeatureDialog(false)) }
         )
     }
 
@@ -123,14 +123,14 @@ fun SettingsScreenContent(
                 labelText = stringResource(R.string.display_mode),
                 endSlot = {
                     SingleChoiceSegmentedButtonRow {
-                        val displayModes = DisplayMode.values()
+                        val displayModes = DisplayMode.entries.toTypedArray()
 
                         displayModes.forEachIndexed { index, displayMode ->
                             SegmentedButton(
                                 modifier = Modifier.size(width = 50.dp, height = 32.dp),
                                 selected = displayMode.options.contains(state.selectedDisplayMode),
                                 onClick = {
-                                    onEvent(SettingsEvent.ChangeDisplayMode(displayMode.options.first()))
+                                    sendIntent(SettingsContract.Intent.ChangeDisplayMode(displayMode.options.first()))
                                 },
                                 shape = SegmentedButtonDefaults.itemShape(
                                     index = index,
@@ -162,7 +162,7 @@ fun SettingsScreenContent(
                                 contentColor = MaterialTheme.colorScheme.onBackground
                             ),
                             onClick = {
-                                onEvent(SettingsEvent.UpdateSelectedLayoutSystemExpanded(!state.selectedLayoutSystemExpanded))
+                                sendIntent(SettingsContract.Intent.UpdateSelectedLayoutSystemExpanded(!state.selectedLayoutSystemExpanded))
                             }) {
                             Text(
                                 text = state.currentLayoutSystem?.systemName?.let {
@@ -183,10 +183,10 @@ fun SettingsScreenContent(
                         DropdownMenu(
                             expanded = state.selectedLayoutSystemExpanded,
                             onDismissRequest = {
-                                onEvent(SettingsEvent.UpdateSelectedLayoutSystemExpanded(false))
+                                sendIntent(SettingsContract.Intent.UpdateSelectedLayoutSystemExpanded(false))
                             }
                         ) {
-                            LayoutSystem.values().forEachIndexed { index, layoutSystem ->
+                            LayoutSystem.entries.forEachIndexed { index, layoutSystem ->
                                 if (index != 0) {
                                     HorizontalDivider()
                                 }
@@ -207,7 +207,7 @@ fun SettingsScreenContent(
                                         )
                                     },
                                     onClick = {
-                                        onEvent(SettingsEvent.ChangeSelectedLayoutSystem(layoutSystem))
+                                        sendIntent(SettingsContract.Intent.ChangeSelectedLayoutSystem(layoutSystem))
                                     }
                                 )
                             }
@@ -221,7 +221,7 @@ fun SettingsScreenContent(
             Row {
                 if (!state.hasDynamicSupport) {
                     IconButton(onClick = {
-                        onEvent(SettingsEvent.ShowUnsupportedDynamicFeatureDialog(true))
+                        sendIntent(SettingsContract.Intent.ShowUnsupportedDynamicFeatureDialog(true))
                     }) {
                         Icon(painterResource(id = R.drawable.ic_info), null)
                     }
@@ -233,7 +233,7 @@ fun SettingsScreenContent(
                     checked = state.dynamicModeEnabled,
                     enabled = state.hasDynamicSupport,
                     onCheckedChange = {
-                        onEvent(SettingsEvent.ChangeDynamicMode(it))
+                        sendIntent(SettingsContract.Intent.ChangeDynamicMode(it))
                     })
             }
 
@@ -256,8 +256,8 @@ fun SettingsScreenContent(
 fun SettingsScreenPreview() {
     PortfolioTheme {
         SettingsScreenContent(
-            state = SettingsState(currentLayoutSystem = LayoutSystem.Compose),
+            state = SettingsContract.State(currentLayoutSystem = LayoutSystem.Compose),
             navController = rememberNavController(),
-            onEvent = {})
+            sendIntent = {})
     }
 }

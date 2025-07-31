@@ -48,7 +48,7 @@ fun ExperienceScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExperienceScreenContent(
-    state: ExperienceState,
+    state: ExperienceContract.State,
     navController: NavController,
     createSnackBarHost: @Composable () -> Unit = {},
 ) {
@@ -86,7 +86,7 @@ fun ExperienceScreenContentPreview() {
     PortfolioTheme {
         ExperienceScreenContent(
             navController = rememberNavController(),
-            state = ExperienceState(experiences = listOf(Experience.previewData()))
+            state = ExperienceContract.State(experiences = listOf(Experience.previewData()))
         )
     }
 }

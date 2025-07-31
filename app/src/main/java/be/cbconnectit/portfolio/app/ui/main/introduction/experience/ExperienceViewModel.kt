@@ -1,10 +1,11 @@
 package be.cbconnectit.portfolio.app.ui.main.introduction.experience
 
 import androidx.lifecycle.viewModelScope
-import be.cbconnectit.portfolio.app.domain.model.Experience
 import be.cbconnectit.portfolio.app.domain.repository.ExperienceRepository
 import be.cbconnectit.portfolio.app.ui.base.BaseComposeViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -13,21 +14,36 @@ import kotlinx.coroutines.launch
 
 class ExperienceViewModel(
     private val experienceRepository: ExperienceRepository
-): BaseComposeViewModel() {
+) : BaseComposeViewModel(), ExperienceContract {
 
-    private val _state = MutableStateFlow(ExperienceState())
-    val state = _state.asStateFlow()
+    private val _state = MutableStateFlow(ExperienceContract.State())
+    override val state = _state.asStateFlow()
+
+    private val _effect = MutableSharedFlow<ExperienceContract.Effect>()
+    override val effect = _effect.asSharedFlow()
 
     init {
         fetchExperienceData()
 
         experienceRepository.findAllExperiences().onEach { experiences ->
-            _state.update { it.copy(experiences = experiences) }
+            updateState { it.copy(experiences = experiences) }
         }.launchIn(viewModelScope)
     }
 
-    private fun fetchExperienceData() = viewModelScope.launch{
-        _state.update { it.copy(isLoading = true) }
+    override fun sendIntent(intent: ExperienceContract.Intent) = viewModelScope.launch {
+    }
+
+    override fun emitEffect(effect: ExperienceContract.Effect) = viewModelScope.launch {
+        _effect.emit(effect)
+    }
+
+    override fun updateState(block: (ExperienceContract.State) -> ExperienceContract.State) {
+        _state.update(block)
+    }
+
+
+    private fun fetchExperienceData() = viewModelScope.launch {
+        updateState { it.copy(isLoading = true) }
 
         val call = experienceRepository.fetchAllExperiences()
         if (call.isFailure) {
@@ -37,11 +53,6 @@ class ExperienceViewModel(
             }
         }
 
-        _state.update { it.copy(isLoading = false) }
+        updateState { it.copy(isLoading = false) }
     }
 }
-
-data class ExperienceState(
-    val isLoading: Boolean = false,
-    val experiences: List<Experience> = emptyList()
-)

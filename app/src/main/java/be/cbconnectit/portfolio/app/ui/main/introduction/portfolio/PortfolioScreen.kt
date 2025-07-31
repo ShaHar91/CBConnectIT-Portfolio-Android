@@ -54,10 +54,10 @@ fun PortfolioScreen(
     val localContext = LocalContext.current
     val colorScheme = MaterialTheme.colorScheme
 
-    LaunchedEffect(key1 = true) {
-        viewModel.eventFlow.collectLatest { event ->
+    LaunchedEffect(Unit) {
+        viewModel.effect.collectLatest { event ->
             when (event) {
-                is PortfolioUiEvent.OpenSocialLink -> {
+                is PortfolioContract.Effect.OpenSocialLink -> {
                     localContext.startWeb(
                         event.link.url,
                         toolbarColor = colorScheme.surfaceColorAtElevation(3.dp).toArgb()
@@ -71,17 +71,17 @@ fun PortfolioScreen(
         state = state,
         navController = navController,
         { viewModel.CreateSnackBarHost() },
-        onEvent = viewModel::onEvent
+        sendIntent = viewModel::sendIntent
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PortfolioScreenContent(
-    state: PortfolioState,
+    state: PortfolioContract.State,
     navController: NavController,
     createSnackBarHost: @Composable () -> Unit = {},
-    onEvent: (PortfolioEvent) -> Unit
+    sendIntent: (PortfolioContract.Intent) -> Unit
 ) {
     Box(contentAlignment = Alignment.BottomCenter) {
         Scaffold(
@@ -106,7 +106,7 @@ fun PortfolioScreenContent(
                         work = work,
                         imageStartAligned = index % 2 == 0,
                         onClick = {
-                            onEvent(PortfolioEvent.OpenSocialLink(it))
+                            sendIntent(PortfolioContract.Intent.OpenSocialLink(it))
                         }
                     )
                 }
@@ -126,8 +126,8 @@ fun ExperienceScreenContentPreview() {
     PortfolioTheme {
         PortfolioScreenContent(
             navController = rememberNavController(),
-            state = PortfolioState(projects = listOf(Work.previewData().copy(links = listOf(Link.previewData(), Link.previewData(), Link.previewData())))),
-            onEvent = {}
+            state = PortfolioContract.State(projects = listOf(Work.previewData().copy(links = listOf(Link.previewData(), Link.previewData(), Link.previewData())))),
+            sendIntent = {}
         )
     }
 }

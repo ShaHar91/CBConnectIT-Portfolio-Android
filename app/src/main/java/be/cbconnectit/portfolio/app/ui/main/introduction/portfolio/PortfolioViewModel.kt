@@ -1,31 +1,28 @@
 package be.cbconnectit.portfolio.app.ui.main.introduction.portfolio
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
-import be.cbconnectit.portfolio.app.domain.model.Link
-import be.cbconnectit.portfolio.app.domain.model.Work
 import be.cbconnectit.portfolio.app.domain.repository.WorkRepository
 import be.cbconnectit.portfolio.app.ui.base.BaseComposeViewModel
 import kotlinx.coroutines.async
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PortfolioViewModel(
     private val workRepository: WorkRepository,
     tagIds: Array<String>
-) : BaseComposeViewModel() {
+) : BaseComposeViewModel(), PortfolioContract {
 
-    private val _state = MutableStateFlow(PortfolioState())
-    val state = _state.asStateFlow()
+    private val _state = MutableStateFlow(PortfolioContract.State())
+    override val state = _state.asStateFlow()
 
-    private val _eventFlow = Channel<PortfolioUiEvent>()
-    val eventFlow = _eventFlow.receiveAsFlow()
+    private val _effect = MutableSharedFlow<PortfolioContract.Effect>()
+    override val effect = _effect.asSharedFlow()
 
     init {
         fetchAllData()
@@ -34,6 +31,20 @@ class PortfolioViewModel(
             _state.update { it.copy(projects = works) }
         }.launchIn(viewModelScope)
 
+    }
+
+    override fun sendIntent(intent: PortfolioContract.Intent) = viewModelScope.launch {
+        when (intent) {
+            is PortfolioContract.Intent.OpenSocialLink -> emitEffect(PortfolioContract.Effect.OpenSocialLink(intent.link))
+        }
+    }
+
+    override fun emitEffect(effect: PortfolioContract.Effect) = viewModelScope.launch {
+        _effect.emit(effect)
+    }
+
+    override fun updateState(block: (PortfolioContract.State) -> PortfolioContract.State) {
+        _state.update(block)
     }
 
     private fun fetchAllData() = viewModelScope.launch {
@@ -53,23 +64,4 @@ class PortfolioViewModel(
 
         _state.update { it.copy(isLoading = false) }
     }
-
-    fun onEvent(event: PortfolioEvent) = viewModelScope.launch {
-        when (event) {
-            is PortfolioEvent.OpenSocialLink -> _eventFlow.send(PortfolioUiEvent.OpenSocialLink(event.link))
-        }
-    }
-}
-
-sealed interface PortfolioEvent {
-    data class OpenSocialLink(val link: Link) : PortfolioEvent
-}
-
-data class PortfolioState(
-    val isLoading: Boolean = false,
-    val projects: List<Work> = emptyList(),
-)
-
-sealed interface PortfolioUiEvent {
-    data class OpenSocialLink(val link: Link) : PortfolioUiEvent
 }

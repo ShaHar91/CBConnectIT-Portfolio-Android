@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -37,22 +38,22 @@ class IntroductionViewModel(
     init {
         fetchAllData()
 
-        serviceRepo.findAllServices().onEach { services ->
-            _state.update { it.copy(services = services) }
-        }.launchIn(viewModelScope)
-
-        experienceRepo.findAllExperiences().onEach { experiences ->
-            _state.update { it.copy(experiences = experiences) }
-        }.launchIn(viewModelScope)
-
-        workRepository.findAllWorks().onEach { works ->
-            _state.update {
-                it.copy(projects = works, selectedProject = it.selectedProject ?: works.firstOrNull())
-            }
-        }.launchIn(viewModelScope)
-
-        testimonialRepository.findAllTestimonials().onEach { testimonials ->
-            _state.update { it.copy(testimonials = testimonials) }
+        combine(
+            serviceRepo.findAllServices(),
+            experienceRepo.findAllExperiences(),
+            workRepository.findAllWorks(),
+            testimonialRepository.findAllTestimonials()
+        ) { services, experiences, works, testimonials ->
+            val currentState = _state.value
+            currentState.copy(
+                services = services,
+                experiences = experiences,
+                projects = works,
+                testimonials = testimonials,
+                selectedProject = currentState.selectedProject ?: works.firstOrNull(),
+            )
+        }.onEach { newState ->
+            updateState { newState }
         }.launchIn(viewModelScope)
     }
 
@@ -61,16 +62,16 @@ class IntroductionViewModel(
         experienceInYears = getUpdateExperienceInYears()
     )
 
-    override fun sendIntent(event: IntroductionContract.Intent) = viewModelScope.launch {
-        when (event) {
-            is IntroductionContract.Intent.OpenSocialLink -> emitEffect(IntroductionContract.Effect.OpenSocialLink(event.link))
+    override fun sendIntent(intent: IntroductionContract.Intent) = viewModelScope.launch {
+        when (intent) {
+            is IntroductionContract.Intent.OpenSocialLink -> emitEffect(IntroductionContract.Effect.OpenSocialLink(intent.link))
             is IntroductionContract.Intent.OpenMailClient -> emitEffect(IntroductionContract.Effect.OpenMailClient)
             is IntroductionContract.Intent.OpenServiceList -> emitEffect(IntroductionContract.Effect.OpenServiceList)
-            is IntroductionContract.Intent.OpenServiceDetail -> emitEffect(IntroductionContract.Effect.OpenServiceDetail(event.serviceId))
+            is IntroductionContract.Intent.OpenServiceDetail -> emitEffect(IntroductionContract.Effect.OpenServiceDetail(intent.serviceId))
             is IntroductionContract.Intent.OpenPortfolioList -> emitEffect(IntroductionContract.Effect.OpenPortfolio)
             is IntroductionContract.Intent.OpenTestimonialsList -> showSnackbar("In Development!")
             is IntroductionContract.Intent.OpenExperiencesList -> emitEffect(IntroductionContract.Effect.OpenExperienceList)
-            is IntroductionContract.Intent.UpdateSelectedWork -> _state.update { it.copy(selectedProject = event.work) }
+            is IntroductionContract.Intent.UpdateSelectedWork -> updateState { it.copy(selectedProject = intent.work) }
             is IntroductionContract.Intent.RefreshData -> fetchAllData(isRefreshing = true)
         }
     }
@@ -84,7 +85,7 @@ class IntroductionViewModel(
     }
 
     private fun fetchAllData(isRefreshing: Boolean = false) = viewModelScope.launch {
-        _state.update { it.copy(isLoading = true, isRefreshing = isRefreshing) }
+        updateState { it.copy(isLoading = true, isRefreshing = isRefreshing) }
 
         val servicesAsync = async { serviceRepo.fetchAllServices() }
         val experiencesAsync = async { experienceRepo.fetchAllExperiences() }
@@ -104,7 +105,7 @@ class IntroductionViewModel(
             }
         }
 
-        _state.update { it.copy(isLoading = false, isRefreshing = false) }
+        updateState { it.copy(isLoading = false, isRefreshing = false) }
     }
 
     private fun getUpdateExperienceInYears(): Int {
