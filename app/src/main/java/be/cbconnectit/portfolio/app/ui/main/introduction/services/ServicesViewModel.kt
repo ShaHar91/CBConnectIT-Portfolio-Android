@@ -30,8 +30,8 @@ class ServicesViewModel(
         }.launchIn(viewModelScope)
     }
 
-    private fun fetchServicesData() = viewModelScope.launch {
-        updateState { it.copy(isLoading = true) }
+    private fun fetchServicesData(isRefreshing: Boolean = false) = viewModelScope.launch {
+        updateState { it.copy(isLoading = true, isRefreshing = isRefreshing) }
 
         val call = serviceRepository.fetchAllServices()
         if (call.isFailure) {
@@ -41,12 +41,13 @@ class ServicesViewModel(
             }
         }
 
-        updateState { it.copy(isLoading = false) }
+        updateState { it.copy(isLoading = false, isRefreshing = false) }
     }
 
     override fun sendIntent(intent: ServicesContract.Intent) = viewModelScope.launch {
         when (intent) {
             is ServicesContract.Intent.OpenServiceDetail -> emitEffect(ServicesContract.Effect.OpenServiceDetail(intent.serviceId))
+            is ServicesContract.Intent.RefreshData -> fetchServicesData(true)
         }
     }
 

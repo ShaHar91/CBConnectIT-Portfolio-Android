@@ -14,6 +14,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -89,26 +90,34 @@ fun PortfolioScreenContent(
             topBar = { DefaultAppBar(navController = navController, appBarTitle = stringResource(id = R.string.portfolio)) },
             snackbarHost = { createSnackBarHost() }
         ) { paddingValues ->
-            LazyColumn(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = paddingValues.calculateTopPadding() + 16.dp, bottom = 40.dp)
+            PullToRefreshBox(
+                isRefreshing = state.isRefreshing,
+                onRefresh = { sendIntent(PortfolioContract.Intent.RefreshData) },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = paddingValues.calculateTopPadding())
             ) {
-                itemsIndexed(state.projects) { index, work ->
-                    if (index != 0) {
-                        HorizontalDivider(
-                            modifier = Modifier
-                                .padding(vertical = 32.dp)
-                                .fillMaxWidth(0.4f), thickness = 2.dp, color = MaterialTheme.colorScheme.primary
+                LazyColumn(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    contentPadding = PaddingValues(16.dp)
+                ) {
+                    itemsIndexed(state.projects) { index, work ->
+                        if (index != 0) {
+                            HorizontalDivider(
+                                modifier = Modifier
+                                    .padding(vertical = 32.dp)
+                                    .fillMaxWidth(0.4f), thickness = 2.dp, color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        WorkDetail(
+                            work = work,
+                            imageStartAligned = index % 2 == 0,
+                            onClick = {
+                                sendIntent(PortfolioContract.Intent.OpenSocialLink(it))
+                            }
                         )
                     }
-
-                    WorkDetail(
-                        work = work,
-                        imageStartAligned = index % 2 == 0,
-                        onClick = {
-                            sendIntent(PortfolioContract.Intent.OpenSocialLink(it))
-                        }
-                    )
                 }
             }
         }

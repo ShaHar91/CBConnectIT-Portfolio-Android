@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -58,6 +60,7 @@ fun ServicesScreen(
     ) { viewModel.CreateSnackBarHost() }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServicesScreenContent(
     state: ServicesContract.State,
@@ -67,29 +70,36 @@ fun ServicesScreenContent(
 ) {
     val toolbarState = rememberCollapsingToolbarScaffoldState()
 
-    CollapsingToolbarScaffold(
-        modifier = Modifier,
-        scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
-        state = toolbarState,
-        snapConfig = SnapConfig(),
-        toolbarScrollable = true,
-        toolbar = {
-            CollapsingServiceToolbar(
-                toolbarState = toolbarState,
-                navController = navController,
-                title = stringResource(id = R.string.my_services),
-                body = stringResource(id = R.string.my_services_description)
-            )
-        }
+    PullToRefreshBox(
+        isRefreshing = state.isRefreshing,
+        onRefresh = { sendIntent(ServicesContract.Intent.RefreshData) },
+        modifier = Modifier
+            .fillMaxSize()
     ) {
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .fillMaxSize()
+        CollapsingToolbarScaffold(
+            modifier = Modifier,
+            scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
+            state = toolbarState,
+            snapConfig = SnapConfig(),
+            toolbarScrollable = true,
+            toolbar = {
+                CollapsingServiceToolbar(
+                    toolbarState = toolbarState,
+                    navController = navController,
+                    title = stringResource(id = R.string.my_services),
+                    body = stringResource(id = R.string.my_services_description)
+                )
+            }
         ) {
-            state.services.forEachIndexed { index, service ->
-                ServiceItem(service = service, shouldColorBackground = index % 2 == 1) {
-                    sendIntent(ServicesContract.Intent.OpenServiceDetail(service.id))
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+            ) {
+                state.services.forEachIndexed { index, service ->
+                    ServiceItem(service = service, shouldColorBackground = index % 2 == 1) {
+                        sendIntent(ServicesContract.Intent.OpenServiceDetail(service.id))
+                    }
                 }
             }
         }

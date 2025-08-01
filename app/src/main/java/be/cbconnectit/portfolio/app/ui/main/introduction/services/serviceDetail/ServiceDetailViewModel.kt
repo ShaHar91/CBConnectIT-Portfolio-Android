@@ -44,6 +44,7 @@ class ServiceDetailViewModel(
     override fun sendIntent(intent: ServiceDetailContract.Intent) = viewModelScope.launch {
         when (intent) {
             is ServiceDetailContract.Intent.OpenProjectByTag -> emitEffect(ServiceDetailContract.Effect.OpenProjectByTag(intent.tagId))
+            is ServiceDetailContract.Intent.RefreshData -> fetchServiceDetailData(true)
         }
     }
 
@@ -55,8 +56,8 @@ class ServiceDetailViewModel(
         _state.update(block)
     }
 
-    private fun fetchServiceDetailData() = viewModelScope.launch {
-        updateState { it.copy(isLoading = true) }
+    private fun fetchServiceDetailData(isRefreshing: Boolean = false) = viewModelScope.launch {
+        updateState { it.copy(isLoading = true, isRefreshing = isRefreshing) }
 
         val call = serviceRepository.fetchAllServices()
         if (call.isFailure) {
@@ -66,6 +67,6 @@ class ServiceDetailViewModel(
             }
         }
 
-        updateState { it.copy(isLoading = false) }
+        updateState { it.copy(isLoading = false, isRefreshing = false) }
     }
 }

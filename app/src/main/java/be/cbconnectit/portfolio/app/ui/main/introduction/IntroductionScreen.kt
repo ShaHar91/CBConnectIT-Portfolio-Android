@@ -94,8 +94,6 @@ fun IntroductionScreen(
     )
 }
 
-// TODO: Add pull to refresh functionality to the service screen!!!!
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IntroductionScreenContent(

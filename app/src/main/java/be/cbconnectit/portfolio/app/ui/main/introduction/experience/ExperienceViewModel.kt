@@ -31,6 +31,9 @@ class ExperienceViewModel(
     }
 
     override fun sendIntent(intent: ExperienceContract.Intent) = viewModelScope.launch {
+        when (intent) {
+            is ExperienceContract.Intent.RefreshData -> fetchExperienceData(true)
+        }
     }
 
     override fun emitEffect(effect: ExperienceContract.Effect) = viewModelScope.launch {
@@ -42,8 +45,8 @@ class ExperienceViewModel(
     }
 
 
-    private fun fetchExperienceData() = viewModelScope.launch {
-        updateState { it.copy(isLoading = true) }
+    private fun fetchExperienceData(isRefreshing: Boolean = false) = viewModelScope.launch {
+        updateState { it.copy(isLoading = true, isRefreshing = isRefreshing) }
 
         val call = experienceRepository.fetchAllExperiences()
         if (call.isFailure) {
@@ -53,6 +56,6 @@ class ExperienceViewModel(
             }
         }
 
-        updateState { it.copy(isLoading = false) }
+        updateState { it.copy(isLoading = false, isRefreshing = false) }
     }
 }

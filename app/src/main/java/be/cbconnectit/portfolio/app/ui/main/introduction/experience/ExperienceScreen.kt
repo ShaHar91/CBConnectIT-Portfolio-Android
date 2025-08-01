@@ -3,7 +3,6 @@ package be.cbconnectit.portfolio.app.ui.main.introduction.experience
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,6 +11,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -42,7 +42,9 @@ fun ExperienceScreen(
     ExperienceScreenContent(
         state = state,
         navController = navController,
-    ) { viewModel.CreateSnackBarHost() }
+        createSnackBarHost = { viewModel.CreateSnackBarHost() },
+        sendIntent = viewModel::sendIntent
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,6 +53,7 @@ fun ExperienceScreenContent(
     state: ExperienceContract.State,
     navController: NavController,
     createSnackBarHost: @Composable () -> Unit = {},
+    sendIntent: (ExperienceContract.Intent) -> Unit
 ) {
 
     Box(contentAlignment = Alignment.BottomCenter) {
@@ -59,16 +62,22 @@ fun ExperienceScreenContent(
             topBar = { DefaultAppBar(navController = navController, appBarTitle = stringResource(id = R.string.experiences)) },
             snackbarHost = { createSnackBarHost() }
         ) { paddingValues ->
-            LazyColumn(
-                modifier = Modifier.padding(PaddingValues(top = paddingValues.calculateTopPadding()))
+            PullToRefreshBox(
+                isRefreshing = state.isRefreshing,
+                onRefresh = { sendIntent(ExperienceContract.Intent.RefreshData) },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = paddingValues.calculateTopPadding())
             ) {
-                itemsIndexed(state.experiences) { index, experience ->
-                    ExperienceItem(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        experience = experience,
-                        active = index == 0,
-                        horizontal = false
-                    )
+                LazyColumn {
+                    itemsIndexed(state.experiences) { index, experience ->
+                        ExperienceItem(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            experience = experience,
+                            active = index == 0,
+                            horizontal = false
+                        )
+                    }
                 }
             }
         }
@@ -86,7 +95,8 @@ fun ExperienceScreenContentPreview() {
     PortfolioTheme {
         ExperienceScreenContent(
             navController = rememberNavController(),
-            state = ExperienceContract.State(experiences = listOf(Experience.previewData()))
+            state = ExperienceContract.State(experiences = listOf(Experience.previewData())),
+            sendIntent = {}
         )
     }
 }

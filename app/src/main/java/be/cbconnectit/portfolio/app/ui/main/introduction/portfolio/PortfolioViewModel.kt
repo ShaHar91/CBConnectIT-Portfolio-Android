@@ -36,6 +36,7 @@ class PortfolioViewModel(
     override fun sendIntent(intent: PortfolioContract.Intent) = viewModelScope.launch {
         when (intent) {
             is PortfolioContract.Intent.OpenSocialLink -> emitEffect(PortfolioContract.Effect.OpenSocialLink(intent.link))
+            is PortfolioContract.Intent.RefreshData -> fetchAllData(true)
         }
     }
 
@@ -47,8 +48,8 @@ class PortfolioViewModel(
         _state.update(block)
     }
 
-    private fun fetchAllData() = viewModelScope.launch {
-        _state.update { it.copy(isLoading = true) }
+    private fun fetchAllData(isRefreshing: Boolean = false) = viewModelScope.launch {
+        _state.update { it.copy(isLoading = true, isRefreshing = isRefreshing) }
 
         val worksAsync = async { workRepository.fetchAllWorks() }
 
@@ -62,6 +63,6 @@ class PortfolioViewModel(
             }
         }
 
-        _state.update { it.copy(isLoading = false) }
+        _state.update { it.copy(isLoading = false, isRefreshing = false) }
     }
 }

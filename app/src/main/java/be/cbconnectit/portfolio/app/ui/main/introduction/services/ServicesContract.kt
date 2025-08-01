@@ -7,10 +7,12 @@ interface ServicesContract : MVI<ServicesContract.State, ServicesContract.Intent
 
     sealed class Intent {
         data class OpenServiceDetail(val serviceId: String) : Intent()
+        data object RefreshData : Intent()
     }
 
     data class State(
         val isLoading: Boolean = false,
+        val isRefreshing: Boolean = false,
         val services: List<Service> = emptyList()
     )
 
