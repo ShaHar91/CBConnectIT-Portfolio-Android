@@ -28,12 +28,3 @@ data class TestimonialEntity(
         const val ENTITY_NAME = "testimonial"
     }
 }
-
-data class TestimonialWithRelations(
-    @Embedded
-    val testimonial: TestimonialEntity,
-    @Relation(parentColumn = "company_id", entityColumn = "id")
-    val company: CompanyEntity?,
-    @Relation(parentColumn = "job_position_id", entityColumn = "id")
-    val jobPosition: JobPositionEntity,
-)

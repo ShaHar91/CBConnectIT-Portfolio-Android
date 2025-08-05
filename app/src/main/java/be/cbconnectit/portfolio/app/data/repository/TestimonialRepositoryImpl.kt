@@ -34,22 +34,23 @@ class TestimonialRepositoryImpl(
         return try {
             val testimonials = testimonialApi.fetchAllTestimonials()
 
+            val links = mutableListOf<LinkEntity>()
+            val companies = mutableListOf<CompanyEntity>()
+            val jobPositions = mutableListOf<JobPositionEntity>()
+
+            testimonials.forEach { item ->
+                item.company?.links?.map { it.toLinkEntity() }?.let(links::addAll)
+                item.company?.toCompanyEntity()?.let(companies::add)
+                jobPositions.add(item.jobPosition.toJobPositionEntity())
+            }
+
+            // TODO demo: Transactionally insert testimonials and their relations into the database
+            //  This ensures that if any part of the transaction fails, all changes are rolled back
             transactionProvider.runAsTransaction {
-                testimonialDao.insertMany(testimonials.toEntities())
-
-                val links = mutableListOf<LinkEntity>()
-                val companies = mutableListOf<CompanyEntity>()
-                val jobPositions = mutableListOf<JobPositionEntity>()
-
-                testimonials.forEach { item ->
-                    item.company?.links?.map { it.toLinkEntity() }?.let(links::addAll)
-                    item.company?.toCompanyEntity()?.let(companies::add)
-                    jobPositions.add(item.jobPosition.toJobPositionEntity())
-                }
-
                 linkDao.insertMany(links)
                 companyDao.insertMany(companies)
                 jobPositionDao.insertMany(jobPositions)
+                testimonialDao.insertMany(testimonials.toEntities())
             }
 
             Result.success(testimonials.toTestimonials())

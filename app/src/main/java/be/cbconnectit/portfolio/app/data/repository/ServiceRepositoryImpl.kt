@@ -26,14 +26,14 @@ class ServiceRepositoryImpl(
         return try {
             val services = serviceApi.fetchAllServices()
 
-            transactionProvider.runAsTransaction {
-                serviceDao.insertMany(services.toEntities())
+            val tags = services.flatMap { parentService ->
+                listOfNotNull(parentService.tag?.toTagEntity())
+                    .plus(parentService.subServices.orEmpty().mapNotNull { it.tag?.toTagEntity() })
+            }
 
-                val tags = services.flatMap { parentService ->
-                    listOfNotNull(parentService.tag?.toTagEntity())
-                        .plus(parentService.subServices.orEmpty().mapNotNull { it.tag?.toTagEntity() })
-                }
+            transactionProvider.runAsTransaction {
                 tagDao.insertMany(tags)
+                serviceDao.insertMany(services.toEntities())
             }
 
             Result.success(services.toServices())

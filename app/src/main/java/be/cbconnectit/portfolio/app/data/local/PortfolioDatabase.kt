@@ -41,7 +41,7 @@ import be.cbconnectit.portfolio.app.data.local.utils.Converters
         JobPositionEntity::class,
         ExperienceTagCrossRefEntity::class
     ],
-    version = 8,
+    version = 10,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

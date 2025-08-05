@@ -33,16 +33,17 @@ class WorkRepositoryImpl(
         return try {
             val works = workApi.fetchAllWorks()
 
+            val crossTagRefEntities = works.flatMap { dto -> dto.tags.map { tag -> WorkTagCrossRefEntity(dto.id, tag.id) } }
+            val crossLinkRefEntities = works.flatMap { dto -> dto.links.map { link -> WorkLinkCrossRefEntity(dto.id, link.id) } }
+            
             transactionProvider.runAsTransaction {
-                workDao.insertMany(works.toEntities())
-
-                val crossTagRefEntities = works.flatMap { dto -> dto.tags.map { tag -> WorkTagCrossRefEntity(dto.id, tag.id) } }
                 workTagCrossRefDao.insertMany(crossTagRefEntities)
                 tagDao.insertMany(works.map { it.tags.toEntities() }.flatten())
 
-                val crossLinkRefEntities = works.flatMap { dto -> dto.links.map { link -> WorkLinkCrossRefEntity(dto.id, link.id) } }
                 workLinkCrossRefDao.insertMany(crossLinkRefEntities)
                 linkDao.insertMany(works.map { it.links.toEntities() }.flatten())
+
+                workDao.insertMany(works.toEntities())
             }
 
             Result.success(works.toWorks())

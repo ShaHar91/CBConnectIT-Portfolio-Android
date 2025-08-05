@@ -34,10 +34,3 @@ data class ServiceEntity(
         const val ENTITY_NAME = "service"
     }
 }
-
-data class ServiceWithTags(
-    @Embedded
-    val service: ServiceEntity,
-    @Relation(parentColumn = "tagId", entityColumn = "id")
-    val tag: TagEntity?
-)

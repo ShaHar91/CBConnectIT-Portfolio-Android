@@ -43,33 +43,32 @@ class ExperienceRepositoryImpl(
         return try {
             val experiences = experienceApi.fetchAllExperiences()
 
-            transactionProvider.runAsTransaction {
-                experienceDao.insertMany(experiences.toEntities())
+            val links = mutableListOf<LinkEntity>()
+            val companies = mutableListOf<CompanyEntity>()
+            val jobPositions = mutableListOf<JobPositionEntity>()
+            val tags = mutableListOf<TagEntity>()
+            val experienceTagCrossRefs = mutableListOf<ExperienceTagCrossRefEntity>()
 
-                val links = mutableListOf<LinkEntity>()
-                val companies = mutableListOf<CompanyEntity>()
-                val jobPositions = mutableListOf<JobPositionEntity>()
-                val tags = mutableListOf<TagEntity>()
-                val experienceTagCrossRefs = mutableListOf<ExperienceTagCrossRefEntity>()
+            // Trying out something to iterate only once over the items and then mapping everything to the data that we might need.
+            // This might be overkill for this simple application, but thinking about it makes me wonder about optimizations.
+            experiences.forEach { item ->
+                links.addAll(item.company.links.map { it.toLinkEntity() })
+                companies.add(item.company.toCompanyEntity())
+                jobPositions.add(item.jobPosition.toJobPositionEntity())
 
-                // Trying out something to iterate only once over the items and then mapping everything to the data that we might need.
-                // This might be overkill for this simple application, but thinking about it makes me wonder about optimizations.
-                experiences.forEach { item ->
-                    links.addAll(item.company.links.map { it.toLinkEntity() })
-                    companies.add(item.company.toCompanyEntity())
-                    jobPositions.add(item.jobPosition.toJobPositionEntity())
-
-                    item.tags.map {
-                        tags.add(it.toTagEntity())
-                        experienceTagCrossRefs.add(ExperienceTagCrossRefEntity(item.id, it.id))
-                    }
+                item.tags.map {
+                    tags.add(it.toTagEntity())
+                    experienceTagCrossRefs.add(ExperienceTagCrossRefEntity(item.id, it.id))
                 }
+            }
 
+            transactionProvider.runAsTransaction {
                 linkDao.insertMany(links)
                 companyDao.insertMany(companies)
                 jobPositionDao.insertMany(jobPositions)
                 tagDao.insertMany(tags)
                 experienceTagCrossRefDao.insertMany(experienceTagCrossRefs)
+                experienceDao.insertMany(experiences.toEntities())
             }
 
             Result.success(experiences.toExperiences())
