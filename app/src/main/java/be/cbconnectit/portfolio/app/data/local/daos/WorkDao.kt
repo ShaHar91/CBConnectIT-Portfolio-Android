@@ -19,6 +19,6 @@ interface WorkDao {
     fun findAllFlow(): Flow<List<WorkEntity>>
 
     @Transaction
-    @Query("SELECT * FROM work")
+    @Query("SELECT * FROM work ORDER BY updated_at DESC")
     fun findAllWorksWithTags(): Flow<List<WorkWithTags>>
 }

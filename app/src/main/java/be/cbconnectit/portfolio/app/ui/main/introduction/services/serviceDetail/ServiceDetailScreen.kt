@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -55,26 +57,26 @@ fun ServiceDetailScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
-    LaunchedEffect(key1 = viewModel.eventFlow) {
-        viewModel.eventFlow.collectLatest { event ->
+    LaunchedEffect(Unit) {
+        viewModel.effect.collectLatest { event ->
             when (event) {
-                is ServiceDetailUiEvent.OpenProjectByTag -> navController.navigate(PortfolioScreenDestination(arrayOf(event.tagId)))
+                is ServiceDetailContract.Effect.OpenProjectByTag -> navController.navigate(PortfolioScreenDestination(arrayOf(event.tagId)))
             }
         }
     }
     ServiceDetailScreenContent(
         state = state,
         navController = navController,
-        onEvent = viewModel::onEvent
+        sendIntent = viewModel::sendIntent
     ) { viewModel.CreateSnackBarHost() }
 }
 
-@OptIn(ExperimentalToolbarApi::class)
+@OptIn(ExperimentalToolbarApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ServiceDetailScreenContent(
-    state: ServiceDetailState,
+    state: ServiceDetailContract.State,
     navController: NavController,
-    onEvent: (ServiceDetailEvent) -> Unit,
+    sendIntent: (ServiceDetailContract.Intent) -> Unit,
     createSnackBarHost: @Composable () -> Unit = {},
 ) {
     val toolbarState = rememberCollapsingToolbarScaffoldState()
@@ -89,50 +91,56 @@ fun ServiceDetailScreenContent(
         }
     }
 
-    CollapsingToolbarScaffold(
-        modifier = Modifier,
-        state = toolbarState,
-        scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
-        snapConfig = SnapConfig(),
-        toolbarScrollable = true,
-        toolbar = {
-            CollapsingServiceToolbar(
-                toolbarState = toolbarState,
-                navController = navController,
-                title = state.parentService?.title ?: "",
-                body = state.parentService?.bannerDescription ?: "",
-                imageUrl = state.parentService?.imageUrl
-            )
-        }
+    PullToRefreshBox(
+        isRefreshing = state.isRefreshing,
+        onRefresh = { sendIntent(ServiceDetailContract.Intent.RefreshData) },
+        modifier = Modifier.fillMaxSize()
     ) {
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .fillMaxSize()
+        CollapsingToolbarScaffold(
+            modifier = Modifier,
+            state = toolbarState,
+            scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
+            snapConfig = SnapConfig(),
+            toolbarScrollable = true,
+            toolbar = {
+                CollapsingServiceToolbar(
+                    toolbarState = toolbarState,
+                    navController = navController,
+                    title = state.parentService?.title ?: "",
+                    body = state.parentService?.bannerDescription ?: "",
+                    imageUrl = state.parentService?.bannerImageUrl
+                )
+            }
         ) {
-            state.services.forEachIndexed { index, service ->
-                ServiceItem(service = service, shouldColorBackground = index % 2 == 1) {
-                    service.tag?.let {
-                        onEvent(ServiceDetailEvent.OpenProjectByTag(it.id))
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+            ) {
+                state.services.forEachIndexed { index, service ->
+                    ServiceItem(service = service, shouldColorBackground = index % 2 == 1) {
+                        service.tag?.let {
+                            sendIntent(ServiceDetailContract.Intent.OpenProjectByTag(it.id))
+                        }
                     }
                 }
-            }
 
-            val extraInfo = state.parentService?.extraInfo
-            if (!extraInfo.isNullOrEmpty()) {
+                val extraInfo = state.parentService?.extraInfo
+                if (!extraInfo.isNullOrEmpty()) {
 
-                Spacer(modifier = Modifier.height(48.dp))
+                    Spacer(modifier = Modifier.height(48.dp))
 
-                MarkdownText(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    markdown = extraInfo,
-                    style = MaterialTheme.typography.bodyLarge,
-                    linkColor = MaterialTheme.colorScheme.primary
-                )
+                    MarkdownText(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        markdown = extraInfo,
+                        style = MaterialTheme.typography.bodyLarge,
+                        linkColor = MaterialTheme.colorScheme.primary
+                    )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
             }
         }
     }
@@ -153,8 +161,8 @@ fun ServiceDetailScreenContentPreview() {
     PortfolioTheme {
         ServiceDetailScreenContent(
             navController = rememberNavController(),
-            state = ServiceDetailState(services = listOf(Service.previewData())),
-            onEvent = {}
+            state = ServiceDetailContract.State(services = listOf(Service.previewData())),
+            sendIntent = {}
         )
     }
 }

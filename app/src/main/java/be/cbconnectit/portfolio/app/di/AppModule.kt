@@ -34,11 +34,12 @@ val appModule = module {
     single { TransactionProvider(get()) }
 
     single {
+        // TODO demo: create the Room database instance
         Room
             .databaseBuilder(
-                androidContext(),
-                PortfolioDatabase::class.java,
-                "portfolio.db"
+                context = androidContext(),
+                klass = PortfolioDatabase::class.java,
+                name = "portfolio.db"
             )
             .fallbackToDestructiveMigration()
             .build()

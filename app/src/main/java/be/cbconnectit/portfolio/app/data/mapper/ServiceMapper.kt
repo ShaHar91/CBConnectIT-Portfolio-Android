@@ -5,47 +5,50 @@ import be.cbconnectit.portfolio.app.data.remote.dto.ServiceDto
 import be.cbconnectit.portfolio.app.domain.model.Service
 
 fun ServiceEntity.toService() = Service(
-    id,
-    imageUrl,
-    title,
-    shortDescription,
-    description,
-    bannerDescription,
-    null, // TODO: add the correct relations
-    extraInfo,
-    null, // TODO: add the correct relations
-    createdAt,
-    updatedAt
+    id = id,
+    imageUrl = imageUrl,
+    bannerImageUrl = bannerImageUrl,
+    title = title,
+    shortDescription = shortDescription,
+    description = description,
+    bannerDescription = bannerDescription,
+    subServices = null, // TODO: add the correct relations
+    extraInfo = extraInfo,
+    tag = null, // TODO: add the correct relations
+    createdAt = createdAt,
+    updatedAt = updatedAt
 )
 
 fun List<ServiceEntity>.toServices() = this.map { it.toService() }
 
 fun ServiceDto.toService() = Service(
-    id,
-    imageUrl,
-    title,
-    shortDescription,
-    description,
-    bannerDescription,
-    subServices?.toServices(),
-    extraInfo,
-    tag?.toTag(),
-    createdAt,
-    updatedAt
+    id = id,
+    imageUrl = imageUrl,
+    bannerImageUrl = bannerImageUrl,
+    title = title,
+    shortDescription = shortDescription,
+    description = description,
+    bannerDescription = bannerDescription,
+    subServices = subServices?.toServices(),
+    extraInfo = extraInfo,
+    tag = tag?.toTag(),
+    createdAt = createdAt,
+    updatedAt = updatedAt
 )
 
 fun ServiceDto.toServiceEntity(parentId: String?) = ServiceEntity(
-    id,
-    imageUrl,
-    title,
-    shortDescription,
-    description,
-    bannerDescription,
-    parentId,
-    extraInfo,
-    tag?.id,
-    createdAt,
-    updatedAt
+    id = id,
+    imageUrl = imageUrl,
+    bannerImageUrl = bannerImageUrl,
+    title = title,
+    shortDescription = shortDescription,
+    description = description,
+    bannerDescription = bannerDescription,
+    parentServiceId = parentId,
+    extraInfo = extraInfo,
+    tagId = tag?.id,
+    createdAt = createdAt,
+    updatedAt = updatedAt
 )
 
 fun List<ServiceDto>.toEntities() = this.flatMap { parentService ->

@@ -19,7 +19,6 @@ import be.cbconnectit.portfolio.app.ui.main.base.ToolbarDelegateImpl
 import be.cbconnectit.portfolio.app.ui.main.base.dataBinding
 import be.cbconnectit.portfolio.app.ui.main.settings.adapter.LayoutSystemAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -43,41 +42,41 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
         popUp.setAdapter(layoutSystemsAdapter)
 
         popUp.setOnDismissListener {
-            mViewModel.onEvent(SettingsEvent.UpdateSelectedLayoutSystemExpanded(false))
+            mViewModel.sendIntent(SettingsContract.Intent.UpdateSelectedLayoutSystemExpanded(false))
         }
 
-        popUp.setOnItemClickListener { parent, view, position, id ->
-            mViewModel.onEvent(SettingsEvent.ChangeSelectedLayoutSystem(LayoutSystem.values()[position]))
+        popUp.setOnItemClickListener { _, view, position, id ->
+            mViewModel.sendIntent(SettingsContract.Intent.ChangeSelectedLayoutSystem(LayoutSystem.entries[position]))
         }
 
         popUp
     }
 
     private val layoutSystemsAdapter by lazy {
-        LayoutSystemAdapter(requireContext(), LayoutSystem.values().toList())
+        LayoutSystemAdapter(requireContext(), LayoutSystem.entries)
     }
 
     private fun showConfirmationDialog() = MaterialAlertDialogBuilder(requireContext())
         .setTitle(R.string.change_layout_mode_title)
         .setMessage(R.string.change_layout_mode_body)
         .setNegativeButton(R.string.cancel) { _, _ ->
-            mViewModel.onEvent(SettingsEvent.ResetSelectedLayoutSystem)
+            mViewModel.sendIntent(SettingsContract.Intent.ResetSelectedLayoutSystem)
         }
         .setPositiveButton(R.string.common_continue) { _, _ ->
-            mViewModel.onEvent(SettingsEvent.PersistSelectedLayoutSystem)
+            mViewModel.sendIntent(SettingsContract.Intent.PersistSelectedLayoutSystem)
         }
         .setOnDismissListener {
-            mViewModel.onEvent(SettingsEvent.ResetSelectedLayoutSystem)
+            mViewModel.sendIntent(SettingsContract.Intent.ResetSelectedLayoutSystem)
         }.show()
 
     private fun showInformativeDialog() = MaterialAlertDialogBuilder(requireContext())
         .setTitle(R.string.unsupported_feature)
         .setMessage(R.string.unsupported_feature_dynamic_colors_dialog_body)
         .setPositiveButton(R.string.ok) { _, _ ->
-            mViewModel.onEvent(SettingsEvent.ShowUnsupportedDynamicFeatureDialog(false))
+            mViewModel.sendIntent(SettingsContract.Intent.ShowUnsupportedDynamicFeatureDialog(false))
         }
         .setOnDismissListener {
-            mViewModel.onEvent(SettingsEvent.ShowUnsupportedDynamicFeatureDialog(false))
+            mViewModel.sendIntent(SettingsContract.Intent.ShowUnsupportedDynamicFeatureDialog(false))
         }.show()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = binding.root
@@ -121,9 +120,9 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
     }
 
     private fun initObservers() = viewLifecycleOwner.lifecycleScope.launch {
-        mViewModel.eventFlow.collectLatest {
+        mViewModel.effect.collectLatest {
             when (it) {
-                SettingsUiEvent.RestartApplication -> {
+                SettingsContract.Effect.RestartApplication -> {
                     val i = requireActivity().packageManager.getLaunchIntentForPackage(requireActivity().packageName)
                     startActivity(Intent.makeRestartActivityTask(i?.component))
                     Runtime.getRuntime().exit(0)
@@ -136,11 +135,11 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
         initCheckedDisplayMode()
 
         binding.btnLayoutSystem.setOnClickListener {
-            mViewModel.onEvent(SettingsEvent.UpdateSelectedLayoutSystemExpanded(true))
+            mViewModel.sendIntent(SettingsContract.Intent.UpdateSelectedLayoutSystemExpanded(true))
         }
 
         binding.ibtnInfoDynamicLayout.setOnClickListener {
-            mViewModel.onEvent(SettingsEvent.ShowUnsupportedDynamicFeatureDialog(true))
+            mViewModel.sendIntent(SettingsContract.Intent.ShowUnsupportedDynamicFeatureDialog(true))
         }
 
         binding.btgDisplayMode.addOnButtonCheckedListener { _, checkedId, isChecked ->
@@ -152,18 +151,19 @@ class SettingsFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
                 else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
             }
 
-            mViewModel.onEvent(SettingsEvent.ChangeDisplayMode(displayMode))
+            mViewModel.sendIntent(SettingsContract.Intent.ChangeDisplayMode(displayMode))
         }
 
-        binding.tdrDynamicMode.valueSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (buttonView.isPressed || buttonView.isFocused) {
-                lifecycleScope.launch {
-                    mViewModel.onEvent(SettingsEvent.ChangeDynamicMode(isChecked))
-                    delay(250)
-                    requireActivity().recreate()
-                }
-            }
-        }
+        // TODO: something goes wrong with the databinding!!
+//        binding.tdrDynamicMode.valueSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+//            if (buttonView.isPressed || buttonView.isFocused) {
+//                lifecycleScope.launch {
+//                    mViewModel.onEvent(SettingsEvent.ChangeDynamicMode(isChecked))
+//                    delay(250)
+//                    requireActivity().recreate()
+//                }
+//            }
+//        }
     }
 
     private fun initCheckedDisplayMode() {

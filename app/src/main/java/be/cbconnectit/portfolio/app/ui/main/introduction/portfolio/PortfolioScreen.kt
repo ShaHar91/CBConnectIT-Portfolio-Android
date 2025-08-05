@@ -14,6 +14,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -54,10 +55,10 @@ fun PortfolioScreen(
     val localContext = LocalContext.current
     val colorScheme = MaterialTheme.colorScheme
 
-    LaunchedEffect(key1 = true) {
-        viewModel.eventFlow.collectLatest { event ->
+    LaunchedEffect(Unit) {
+        viewModel.effect.collectLatest { event ->
             when (event) {
-                is PortfolioUiEvent.OpenSocialLink -> {
+                is PortfolioContract.Effect.OpenSocialLink -> {
                     localContext.startWeb(
                         event.link.url,
                         toolbarColor = colorScheme.surfaceColorAtElevation(3.dp).toArgb()
@@ -71,17 +72,17 @@ fun PortfolioScreen(
         state = state,
         navController = navController,
         { viewModel.CreateSnackBarHost() },
-        onEvent = viewModel::onEvent
+        sendIntent = viewModel::sendIntent
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PortfolioScreenContent(
-    state: PortfolioState,
+    state: PortfolioContract.State,
     navController: NavController,
     createSnackBarHost: @Composable () -> Unit = {},
-    onEvent: (PortfolioEvent) -> Unit
+    sendIntent: (PortfolioContract.Intent) -> Unit
 ) {
     Box(contentAlignment = Alignment.BottomCenter) {
         Scaffold(
@@ -89,27 +90,34 @@ fun PortfolioScreenContent(
             topBar = { DefaultAppBar(navController = navController, appBarTitle = stringResource(id = R.string.portfolio)) },
             snackbarHost = { createSnackBarHost() }
         ) { paddingValues ->
-            LazyColumn(
-                modifier = Modifier.padding(paddingValues),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            PullToRefreshBox(
+                isRefreshing = state.isRefreshing,
+                onRefresh = { sendIntent(PortfolioContract.Intent.RefreshData) },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = paddingValues.calculateTopPadding())
             ) {
-                itemsIndexed(state.projects) { index, work ->
-                    if (index != 0) {
-                        HorizontalDivider(
-                            modifier = Modifier
-                                .padding(vertical = 32.dp)
-                                .fillMaxWidth(0.4f), thickness = 2.dp, color = MaterialTheme.colorScheme.primary
+                LazyColumn(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    contentPadding = PaddingValues(16.dp)
+                ) {
+                    itemsIndexed(state.projects) { index, work ->
+                        if (index != 0) {
+                            HorizontalDivider(
+                                modifier = Modifier
+                                    .padding(vertical = 32.dp)
+                                    .fillMaxWidth(0.4f), thickness = 2.dp, color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        WorkDetail(
+                            work = work,
+                            imageStartAligned = index % 2 == 0,
+                            onClick = {
+                                sendIntent(PortfolioContract.Intent.OpenSocialLink(it))
+                            }
                         )
                     }
-
-                    WorkDetail(
-                        work = work,
-                        imageStartAligned = index % 2 == 0,
-                        onClick = {
-                            onEvent(PortfolioEvent.OpenSocialLink(it))
-                        }
-                    )
                 }
             }
         }
@@ -127,8 +135,8 @@ fun ExperienceScreenContentPreview() {
     PortfolioTheme {
         PortfolioScreenContent(
             navController = rememberNavController(),
-            state = PortfolioState(projects = listOf(Work.previewData().copy(links = listOf(Link.previewData(), Link.previewData(), Link.previewData())))),
-            onEvent = {}
+            state = PortfolioContract.State(projects = listOf(Work.previewData().copy(links = listOf(Link.previewData(), Link.previewData(), Link.previewData())))),
+            sendIntent = {}
         )
     }
 }

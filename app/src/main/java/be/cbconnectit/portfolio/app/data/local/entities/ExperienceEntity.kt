@@ -1,13 +1,26 @@
 package be.cbconnectit.portfolio.app.data.local.entities
 
 import androidx.room.ColumnInfo
-import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.Junction
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import androidx.room.Relation
 
-@Entity(ExperienceEntity.ENTITY_NAME)
+@Entity(
+    ExperienceEntity.ENTITY_NAME, foreignKeys = [
+        ForeignKey(
+            entity = CompanyEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["company_id"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = JobPositionEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["job_position_id"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
 data class ExperienceEntity(
     @PrimaryKey
     val id: String,
@@ -31,23 +44,3 @@ data class ExperienceEntity(
         const val ENTITY_NAME = "experience"
     }
 }
-
-data class ExperienceWithRelations(
-    @Embedded
-    val experience: ExperienceEntity,
-    @Relation(parentColumn = "company_id", entityColumn = "id")
-    val company: CompanyEntity,
-    @Relation(parentColumn = "job_position_id", entityColumn = "id")
-    val jobPosition: JobPositionEntity,
-    @Relation(
-        parentColumn = "id",
-        entity = TagEntity::class,
-        entityColumn = "id",
-        associateBy = Junction(
-            value = ExperienceTagCrossRefEntity::class,
-            parentColumn = ExperienceTagCrossRefEntity.COLUMN_ID_EXPERIENCE,
-            entityColumn = ExperienceTagCrossRefEntity.COLUMN_ID_TAG
-        )
-    )
-    val tags: List<TagEntity>
-)

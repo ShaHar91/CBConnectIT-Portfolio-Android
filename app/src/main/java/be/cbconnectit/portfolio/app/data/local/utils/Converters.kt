@@ -4,7 +4,9 @@ import androidx.room.TypeConverter
 import be.cbconnectit.portfolio.app.domain.enums.TechStack
 import io.ktor.serialization.kotlinx.json.DefaultJson
 import kotlinx.serialization.serializer
+import java.util.UUID
 
+// TODO demo: Converters for Room database
 class Converters {
 
     @TypeConverter
@@ -16,5 +18,15 @@ class Converters {
     @TypeConverter
     fun convertStringToTechStacks(value: String): List<TechStack> {
         return DefaultJson.decodeFromString(value)
+    }
+
+    @TypeConverter
+    fun convertUUIDToString(uuid: UUID) : String {
+        return uuid.toString()
+    }
+
+    @TypeConverter
+    fun convertStringToUUID(value: String): UUID {
+        return UUID.fromString(value)
     }
 }

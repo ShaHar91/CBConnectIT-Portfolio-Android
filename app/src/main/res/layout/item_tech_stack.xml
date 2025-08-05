@@ -10,11 +10,13 @@
             type="Boolean" />
     </data>
 
+<!--    TODO: something goes wrong with the databinding!!-->
+
+<!--        app:tintAttr="@{isCurrent ? com.google.android.material.R.attr.colorOnPrimary : com.google.android.material.R.attr.colorPrimary}"-->
     <ImageView
         android:id="@+id/ivTechStack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:tintAttr="@{isCurrent ? com.google.android.material.R.attr.colorOnPrimary : com.google.android.material.R.attr.colorPrimary}"
         tools:src="@drawable/ic_phone_android"
         tools:tint="?colorPrimary" />
 </layout>

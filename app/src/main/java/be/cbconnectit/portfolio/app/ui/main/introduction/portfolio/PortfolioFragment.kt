@@ -30,7 +30,7 @@ class PortfolioFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
 
     private val workAdapter by lazy {
         WorkVerticalAdapter {
-            mViewModel.onEvent(PortfolioEvent.OpenSocialLink(it))
+            mViewModel.sendIntent(PortfolioContract.Intent.OpenSocialLink(it))
         }
     }
 
@@ -67,9 +67,9 @@ class PortfolioFragment : Fragment(), ToolbarDelegate by ToolbarDelegateImpl() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            mViewModel.eventFlow.collectLatest { event ->
+            mViewModel.effect.collectLatest { event ->
                 when (event) {
-                    is PortfolioUiEvent.OpenSocialLink -> {
+                    is PortfolioContract.Effect.OpenSocialLink -> {
                         val color = MaterialColors.getColor(requireView(), com.google.android.material.R.attr.colorSurfaceContainer)
 
                         requireActivity().startWeb(
